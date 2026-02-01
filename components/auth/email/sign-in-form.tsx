@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { authClient } from "@/lib/auth/auth-client";
 
 const formSchema = z.object({
   email: z
@@ -32,19 +34,26 @@ export function SignInForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      classNames: {
-        content: "flex flex-col gap-2",
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await authClient.signIn.magicLink({
+      email: data.email,
+      fetchOptions: {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onSuccess: () => {
+          setIsLoading(false);
+          toast.success("Check your inbox", {
+            description: `A sign-in link has been sent to ${data.email}`,
+          });
+        },
+        onError: (error) => {
+          setIsLoading(false);
+          toast.error(error.error.message);
+        },
       },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
     });
   }
 
@@ -68,8 +77,13 @@ export function SignInForm() {
             </Field>
           )}
         />
-        <Button variant="outline" type="submit" form="form-rhf-demo">
-          <HugeiconsIcon icon={Mail01Icon} />
+        <Button
+          variant="outline"
+          type="submit"
+          form="form-rhf-demo"
+          disabled={isLoading}
+        >
+          {isLoading ? <Spinner /> : <HugeiconsIcon icon={Mail01Icon} />}
           Continue with email
         </Button>
       </FieldGroup>
