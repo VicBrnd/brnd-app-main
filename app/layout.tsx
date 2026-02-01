@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeStorage } from "@/components/theme/theme-storage";
 import { Toaster } from "@/components/ui/sonner";
 
 import "@/styles/globals.css";
@@ -28,6 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-sidebar h-full" suppressHydrationWarning>
+      <ThemeStorage />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
