@@ -6,7 +6,6 @@ import { Select as SelectPrimitive } from "@base-ui/react/select";
 import {
   ArrowDown01Icon,
   ArrowUp01Icon,
-  Tick02Icon,
   UnfoldMoreIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -144,11 +143,10 @@ function SelectItem({
           <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
         }
       >
-        <HugeiconsIcon
-          icon={Tick02Icon}
-          strokeWidth={2}
-          className="pointer-events-none"
-        />
+        <span className="relative flex size-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+          <span className="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+        </span>
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );

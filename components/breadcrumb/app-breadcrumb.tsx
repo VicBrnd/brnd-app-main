@@ -12,6 +12,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Select,
   SelectContent,
@@ -23,7 +25,7 @@ import {
 } from "@/components/ui/select";
 
 const AppOverview = [
-  { label: "Dashboard", value: null },
+  { label: "Dashboard", href: "/dashboard", value: null },
   { label: "Documentation", value: "documentation" },
 ];
 
@@ -51,10 +53,13 @@ export function AppBreadcrumb() {
       <BreadcrumbList className="overflow-auto flex-nowrap">
         <BreadcrumbItem>
           <Select items={AppOverview}>
-            <SelectTrigger className="w-full max-w-48">
-              <HugeiconsIcon icon={DashboardSquare02Icon} />
-              <SelectValue />
-            </SelectTrigger>
+            <ButtonGroup>
+              <Button variant="outline">
+                <HugeiconsIcon icon={DashboardSquare02Icon} />
+                <SelectValue />
+              </Button>
+              <SelectTrigger className="w-full max-w-48" />
+            </ButtonGroup>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>App Overview</SelectLabel>
@@ -72,10 +77,13 @@ export function AppBreadcrumb() {
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <Select items={Collections}>
-            <SelectTrigger className="w-full max-w-48">
-              <HugeiconsIcon icon={Folder01Icon} />
-              <SelectValue />
-            </SelectTrigger>
+            <ButtonGroup>
+              <Button variant="outline">
+                <HugeiconsIcon icon={Folder01Icon} />
+                <SelectValue />
+              </Button>
+              <SelectTrigger className="w-full max-w-48" />
+            </ButtonGroup>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Collections</SelectLabel>
@@ -92,11 +100,14 @@ export function AppBreadcrumb() {
           <HugeiconsIcon icon={ArrowRight01Icon} />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
-          <Select items={Collections}>
-            <SelectTrigger className="w-full max-w-48">
-              <MdxIcon />
-              <SelectValue />
-            </SelectTrigger>
+          <Select items={Documents}>
+            <ButtonGroup>
+              <Button variant="outline">
+                <MdxIcon />
+                <SelectValue />
+              </Button>
+              <SelectTrigger className="w-full max-w-48" />
+            </ButtonGroup>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Documents</SelectLabel>

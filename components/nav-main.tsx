@@ -1,9 +1,23 @@
 "use client";
 
-import { Add01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  File01Icon,
+  Folder01Icon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -30,14 +44,39 @@ export function NavMain({
               <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />{" "}
               <span>Search</span>
             </Button>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-              <span className="sr-only">Quick Create</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    size="icon"
+                    className="size-8 group-data-[collapsible=icon]:opacity-0"
+                    variant="outline"
+                  >
+                    <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+                    <span className="sr-only">Quick Create</span>
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" sideOffset={9} className="w-64">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Write</DropdownMenuLabel>
+                  <DropdownMenuItem>
+                    <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
+                    New Collection
+                    <DropdownMenuShortcut className="ml-auto">
+                      ⌘C
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <HugeiconsIcon icon={File01Icon} className="mr-1" />
+                    New Document
+                    <DropdownMenuShortcut className="ml-auto">
+                      ⌘D
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
