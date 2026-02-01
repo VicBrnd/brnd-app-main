@@ -4,15 +4,12 @@ import Link from "next/link";
 
 import {
   ArrowRight01Icon,
-  Chart01Icon,
   ComputerTerminal01Icon,
-  DashboardBrowsingIcon,
+  Delete01Icon,
   Folder01Icon,
   HelpCircleIcon,
-  LeftToRightListBulletIcon,
-  Search01Icon,
+  Home01Icon,
   Settings01Icon,
-  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -49,29 +46,14 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
-      icon: DashboardBrowsingIcon,
+      title: "All Files",
+      url: "/",
+      icon: Home01Icon,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: LeftToRightListBulletIcon,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: Chart01Icon,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: Folder01Icon,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: UserGroupIcon,
+      title: "Trash",
+      url: "/trash",
+      icon: Delete01Icon,
     },
   ],
   tree: [
@@ -92,11 +74,6 @@ const data = {
       title: "Get Help",
       url: "#",
       icon: HelpCircleIcon,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: Search01Icon,
     },
   ],
 };
