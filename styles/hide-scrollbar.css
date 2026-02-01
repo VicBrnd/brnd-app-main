@@ -1,0 +1,11 @@
+  *::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  html,
+  body {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE et Edge Legacy */
+  }
