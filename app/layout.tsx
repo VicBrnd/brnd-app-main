@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeStorage } from "@/components/theme/theme-storage";
 import { Toaster } from "@/components/ui/sonner";
 import { fontVariables } from "@/lib/fonts";
@@ -28,12 +28,7 @@ export default function RootLayout({
     >
       <ThemeStorage />
       <body className={cn("h-full antialiased")}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           <Toaster richColors position="top-center" />
           {children}
         </ThemeProvider>
