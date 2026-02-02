@@ -78,7 +78,7 @@ export default function CollectionHeader({
                 })}
               </span>
             </div>
-            <div className="ml-auto flex flex-col items-start just gap-1 md:flex-row">
+            <div className="ml-auto flex flex-col items-start gap-1 md:flex-row">
               <div className="flex items-center gap-1">
                 <HugeiconsIcon
                   icon={CalendarSetting01Icon}

@@ -28,7 +28,7 @@ export default function NotFound({ className }: React.ComponentProps<"div">) {
         <Button
           variant="outline"
           nativeButton={false}
-          render={<Link href="/" />}
+          render={<Link href="/dashboard" />}
         >
           Go back home
         </Button>
