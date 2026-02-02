@@ -23,7 +23,7 @@ export default function CollectionHeader({
   collectionData,
 }: CollectionHeaderProps) {
   return (
-    <header>
+    <header className="pb-4">
       <div className="flex flex-col gap-4 md:gap-6">
         <div className="flex gap-4 md:items-center">
           <Button
@@ -56,8 +56,7 @@ export default function CollectionHeader({
             <HugeiconsIcon icon={Delete01Icon} /> Delete
           </Button>
         </div>
-        <div className="flex flex-col gap-2">
-          <Separator />
+        <div className="flex flex-col gap-1">
           <div className="flex items-center text-sm text-muted-foreground capitalize">
             <div className="flex flex-col items-start gap-1 md:flex-row">
               <div className="flex items-center gap-1">
@@ -67,7 +66,7 @@ export default function CollectionHeader({
                   strokeWidth={2.5}
                   style={{ color: collectionData.color }}
                 />
-                <span>Created at:</span>
+                <span>Created:</span>
               </div>
               <span>
                 {collectionData.createdAt.toLocaleDateString("fr-FR", {
@@ -86,7 +85,7 @@ export default function CollectionHeader({
                   strokeWidth={2.5}
                   style={{ color: collectionData.color }}
                 />
-                <span> Last update:</span>
+                <span>Update:</span>
               </div>
               <span>
                 {collectionData.updatedAt.toLocaleDateString("fr-FR", {
@@ -98,6 +97,7 @@ export default function CollectionHeader({
               </span>
             </div>
           </div>
+          <Separator />
         </div>
       </div>
     </header>

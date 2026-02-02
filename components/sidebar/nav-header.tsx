@@ -16,7 +16,7 @@ export function NavHeader() {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
-            render={<Link href="/" />}
+            render={<Link href="/dashboard" />}
             className="data-[slot=sidebar-menu-button]:p-1.5!"
           >
             <HugeiconsIcon

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { NewCollectionAction } from "@/actions/new-collection.action";
+import { NewDocumentAction } from "@/actions/new-document.actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -19,18 +19,33 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { NewCollectionFormSchema } from "@/schemas/new-collection.schema";
+import { CollectionWithCount } from "@/lib/db/types";
+import { NewDocumentFormSchema } from "@/schemas/new-document.schema";
 
-export default function Page() {
-  const [isLoading, startTransition] = React.useTransition();
+interface NewDocumentCardProps {
+  collectionsData: CollectionWithCount[];
+}
+
+export default function NewDocumentCard({
+  collectionsData,
+}: NewDocumentCardProps) {
+  const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof NewCollectionFormSchema>>({
-    resolver: zodResolver(NewCollectionFormSchema),
+  const form = useForm<z.infer<typeof NewDocumentFormSchema>>({
+    resolver: zodResolver(NewDocumentFormSchema),
     defaultValues: {
       title: "",
       slug: "",
+      collection: "",
     },
   });
 
@@ -57,14 +72,15 @@ export default function Page() {
     );
   };
 
-  async function onSubmit(data: z.infer<typeof NewCollectionFormSchema>) {
+  function onSubmit(data: z.infer<typeof NewDocumentFormSchema>) {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("slug", data.slug);
+    formData.append("collection", data.collection);
     startTransition(() => {
       toast.promise(
         async () => {
-          const result = await NewCollectionAction(formData);
+          const result = await NewDocumentAction(formData);
 
           if (!result.success) {
             throw new Error(result.error || "Erreur inconnue");
@@ -72,10 +88,11 @@ export default function Page() {
           return result;
         },
         {
-          loading: "Create collection...",
+          loading: "Creating document...",
           success: (result) => {
-            router.push(`/dashboard/${result.collection.slug}`);
-            return "Collection created successfully";
+            form.reset();
+            router.push(`/dashboard/${result.collectionSlug}`);
+            return "Document created successfully";
           },
           error: (err) => `${err.message}`,
         },
@@ -87,7 +104,7 @@ export default function Page() {
     <Card>
       <CardContent>
         <form
-          id="form-new-collection"
+          id="form-new-document"
           className="flex flex-col gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
@@ -97,14 +114,14 @@ export default function Page() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-new-collection-title">
+                  <FieldLabel htmlFor="form-new-document-title">
                     Title <span className="text-destructive -ml-1.5">*</span>
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-new-collection-title"
+                    id="form-new-document-title"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Collection Title"
+                    placeholder="Document Title"
                     autoComplete="off"
                     onChange={handleTitleChange}
                   />
@@ -119,17 +136,48 @@ export default function Page() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-new-collection-slug">
+                  <FieldLabel htmlFor="form-new-document-slug">
                     Slug <span className="text-destructive -ml-1.5">*</span>
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-new-collection-slug"
+                    id="form-new-document-slug"
                     aria-invalid={fieldState.invalid}
-                    placeholder="collection-slug"
+                    placeholder="document-slug"
                     autoComplete="off"
                     onChange={handleSlugChange}
                   />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="collection"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-new-document-collection">
+                    Collection
+                    <span className="text-destructive -ml-1.5">*</span>
+                  </FieldLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectTrigger aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder="Select a collection" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {collectionsData.map((collection) => (
+                        <SelectItem key={collection.id} value={collection.id}>
+                          {collection.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -140,9 +188,9 @@ export default function Page() {
         </form>
       </CardContent>
       <CardFooter className="justify-end">
-        <Button disabled={isLoading} type="submit" form="form-new-collection">
-          {isLoading && <Spinner className="mr-1" />}
-          Create Collection
+        <Button disabled={isLoading} type="submit" form="form-new-document">
+          {isLoading && <Spinner />}
+          Create Document
         </Button>
       </CardFooter>
     </Card>

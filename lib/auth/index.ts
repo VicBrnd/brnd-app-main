@@ -30,7 +30,7 @@ export const auth = betterAuth({
   },
   plugins: [
     magicLink({
-      sendMagicLink: async ({ email, token, url }, ctx) => {
+      sendMagicLink: async ({ email, url }) => {
         const emailDev = await resend.emails.send({
           from: "BrndHub <server@brndhub.dev>",
           to: email,

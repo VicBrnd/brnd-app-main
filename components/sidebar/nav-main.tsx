@@ -71,11 +71,13 @@ export function NavMain({
                       ⌘C
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={<Link href="/dashboard/new/document" />}
+                  >
                     <HugeiconsIcon icon={File01Icon} className="mr-1" />
                     New Document
                     <DropdownMenuShortcut className="ml-auto">
-                      ⌘D
+                      ⌘C
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
