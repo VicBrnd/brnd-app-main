@@ -129,6 +129,14 @@ export const collection = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
     slug: text("slug").notNull(),
+    color: text("color")
+      .notNull()
+      .$defaultFn(
+        () =>
+          ["#8B5CF6", "#06B6D4", "#F59E0B", "#EC4899", "#10B981"][
+            Math.floor(Math.random() * 5)
+          ],
+      ),
     ...timestamps,
   },
   (table) => [

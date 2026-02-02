@@ -19,6 +19,7 @@ CREATE TABLE "collection" (
 	"user_id" text NOT NULL,
 	"title" text NOT NULL,
 	"slug" text NOT NULL,
+	"color" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );

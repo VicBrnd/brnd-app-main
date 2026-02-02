@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useFilesStore } from "@/store/files-store";
 
-export function ViewMode() {
+export function ViewSwitcher() {
   const { viewMode, setViewMode } = useFilesStore();
 
   const pathname = usePathname();

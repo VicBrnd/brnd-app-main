@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   Add01Icon,
   File01Icon,
@@ -60,7 +62,9 @@ export function NavMain({
               <DropdownMenuContent align="end" sideOffset={9} className="w-64">
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Write</DropdownMenuLabel>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={<Link href="/dashboard/new/collection" />}
+                  >
                     <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
                     New Collection
                     <DropdownMenuShortcut className="ml-auto">
@@ -82,7 +86,7 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton render={<Link href={item.url} />}>
                 {item.icon && (
                   <HugeiconsIcon
                     icon={item.icon}

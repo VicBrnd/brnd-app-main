@@ -16,6 +16,7 @@ export type Passkey = typeof passkey.$inferSelect;
 export type Image = typeof image.$inferSelect;
 export type NewImage = typeof image.$inferInsert;
 export type Collection = typeof collection.$inferSelect;
+export type CollectionWithCount = Collection & { filesCount: number };
 export type NewCollection = typeof collection.$inferInsert;
 export type Document = typeof document.$inferSelect;
 export type NewDocument = typeof document.$inferInsert;

@@ -2,14 +2,10 @@
 
 import {
   ArrowRight02Icon,
-  Clock01Icon,
-  Delete01Icon,
   FavouriteIcon,
   Folder01Icon,
-  FolderOpenIcon,
   MoreVerticalIcon,
   Share01Icon,
-  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -38,78 +34,15 @@ import {
 import { cn } from "@/lib/utils";
 import { useFilesStore } from "@/store/files-store";
 
-import { ViewType } from "./content";
 import { FileIcon } from "./file-icon";
 
-interface FileListProps {
-  view: ViewType;
-  folderId?: string;
-}
+export function FileList() {
+  const { viewMode, toggleStarred, getFilteredFiles } = useFilesStore();
 
-export function FileList({ view, folderId }: FileListProps) {
-  const {
-    viewMode,
-    toggleStarred,
-    getFilteredFiles,
-    getStarredFiles,
-    getRecentFiles,
-    getSharedFiles,
-    getFilesByFolder,
-  } = useFilesStore();
-
-  let files = getFilteredFiles();
-  let title = "All Files";
-
-  if (view === "starred") {
-    files = getStarredFiles();
-    title = "Starred Files";
-  } else if (view === "recent") {
-    files = getRecentFiles();
-    title = "Recent Files";
-  } else if (view === "shared") {
-    files = getSharedFiles();
-    title = "Shared Files";
-  } else if (view === "trash") {
-    files = [];
-    title = "Trash";
-  } else if (view === "folder" && folderId) {
-    files = getFilesByFolder(folderId);
-    title = "Folder";
-  }
+  const files = getFilteredFiles();
+  const title = "All Files";
 
   if (files.length === 0) {
-    const emptyStates = {
-      starred: {
-        icon: FavouriteIcon,
-        title: "No starred files",
-        description: "Star important files to find them quickly",
-      },
-      recent: {
-        icon: Clock01Icon,
-        title: "No recent files",
-        description: "Files you open will appear here",
-      },
-      shared: {
-        icon: UserGroupIcon,
-        title: "No shared files",
-        description: "Files shared with you will appear here",
-      },
-      trash: {
-        icon: Delete01Icon,
-        title: "Trash is empty",
-        description: "Deleted files will appear here for 30 days",
-      },
-      default: {
-        icon: FolderOpenIcon,
-        title: "This folder is empty",
-        description: "Upload files or drag and drop them here",
-      },
-    };
-
-    const state =
-      emptyStates[view as keyof typeof emptyStates] || emptyStates.default;
-    const Icon = state.icon;
-
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 bg-background p-6 px-4 md:p-10">
         <Empty>

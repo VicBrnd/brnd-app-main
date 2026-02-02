@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { authClient } from "@/lib/auth/auth-client";
 
-export default function SignInPage() {
+export default function Page() {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",

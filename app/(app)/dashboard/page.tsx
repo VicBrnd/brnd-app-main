@@ -1,5 +1,14 @@
-import { FilesContent } from "@/components/files/content";
+import { FileList } from "@/components/files/file-list";
+import { FolderGrid } from "@/components/files/folder-grid";
+import { getCollections } from "@/lib/data/get-collections";
 
-export default function Page() {
-  return <FilesContent view="all" />;
+export default async function Page() {
+  const collectionsData = await getCollections();
+
+  return (
+    <div className="flex flex-col gap-6">
+      <FolderGrid collectionsData={collectionsData} />
+      <FileList />
+    </div>
+  );
 }

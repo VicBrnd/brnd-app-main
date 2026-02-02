@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import Link from "next/link";
+import { unauthorized } from "next/navigation";
 
 import {
   ArrowRight01Icon,
@@ -36,23 +37,18 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
+import { getSession } from "@/lib/data/get-session";
 
-// This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "All Files",
-      url: "/",
+      url: "/dashboard",
       icon: Home01Icon,
     },
     {
       title: "Trash",
-      url: "/trash",
+      url: "/dashboard/trash",
       icon: Delete01Icon,
     },
   ],
@@ -85,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={<Link href="#" />}
+              render={<Link href="/" />}
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <HugeiconsIcon
@@ -113,7 +109,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <React.Suspense>
+          <UserSidebarCache />
+        </React.Suspense>
       </SidebarFooter>
     </Sidebar>
   );
@@ -167,4 +165,14 @@ function Tree({ item }: { item: TreeItem }) {
       </Collapsible>
     </SidebarMenuItem>
   );
+}
+
+async function UserSidebarCache() {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return unauthorized();
+  }
+
+  return <NavUser user={session.user} />;
 }

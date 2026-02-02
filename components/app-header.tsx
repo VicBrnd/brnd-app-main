@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
-import { AppBreadcrumb } from "@/components/breadcrumb/app-breadcrumb";
-import { ViewMode } from "@/components/files/view-mode";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
+import { ViewSwitcher } from "@/components/files/view-switcher";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -21,7 +21,7 @@ export function AppHeader() {
           </div>
           <div className="ml-auto flex items-center gap-2">
             <Suspense>
-              <ViewMode />
+              <ViewSwitcher />
             </Suspense>
             <ThemeSwitcher />
           </div>
