@@ -69,7 +69,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
         {collectionsData.map((collection) => (
           <Link
             key={collection.id}
-            href={`/dashboard/${collection.id}`}
+            href={`/dashboard/${collection.slug}`}
             className={cn(
               "p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group block",
             )}

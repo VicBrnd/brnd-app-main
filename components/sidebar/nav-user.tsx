@@ -128,6 +128,7 @@ export function NavUserSkeleton() {
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-3 w-32" />
           </div>
+          <Skeleton className="size-4 rounded ml-auto" />
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
