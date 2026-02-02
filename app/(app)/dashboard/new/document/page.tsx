@@ -5,7 +5,7 @@ import { getCollections } from "@/lib/data/get-collections";
 
 export default function Page() {
   return (
-    <Suspense>
+    <Suspense fallback={<div>Load..</div>}>
       <NewDocumentCardAsync />
     </Suspense>
   );
