@@ -11,14 +11,7 @@ import * as z from "zod";
 
 import { NewCollectionAction } from "@/actions/new-collection.action";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   Field,
   FieldError,
@@ -92,14 +85,12 @@ export default function Page() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>New Collection</CardTitle>
-        <CardDescription>
-          Fill in the details for your collection
-        </CardDescription>
-      </CardHeader>
       <CardContent>
-        <form id="form-new-collection" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="form-new-collection"
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FieldGroup>
             <Controller
               name="title"
@@ -148,18 +139,11 @@ export default function Page() {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <div className="ml-auto">
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            type="submit"
-            form="form-new-collection"
-          >
-            {isLoading && <Spinner />}
-            Create Collection
-          </Button>
-        </div>
+      <CardFooter className="justify-end">
+        <Button disabled={isLoading} type="submit" form="form-new-collection">
+          {isLoading && <Spinner />}
+          Create Collection
+        </Button>
       </CardFooter>
     </Card>
   );

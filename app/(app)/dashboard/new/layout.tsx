@@ -1,7 +1,12 @@
+import NewCollectionHeader from "@/app/(app)/dashboard/new/collection/new-collection-header";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="h-full flex items-center justify-center">
-      <div className="w-full max-w-sm">{children}</div>
+    <main className="flex flex-col gap-4 md:gap-6 h-full">
+      <NewCollectionHeader />
+      <div className="flex h-full justify-center">
+        <div className="w-full ">{children} </div>
+      </div>
     </main>
   );
 }
