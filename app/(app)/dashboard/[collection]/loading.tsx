@@ -15,9 +15,15 @@ export default function Loading() {
         </div>
         <div className="flex flex-col gap-2">
           <Separator />
-          <div className="flex items-center">
-            <Skeleton className="h-4 w-52" />
-            <Skeleton className="ml-auto h-4 w-52" />
+          <div className="flex items-center text-sm">
+            <div className="flex flex-col gap-1 md:flex-row">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-36" />
+            </div>
+            <div className="ml-auto flex flex-col gap-1 md:flex-row">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-36" />
+            </div>
           </div>
         </div>
       </div>
