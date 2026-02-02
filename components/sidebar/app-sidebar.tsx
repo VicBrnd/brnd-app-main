@@ -1,23 +1,15 @@
-import * as React from "react";
+import { Suspense } from "react";
 
-import Link from "next/link";
 import { unauthorized } from "next/navigation";
 
-import {
-  ArrowRight01Icon,
-  ComputerTerminal01Icon,
-  Delete01Icon,
-  Folder01Icon,
-  HelpCircleIcon,
-  Home01Icon,
-  Settings01Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { MdxIcon } from "@/components/icons/mdx-icons";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavHeader } from "@/components/sidebar/nav-header";
+import { NavMain } from "@/components/sidebar/nav-main";
+import { NavSecondary } from "@/components/sidebar/nav-secondary";
+import { NavUser, NavUserSkeleton } from "@/components/sidebar/nav-user";
 import {
   Collapsible,
   CollapsibleContent,
@@ -30,70 +22,19 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
+import { data } from "@/config/dashboard.config";
 import { getSession } from "@/lib/data/get-session";
-
-const data = {
-  navMain: [
-    {
-      title: "All Files",
-      url: "/dashboard",
-      icon: Home01Icon,
-    },
-    {
-      title: "Trash",
-      url: "/dashboard/trash",
-      icon: Delete01Icon,
-    },
-  ],
-  tree: [
-    ["Uploadthing", ["API"]],
-    ["Zustand", ["Sidebar Store"]],
-    ["React", ["UseActionState"]],
-    ["NextJs", "Rate-Limiter"],
-    ["BetterAuth", "Auth Config"],
-    ["Redis", "@upstash/redis"],
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings01Icon,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: HelpCircleIcon,
-    },
-  ],
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="pb-0">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              render={<Link href="/" />}
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-            >
-              <HugeiconsIcon
-                icon={ComputerTerminal01Icon}
-                strokeWidth={2}
-                className="size-5! pointer-events-none"
-              />
-              <span className="text-base font-semibold">Brnd Inc.</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+      <NavHeader />
       <SidebarContent>
         <NavMain items={data.navMain} />
         <SidebarGroup>
@@ -109,9 +50,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <React.Suspense>
+        <Suspense fallback={<NavUserSkeleton />}>
           <UserSidebarCache />
-        </React.Suspense>
+        </Suspense>
       </SidebarFooter>
     </Sidebar>
   );

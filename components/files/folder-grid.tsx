@@ -23,6 +23,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CollectionWithCount } from "@/lib/db/types";
 import { cn } from "@/lib/utils";
 
@@ -85,11 +86,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
                 />
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger
-                // render={
-                //   <Button variant="ghost" size="icon" className="size-7" />
-                // }
-                >
+                <DropdownMenuTrigger>
                   <HugeiconsIcon icon={MoreVerticalIcon} className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -112,6 +109,28 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
               {collection.filesCount} files
             </p>
           </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function FolderGridSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="p-4 rounded-xl border bg-card">
+            <div className="flex items-start justify-between mb-3">
+              <Skeleton className="size-10 rounded-lg" />
+              <Skeleton className="size-4 rounded" />
+            </div>
+            <Skeleton className="h-5 w-3/4 mb-0.5" />
+            <Skeleton className="h-4 w-1/2" />
+          </div>
         ))}
       </div>
     </div>
