@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -17,6 +19,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { getCollectionBySlug } from "@/lib/data/get-collection-slug";
+import { getDocuments } from "@/lib/data/get-documents";
 
 export default async function CollectionPage({
   params,
@@ -41,7 +44,7 @@ export default async function CollectionPage({
               <EmptyTitle>No Document Yet</EmptyTitle>
               <EmptyDescription>
                 You haven&apos;t created any documents yet. Get started by
-                creating your first collection.
+                creating your first document.
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent className="flex-row justify-center gap-2">
@@ -62,7 +65,14 @@ export default async function CollectionPage({
   return (
     <div>
       <CollectionHeader collectionData={collectionData} />
-      <FileList />
+      <Suspense>
+        <FileListAsync collectionSlug={collection} />
+      </Suspense>
     </div>
   );
+}
+
+async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
+  const documentsData = await getDocuments(collectionSlug);
+  return <FileList documentsData={documentsData} />;
 }

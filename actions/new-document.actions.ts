@@ -76,6 +76,7 @@ export async function NewDocumentAction(formData: FormData) {
       .returning();
 
     updateTag("documents");
+    updateTag(`documents-${collectionRow.slug}`);
     updateTag("collections");
     updateTag(`collection-${collectionRow.slug}`);
 

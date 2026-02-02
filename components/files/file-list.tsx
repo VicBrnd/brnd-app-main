@@ -2,13 +2,13 @@
 
 import {
   ArrowRight02Icon,
-  FavouriteIcon,
+  Folder,
   Folder01Icon,
   MoreVerticalIcon,
-  Share01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,23 +26,19 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { DocumentWithCollection } from "@/lib/db/types";
 import { useFilesStore } from "@/store/files-store";
 
-import { FileIcon } from "./file-icon";
+interface FileListProps {
+  documentsData: DocumentWithCollection[];
+}
 
-export function FileList() {
-  const { viewMode, toggleStarred, getFilteredFiles } = useFilesStore();
+export function FileList({ documentsData }: FileListProps) {
+  const { viewMode } = useFilesStore();
 
-  const files = getFilteredFiles();
   const title = "All Files";
 
-  if (files.length === 0) {
+  if (documentsData.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 bg-background p-6 px-4 md:p-10">
         <Empty>
@@ -81,45 +77,14 @@ export function FileList() {
       <div className="space-y-4">
         <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {files.map((file) => (
+          {documentsData.map((document) => (
             <div
-              key={file.id}
+              key={document.id}
               className="p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group"
             >
               <div className="flex items-start justify-between mb-3">
-                <FileIcon type={file.type} />
+                <MdxIcon style={{ color: document.collectionColor }} />
                 <div className="flex items-center gap-1">
-                  <Tooltip>
-                    <TooltipTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={cn(
-                            "size-7 transition-opacity",
-                            file.starred
-                              ? "opacity-100"
-                              : "opacity-0 group-hover:opacity-100",
-                          )}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleStarred(file.id);
-                          }}
-                        >
-                          <HugeiconsIcon
-                            icon={FavouriteIcon}
-                            className={cn(
-                              "size-4",
-                              file.starred && "fill-amber-400 text-amber-400",
-                            )}
-                          />
-                        </Button>
-                      }
-                    />
-                    <TooltipContent>
-                      {file.starred ? "Remove from starred" : "Add to starred"}
-                    </TooltipContent>
-                  </Tooltip>
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       render={
@@ -150,11 +115,13 @@ export function FileList() {
                   </DropdownMenu>
                 </div>
               </div>
-              <p className="font-medium text-sm truncate mb-0.5">{file.name}</p>
+              <p className="font-medium text-sm truncate mb-0.5">
+                {document.title}
+              </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{file.size}</span>
-                {file.shared && (
-                  <HugeiconsIcon icon={Share01Icon} className="size-3" />
+                <span> {document.createdAt.toLocaleDateString("fr-FR")}</span>
+                {document.isPublished === true && (
+                  <HugeiconsIcon icon={Folder} className="size-3" />
                 )}
               </div>
             </div>
@@ -170,73 +137,40 @@ export function FileList() {
       <div className="rounded-xl border bg-card overflow-hidden">
         <div className="hidden sm:grid grid-cols-[1fr_100px_100px_100px_70px] gap-4 px-4 py-3 border-b bg-muted/50 text-xs font-medium text-muted-foreground">
           <span>Name</span>
-          <span>Size</span>
+          <span>Collection</span>
           <span>Modified</span>
           <span>Created</span>
-          <span></span>
         </div>
         <div className="divide-y">
-          {files.map((file) => (
+          {documentsData.map((document) => (
             <div
-              key={file.id}
+              key={document.id}
               className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_100px_100px_100px_70px] gap-2 sm:gap-4 px-4 py-3 hover:bg-accent/50 transition-colors cursor-pointer group items-center"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <FileIcon type={file.type} />
+                <MdxIcon style={{ color: document.collectionColor }} />
                 <div className="min-w-0">
-                  <p className="font-medium text-sm truncate">{file.name}</p>
+                  <p className="font-medium text-sm truncate">
+                    {document.title}
+                  </p>
                   <p className="text-xs text-muted-foreground sm:hidden">
-                    {file.size} · {file.modifiedAt}
+                    {document.collectionTitle}
+                  </p>
+                  <p className="text-xs text-muted-foreground sm:hidden">
+                    {document.updatedAt.toLocaleDateString("en-US")}
                   </p>
                 </div>
-                {file.shared && (
-                  <HugeiconsIcon
-                    icon={Share01Icon}
-                    className="size-3.5 text-muted-foreground shrink-0 hidden sm:block"
-                  />
-                )}
               </div>
               <span className="hidden sm:block text-sm text-muted-foreground">
-                {file.size}
+                {document.collectionTitle}
               </span>
               <span className="hidden sm:block text-sm text-muted-foreground">
-                {file.modifiedAt}
+                {document.updatedAt.toLocaleDateString("fr-FR")}
               </span>
               <span className="hidden sm:block text-sm text-muted-foreground">
-                {file.createdAt}
+                {document.createdAt.toLocaleDateString("fr-FR")}
               </span>
               <div className="flex items-center gap-1">
-                <Tooltip>
-                  <TooltipTrigger
-                    render={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={cn(
-                          "size-7 transition-opacity",
-                          file.starred
-                            ? "opacity-100"
-                            : "opacity-0 group-hover:opacity-100",
-                        )}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleStarred(file.id);
-                        }}
-                      >
-                        <HugeiconsIcon
-                          icon={FavouriteIcon}
-                          className={cn(
-                            "size-4",
-                            file.starred && "fill-amber-400 text-amber-400",
-                          )}
-                        />
-                      </Button>
-                    }
-                  />
-                  <TooltipContent>
-                    {file.starred ? "Remove from starred" : "Add to starred"}
-                  </TooltipContent>
-                </Tooltip>
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     render={

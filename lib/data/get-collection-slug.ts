@@ -7,6 +7,8 @@ import { getSession } from "@/lib/data/get-session";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
+import "server-only";
+
 export async function getCollectionBySlug(slug: string) {
   const session = await getSession();
 

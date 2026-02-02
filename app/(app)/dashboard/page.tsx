@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { FileList } from "@/components/files/file-list";
 import { FolderGrid, FolderGridSkeleton } from "@/components/files/folder-grid";
 import { getCollections } from "@/lib/data/get-collections";
+import { getDocuments } from "@/lib/data/get-documents";
 
 export default function Page() {
   return (
@@ -10,7 +11,9 @@ export default function Page() {
       <Suspense fallback={<FolderGridSkeleton />}>
         <FolderGridAsync />
       </Suspense>
-      <FileList />
+      <Suspense fallback={<div>Load...</div>}>
+        <FileListAsync />
+      </Suspense>
     </div>
   );
 }
@@ -18,4 +21,9 @@ export default function Page() {
 async function FolderGridAsync() {
   const collectionsData = await getCollections();
   return <FolderGrid collectionsData={collectionsData} />;
+}
+
+async function FileListAsync() {
+  const documentsData = await getDocuments();
+  return <FileList documentsData={documentsData} />;
 }

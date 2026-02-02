@@ -43,6 +43,7 @@ export async function NewCollectionAction(formData: FormData) {
       .returning();
 
     updateTag("collections");
+
     return { success: true, collection: newCollection };
   } catch (error) {
     if (error instanceof z.ZodError) {

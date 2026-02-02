@@ -20,3 +20,11 @@ export type CollectionWithCount = Collection & { filesCount: number };
 export type NewCollection = typeof collection.$inferInsert;
 export type Document = typeof document.$inferSelect;
 export type NewDocument = typeof document.$inferInsert;
+export type DocumentWithCollection = Pick<
+  Document,
+  "id" | "title" | "slug" | "isPublished" | "createdAt" | "updatedAt"
+> & {
+  collectionSlug: string;
+  collectionTitle: string;
+  collectionColor: string;
+};
