@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   ArrowRight02Icon,
   Folder,
@@ -78,53 +80,58 @@ export function FileList({ documentsData }: FileListProps) {
         <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {documentsData.map((document) => (
-            <div
+            <Link
+              href={`/dashboard/${document.collectionSlug}/${document.slug}`}
               key={document.id}
-              className="p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group"
             >
-              <div className="flex items-start justify-between mb-3">
-                <MdxIcon style={{ color: document.collectionColor }} />
-                <div className="flex items-center gap-1">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="size-7"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <HugeiconsIcon
-                            icon={MoreVerticalIcon}
-                            className="size-4"
-                          />
-                        </Button>
-                      }
-                    />
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem>Download</DropdownMenuItem>
-                        <DropdownMenuItem>Rename</DropdownMenuItem>
-                        <DropdownMenuItem>Share</DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem variant="destructive">
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+              <div
+                key={document.id}
+                className="p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <MdxIcon style={{ color: document.collectionColor }} />
+                  <div className="flex items-center gap-1">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger
+                        onClick={(e) => e.preventDefault()}
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-7"
+                          >
+                            <HugeiconsIcon
+                              icon={MoreVerticalIcon}
+                              className="size-4"
+                            />
+                          </Button>
+                        }
+                      />
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem>Download</DropdownMenuItem>
+                          <DropdownMenuItem>Rename</DropdownMenuItem>
+                          <DropdownMenuItem>Share</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem variant="destructive">
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+                <p className="font-medium text-sm truncate mb-0.5">
+                  {document.title}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span> {document.createdAt.toLocaleDateString("fr-FR")}</span>
+                  {document.isPublished === true && (
+                    <HugeiconsIcon icon={Folder} className="size-3" />
+                  )}
                 </div>
               </div>
-              <p className="font-medium text-sm truncate mb-0.5">
-                {document.title}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span> {document.createdAt.toLocaleDateString("fr-FR")}</span>
-                {document.isPublished === true && (
-                  <HugeiconsIcon icon={Folder} className="size-3" />
-                )}
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -143,7 +150,8 @@ export function FileList({ documentsData }: FileListProps) {
         </div>
         <div className="divide-y">
           {documentsData.map((document) => (
-            <div
+            <Link
+              href={`/dashboard/${document.collectionSlug}/${document.slug}`}
               key={document.id}
               className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_100px_100px_100px_70px] gap-2 sm:gap-4 px-4 py-3 hover:bg-accent/50 transition-colors cursor-pointer group items-center"
             >
@@ -157,7 +165,7 @@ export function FileList({ documentsData }: FileListProps) {
                     {document.collectionTitle}
                   </p>
                   <p className="text-xs text-muted-foreground sm:hidden">
-                    {document.updatedAt.toLocaleDateString("en-US")}
+                    {document.updatedAt.toLocaleDateString("fr-FR")}
                   </p>
                 </div>
               </div>
@@ -173,13 +181,9 @@ export function FileList({ documentsData }: FileListProps) {
               <div className="flex items-center gap-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger
+                    onClick={(e) => e.preventDefault()}
                     render={
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-7"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <Button variant="ghost" size="icon" className="size-7">
                         <HugeiconsIcon
                           icon={MoreVerticalIcon}
                           className="size-4"
@@ -200,7 +204,7 @@ export function FileList({ documentsData }: FileListProps) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

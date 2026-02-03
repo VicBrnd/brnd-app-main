@@ -86,7 +86,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
                 />
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger onClick={(e) => e.preventDefault()}>
                   <HugeiconsIcon icon={MoreVerticalIcon} className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
