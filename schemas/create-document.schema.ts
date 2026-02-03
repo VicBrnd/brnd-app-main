@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const NewCollectionFormSchema = z.object({
+export const CreateDocumentFormSchema = z.object({
   title: z
     .string()
     .min(1, "Title must be at least 1 characters.")
@@ -13,4 +13,5 @@ export const NewCollectionFormSchema = z.object({
       /^[\da-z-]+$/,
       "Slug can only contain lowercase letters, numbers, and hyphens",
     ),
+  collection: z.string().min(1, "Collection is required"),
 });

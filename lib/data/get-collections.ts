@@ -9,16 +9,6 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getCollections() {
-  const session = await getSession();
-
-  if (!session) {
-    return unauthorized();
-  }
-
-  return getCollectionsCache(session.user.id);
-}
-
 async function getCollectionsCache(userId: string) {
   "use cache";
   cacheTag("collections");
@@ -38,4 +28,14 @@ async function getCollectionsCache(userId: string) {
     .leftJoin(document, eq(document.collectionId, collection.id))
     .where(eq(collection.userId, userId))
     .groupBy(collection.id);
+}
+
+export async function getCollections() {
+  const session = await getSession();
+
+  if (!session) {
+    return unauthorized();
+  }
+
+  return getCollectionsCache(session.user.id);
 }

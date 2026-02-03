@@ -50,7 +50,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
             <Button
               nativeButton={false}
               variant="outline"
-              render={<Link href="/dashboard/new/collection" />}
+              render={<Link href="/dashboard/create/collection" />}
             >
               New Collection
             </Button>

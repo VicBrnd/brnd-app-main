@@ -7,11 +7,11 @@ import { and, count, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { authActionClient } from "@/lib/safe-action";
-import { NewDocumentFormSchema } from "@/schemas/new-document.schema";
+import { CreateDocumentFormSchema } from "@/schemas/create-document.schema";
 
-export const NewDocumentAction = authActionClient
+export const CreateDocumentAction = authActionClient
   .metadata({ actionName: "NewDocument" })
-  .inputSchema(NewDocumentFormSchema)
+  .inputSchema(CreateDocumentFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
     const [collectionRow] = await db
       .select({ id: collection.id, slug: collection.slug })
@@ -28,7 +28,7 @@ export const NewDocumentAction = authActionClient
       return { error: "Collection not found" };
     }
 
-    const [existing] = await db
+    const [verifySlug] = await db
       .select({ id: document.id })
       .from(document)
       .where(
@@ -39,7 +39,7 @@ export const NewDocumentAction = authActionClient
       )
       .limit(1);
 
-    if (existing) {
+    if (verifySlug) {
       return {
         error: "A document with this slug already exists in this collection",
       };
@@ -61,9 +61,7 @@ export const NewDocumentAction = authActionClient
       })
       .returning();
 
-    updateTag("documents");
     updateTag(`documents-${collectionRow.slug}`);
-    updateTag("collections");
     updateTag(`collection-${collectionRow.slug}`);
 
     return {

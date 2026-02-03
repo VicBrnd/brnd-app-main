@@ -63,7 +63,7 @@ export function NavMain({
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Write</DropdownMenuLabel>
                   <DropdownMenuItem
-                    render={<Link href="/dashboard/new/collection" />}
+                    render={<Link href="/dashboard/create/collection" />}
                   >
                     <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
                     New Collection
@@ -72,7 +72,7 @@ export function NavMain({
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    render={<Link href="/dashboard/new/document" />}
+                    render={<Link href="/dashboard/create/document" />}
                   >
                     <HugeiconsIcon icon={File01Icon} className="mr-1" />
                     New Document

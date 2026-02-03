@@ -9,19 +9,6 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getDocumentBySlug(
-  collectionSlug: string,
-  documentSlug: string,
-) {
-  const session = await getSession();
-
-  if (!session) {
-    return unauthorized();
-  }
-
-  return getDocumentBySlugCache(session.user.id, collectionSlug, documentSlug);
-}
-
 async function getDocumentBySlugCache(
   userId: string,
   collectionSlug: string,
@@ -53,4 +40,17 @@ async function getDocumentBySlugCache(
     );
 
   return result ?? null;
+}
+
+export async function getDocumentBySlug(
+  collectionSlug: string,
+  documentSlug: string,
+) {
+  const session = await getSession();
+
+  if (!session) {
+    return unauthorized();
+  }
+
+  return getDocumentBySlugCache(session.user.id, collectionSlug, documentSlug);
 }

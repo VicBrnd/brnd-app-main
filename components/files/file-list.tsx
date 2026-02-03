@@ -10,6 +10,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { columns } from "@/components/files/document-list/columns";
+import { DataTable } from "@/components/files/document-list/data-table";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -138,76 +140,5 @@ export function FileList({ documentsData }: FileListProps) {
     );
   }
 
-  return (
-    <div className="space-y-4">
-      <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
-      <div className="rounded-xl border bg-card overflow-hidden">
-        <div className="hidden sm:grid grid-cols-[1fr_100px_100px_100px_70px] gap-4 px-4 py-3 border-b bg-muted/50 text-xs font-medium text-muted-foreground">
-          <span>Name</span>
-          <span>Collection</span>
-          <span>Modified</span>
-          <span>Created</span>
-        </div>
-        <div className="divide-y">
-          {documentsData.map((document) => (
-            <Link
-              href={`/dashboard/${document.collectionSlug}/${document.slug}`}
-              key={document.id}
-              className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_100px_100px_100px_70px] gap-2 sm:gap-4 px-4 py-3 hover:bg-accent/50 transition-colors cursor-pointer group items-center"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <MdxIcon style={{ color: document.collectionColor }} />
-                <div className="min-w-0">
-                  <p className="font-medium text-sm truncate">
-                    {document.title}
-                  </p>
-                  <p className="text-xs text-muted-foreground sm:hidden">
-                    {document.collectionTitle}
-                  </p>
-                  <p className="text-xs text-muted-foreground sm:hidden">
-                    {document.updatedAt.toLocaleDateString("fr-FR")}
-                  </p>
-                </div>
-              </div>
-              <span className="hidden sm:block text-sm text-muted-foreground">
-                {document.collectionTitle}
-              </span>
-              <span className="hidden sm:block text-sm text-muted-foreground">
-                {document.updatedAt.toLocaleDateString("fr-FR")}
-              </span>
-              <span className="hidden sm:block text-sm text-muted-foreground">
-                {document.createdAt.toLocaleDateString("fr-FR")}
-              </span>
-              <div className="flex items-center gap-1">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    onClick={(e) => e.preventDefault()}
-                    render={
-                      <Button variant="ghost" size="icon" className="size-7">
-                        <HugeiconsIcon
-                          icon={MoreVerticalIcon}
-                          className="size-4"
-                        />
-                      </Button>
-                    }
-                  />
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>Download</DropdownMenuItem>
-                      <DropdownMenuItem>Rename</DropdownMenuItem>
-                      <DropdownMenuItem>Share</DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <DataTable columns={columns} data={documentsData} />;
 }

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import NewDocumentCard from "@/app/(app)/dashboard/new/document/new-document-card";
+import NewDocumentCard from "@/app/(app)/dashboard/create/document/create-document-card";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCollections } from "@/lib/data/get-collections";

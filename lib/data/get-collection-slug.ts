@@ -9,16 +9,6 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getCollectionBySlug(slug: string) {
-  const session = await getSession();
-
-  if (!session) {
-    return unauthorized();
-  }
-
-  return getCollectionBySlugCache(session.user.id, slug);
-}
-
 async function getCollectionBySlugCache(userId: string, slug: string) {
   "use cache";
   cacheTag(`collection-${slug}`);
@@ -40,4 +30,14 @@ async function getCollectionBySlugCache(userId: string, slug: string) {
     .groupBy(collection.id);
 
   return result ?? null;
+}
+
+export async function getCollectionBySlug(slug: string) {
+  const session = await getSession();
+
+  if (!session) {
+    return unauthorized();
+  }
+
+  return getCollectionBySlugCache(session.user.id, slug);
 }

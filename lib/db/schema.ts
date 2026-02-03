@@ -9,7 +9,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-import { timestamps } from "@/lib/db/helpers";
+import { timestamps } from "@/lib/db/utils";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),

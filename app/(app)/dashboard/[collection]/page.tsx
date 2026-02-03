@@ -51,7 +51,7 @@ export default async function CollectionPage({
               <Button
                 nativeButton={false}
                 variant="outline"
-                render={<Link href="/dashboard/new/document" />}
+                render={<Link href="/dashboard/create/document" />}
               >
                 New Document
               </Button>
