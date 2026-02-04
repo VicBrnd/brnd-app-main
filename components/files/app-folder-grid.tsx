@@ -31,7 +31,7 @@ interface FolderGridProps {
   collectionsData: CollectionWithCount[];
 }
 
-export function FolderGrid({ collectionsData }: FolderGridProps) {
+export function AppFolderGrid({ collectionsData }: FolderGridProps) {
   if (collectionsData.length === 0) {
     return (
       <Card>
@@ -115,7 +115,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
   );
 }
 
-export function FolderGridSkeleton() {
+export function AppFolderGridSkeleton() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">

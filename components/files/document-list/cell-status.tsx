@@ -2,7 +2,7 @@
 
 import { useOptimistic, useTransition } from "react";
 
-import { togglePublishStatusAction } from "@/actions/update-status-document";
+import { togglePublishStatusAction } from "@/actions/files/update-status-document";
 import { Badge } from "@/components/ui/brnd-ui/badge";
 
 interface PublishStatusBadgeProps {

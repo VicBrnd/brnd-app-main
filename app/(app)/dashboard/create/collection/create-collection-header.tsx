@@ -5,7 +5,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Separator } from "@/components/ui/separator";
 
-export function NewCollectionHeader() {
+export function CreateCollectionHeader() {
   return (
     <header>
       <div className="flex flex-col gap-4">

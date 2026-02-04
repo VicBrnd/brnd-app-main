@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import {
-  CreditCardIcon,
+  AccountSetting02Icon,
   Logout01Icon,
   MoreVerticalIcon,
-  Notification01Icon,
+  SecurityIcon,
   UserCircleIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -92,17 +93,23 @@ export function NavUser({ user }: { user: User }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  render={<Link href="/dashboard/account/settings" />}
+                >
                   <HugeiconsIcon icon={UserCircleIcon} />
                   Account
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <HugeiconsIcon icon={CreditCardIcon} />
-                  Billing
+                <DropdownMenuItem
+                  render={<Link href="/dashboard/account/security" />}
+                >
+                  <HugeiconsIcon icon={SecurityIcon} />
+                  Security
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <HugeiconsIcon icon={Notification01Icon} />
-                  Notifications
+                <DropdownMenuItem
+                  render={<Link href="/dashboard/account/settings" />}
+                >
+                  <HugeiconsIcon icon={AccountSetting02Icon} />
+                  Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import NewDocumentCard from "@/app/(app)/dashboard/create/document/create-document-card";
+import { CreateDocumentCard } from "@/app/(app)/dashboard/create/document/create-document-card";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCollections } from "@/lib/data/get-collections";
@@ -15,7 +15,7 @@ export default function CreateDocumentPage() {
 
 async function NewDocumentCardAsync() {
   const CollectionsData = await getCollections();
-  return <NewDocumentCard collectionsData={CollectionsData} />;
+  return <CreateDocumentCard collectionsData={CollectionsData} />;
 }
 
 function NewDocumentCardSkeleton() {

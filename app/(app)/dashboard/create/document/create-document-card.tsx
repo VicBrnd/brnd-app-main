@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { CreateDocumentAction } from "@/actions/create-document.actions";
+import { CreateDocumentAction } from "@/actions/files/create-document.actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -28,15 +28,13 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { CollectionWithCount } from "@/lib/db/types";
-import { CreateDocumentFormSchema } from "@/schemas/create-document.schema";
+import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
 
 interface NewDocumentCardProps {
   collectionsData: CollectionWithCount[];
 }
 
-export default function CreateDocumentCard({
-  collectionsData,
-}: NewDocumentCardProps) {
+export function CreateDocumentCard({ collectionsData }: NewDocumentCardProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 

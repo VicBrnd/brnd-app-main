@@ -37,7 +37,7 @@ interface FileListProps {
   documentsData: DocumentWithCollection[];
 }
 
-export function FileList({ documentsData }: FileListProps) {
+export function AppDocumentList({ documentsData }: FileListProps) {
   const { viewMode } = useFilesStore();
 
   const title = "All Files";

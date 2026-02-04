@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "v7tc63n03z.ufs.sh",
+        pathname: "/f/*",
+      },
+      {
+        protocol: "https",
         hostname: "avatars.githubusercontent.com",
       },
       {

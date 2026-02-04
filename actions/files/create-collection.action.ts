@@ -9,7 +9,7 @@ import { collection } from "@/lib/db/schema";
 import { takeFirstOrNull, takeFirstOrThrow } from "@/lib/db/utils";
 import { getErrorMessage } from "@/lib/handle-error";
 import { authActionClient } from "@/lib/safe-action";
-import { CreateCollectionFormSchema } from "@/schemas/create-collection.schema";
+import { CreateCollectionFormSchema } from "@/schemas/files/create-collection.schema";
 
 export const CreateCollectionAction = authActionClient
   .metadata({ actionName: "NewCollection" })

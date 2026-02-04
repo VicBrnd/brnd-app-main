@@ -7,7 +7,7 @@ import { and, count, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { authActionClient } from "@/lib/safe-action";
-import { CreateDocumentFormSchema } from "@/schemas/create-document.schema";
+import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
 
 export const CreateDocumentAction = authActionClient
   .metadata({ actionName: "NewDocument" })

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import DocumentHeader from "@/app/(app)/dashboard/[collection]/[document]/document-header";
+import { DocumentHeader } from "@/app/(app)/dashboard/[collection]/[document]/document-header";
 import { getDocumentBySlug } from "@/lib/data/get-document-slug";
 
 export default async function DocumentPage({
