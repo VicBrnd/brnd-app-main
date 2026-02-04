@@ -15,9 +15,5 @@ export default async function DocumentPage({
     return notFound();
   }
 
-  return (
-    <div>
-      <DocumentHeader documentData={documentData} />
-    </div>
-  );
+  return <DocumentHeader documentData={documentData} />;
 }

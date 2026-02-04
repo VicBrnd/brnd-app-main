@@ -17,7 +17,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -59,7 +58,11 @@ export function NavMain({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" sideOffset={9} className="w-64">
+              <DropdownMenuContent
+                align="end"
+                sideOffset={9}
+                className="w-auto"
+              >
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Write</DropdownMenuLabel>
                   <DropdownMenuItem
@@ -67,18 +70,12 @@ export function NavMain({
                   >
                     <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
                     New Collection
-                    <DropdownMenuShortcut className="ml-auto">
-                      ⌘C
-                    </DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     render={<Link href="/dashboard/create/document" />}
                   >
                     <HugeiconsIcon icon={File01Icon} className="mr-1" />
                     New Document
-                    <DropdownMenuShortcut className="ml-auto">
-                      ⌘C
-                    </DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

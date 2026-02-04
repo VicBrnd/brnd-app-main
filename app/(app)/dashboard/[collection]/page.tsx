@@ -33,7 +33,7 @@ export default async function CollectionPage({
   if (!collectionData) notFound();
 
   return (
-    <div>
+    <>
       <CollectionHeader collectionData={collectionData} />
       <div className="p-4 md:p-6">
         {collectionData.filesCount === 0 ? (
@@ -74,7 +74,7 @@ export default async function CollectionPage({
           </Suspense>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
