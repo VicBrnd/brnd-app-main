@@ -20,14 +20,14 @@ async function getDocumentBySlugCache(
   const [result] = await db
     .select({
       id: document.id,
-      collectionId: document.collectionId,
       title: document.title,
       slug: document.slug,
-      content: document.content,
       isPublished: document.isPublished,
-      orderIndex: document.orderIndex,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,
+      collectionSlug: collection.slug,
+      collectionTitle: collection.title,
+      collectionColor: collection.color,
     })
     .from(document)
     .innerJoin(collection, eq(collection.id, document.collectionId))

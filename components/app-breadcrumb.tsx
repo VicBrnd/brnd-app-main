@@ -54,11 +54,11 @@ export function AppBreadcrumb() {
         <BreadcrumbItem>
           <Select items={AppOverview}>
             <ButtonGroup>
-              <Button variant="outline">
+              <Button variant="outline" size="sm">
                 <HugeiconsIcon icon={DashboardSquare02Icon} />
                 <SelectValue />
               </Button>
-              <SelectTrigger className="w-full max-w-48" />
+              <SelectTrigger className="w-full max-w-48" size="sm" />
             </ButtonGroup>
             <SelectContent>
               <SelectGroup>
@@ -78,11 +78,11 @@ export function AppBreadcrumb() {
         <BreadcrumbItem>
           <Select items={Collections}>
             <ButtonGroup>
-              <Button variant="outline">
+              <Button variant="outline" size="sm">
                 <HugeiconsIcon icon={Folder01Icon} />
                 <SelectValue />
               </Button>
-              <SelectTrigger className="w-full max-w-48" />
+              <SelectTrigger className="w-full max-w-48" size="sm" />
             </ButtonGroup>
             <SelectContent>
               <SelectGroup>
@@ -102,11 +102,11 @@ export function AppBreadcrumb() {
         <BreadcrumbItem>
           <Select items={Documents}>
             <ButtonGroup>
-              <Button variant="outline">
+              <Button variant="outline" size="sm">
                 <MdxIcon />
                 <SelectValue />
               </Button>
-              <SelectTrigger className="w-full max-w-48" />
+              <SelectTrigger className="w-full max-w-48" size="sm" />
             </ButtonGroup>
             <SelectContent>
               <SelectGroup>

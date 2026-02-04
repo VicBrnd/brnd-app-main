@@ -2,16 +2,25 @@ import { Suspense } from "react";
 
 import { FileList } from "@/components/files/file-list";
 import { FolderGrid, FolderGridSkeleton } from "@/components/files/folder-grid";
+import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 import { getCollections } from "@/lib/data/get-collections";
 import { getDocuments } from "@/lib/data/get-documents";
 
-export default function Page() {
+export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-4 md:p-6">
       <Suspense fallback={<FolderGridSkeleton />}>
         <FolderGridAsync />
       </Suspense>
-      <Suspense fallback={<div>Load...</div>}>
+      <Suspense
+        fallback={
+          <DataTableSkeleton
+            columnCount={5}
+            withViewOptions={false}
+            withPagination={false}
+          />
+        }
+      >
         <FileListAsync />
       </Suspense>
     </div>

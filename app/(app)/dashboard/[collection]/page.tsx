@@ -10,6 +10,7 @@ import CollectionHeader from "@/app/(app)/dashboard/[collection]/collection-head
 import { FileList } from "@/components/files/file-list";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 import {
   Empty,
   EmptyContent,
@@ -31,43 +32,48 @@ export default async function CollectionPage({
 
   if (!collectionData) notFound();
 
-  if (collectionData.filesCount === 0) {
-    return (
-      <div>
-        <CollectionHeader collectionData={collectionData} />
-        <Card>
-          <Empty className="flex flex-col justify-center items-center">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <HugeiconsIcon icon={Folder01Icon} />
-              </EmptyMedia>
-              <EmptyTitle>No Document Yet</EmptyTitle>
-              <EmptyDescription>
-                You haven&apos;t created any documents yet. Get started by
-                creating your first document.
-              </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent className="flex-row justify-center gap-2">
-              <Button
-                nativeButton={false}
-                variant="outline"
-                render={<Link href="/dashboard/create/document" />}
-              >
-                New Document
-              </Button>
-            </EmptyContent>
-          </Empty>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div>
       <CollectionHeader collectionData={collectionData} />
-      <Suspense>
-        <FileListAsync collectionSlug={collection} />
-      </Suspense>
+      <div className="p-4 md:p-6">
+        {collectionData.filesCount === 0 ? (
+          <Card>
+            <Empty className="flex flex-col justify-center items-center">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <HugeiconsIcon icon={Folder01Icon} />
+                </EmptyMedia>
+                <EmptyTitle>No Document Yet</EmptyTitle>
+                <EmptyDescription>
+                  You haven&apos;t created any documents yet. Get started by
+                  creating your first document.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent className="flex-row justify-center gap-2">
+                <Button
+                  nativeButton={false}
+                  variant="outline"
+                  render={<Link href="/dashboard/create/document" />}
+                >
+                  New Document
+                </Button>
+              </EmptyContent>
+            </Empty>
+          </Card>
+        ) : (
+          <Suspense
+            fallback={
+              <DataTableSkeleton
+                columnCount={5}
+                withViewOptions={false}
+                withPagination={false}
+              />
+            }
+          >
+            <FileListAsync collectionSlug={collection} />
+          </Suspense>
+        )}
+      </div>
     </div>
   );
 }

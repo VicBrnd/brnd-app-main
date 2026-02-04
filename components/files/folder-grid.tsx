@@ -71,7 +71,7 @@ export function FolderGrid({ collectionsData }: FolderGridProps) {
             key={collection.id}
             href={`/dashboard/${collection.slug}`}
             className={cn(
-              "p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group block",
+              "p-4 rounded-xl border bg-background dark:bg-input/30 hover:bg-accent/50 transition-all cursor-pointer group block",
             )}
           >
             <div className="flex items-start justify-between mb-3">

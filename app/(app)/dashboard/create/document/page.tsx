@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCollections } from "@/lib/data/get-collections";
 
-export default function Page() {
+export default function CreateDocumentPage() {
   return (
     <Suspense fallback={<NewDocumentCardSkeleton />}>
       <NewDocumentCardAsync />

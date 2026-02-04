@@ -140,5 +140,10 @@ export function FileList({ documentsData }: FileListProps) {
     );
   }
 
-  return <DataTable columns={columns} data={documentsData} />;
+  return (
+    <div className="space-y-4">
+      <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
+      <DataTable columns={columns} data={documentsData} />
+    </div>
+  );
 }
