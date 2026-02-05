@@ -54,7 +54,7 @@ export function DataTableSkeleton({
       </div>
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-sidebar dark:bg-input/30">
             {Array.from({ length: 1 }).map((_, i) => (
               <TableRow key={i} className="hover:bg-transparent">
                 {Array.from({ length: columnCount }).map((_, j) => (
@@ -71,7 +71,7 @@ export function DataTableSkeleton({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-background dark:bg-sidebar/50">
             {Array.from({ length: rowCount }).map((_, i) => (
               <TableRow key={i} className="hover:bg-transparent">
                 {Array.from({ length: columnCount }).map((_, j) => (
