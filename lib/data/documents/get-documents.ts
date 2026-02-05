@@ -1,23 +1,34 @@
 import { cacheTag } from "next/cache";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, SQL } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getDocuments(userId: string, collectionSlug?: string) {
+export type DocumentsProps = Pick<
+  typeof document.$inferSelect,
+  "id" | "title" | "slug" | "isPublished" | "createdAt" | "updatedAt"
+> & {
+  collectionSlug: string;
+  collectionTitle: string;
+  collectionColor: string;
+};
+
+export async function getDocuments(
+  userId: string,
+  collectionSlug?: string,
+): Promise<DocumentsProps[]> {
   "use cache";
   cacheTag(collectionSlug ? `documents-${collectionSlug}` : "documents");
 
-  const conditions = [eq(collection.userId, userId)];
+  const filters: SQL[] = [];
 
-  if (collectionSlug) {
-    conditions.push(eq(collection.slug, collectionSlug));
-  }
+  if (userId) filters.push(eq(collection.userId, userId));
+  if (collectionSlug) filters.push(eq(collection.slug, collectionSlug));
 
-  return db
+  const documentsData = await db
     .select({
       id: document.id,
       title: document.title,
@@ -31,6 +42,8 @@ export async function getDocuments(userId: string, collectionSlug?: string) {
     })
     .from(document)
     .innerJoin(collection, eq(document.collectionId, collection.id))
-    .where(and(...conditions))
+    .where(and(...filters))
     .orderBy(desc(document.createdAt));
+
+  return documentsData;
 }

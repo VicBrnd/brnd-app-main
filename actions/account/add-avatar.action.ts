@@ -40,7 +40,7 @@ export const addAvatar = authActionClient
 
       await updateUser({ image: uploadedFile.ufsUrl });
 
-      updateTag(`${sessionData.user}`);
+      updateTag("session");
     } catch (error) {
       try {
         await utapi.deleteFiles([result.data.key]);

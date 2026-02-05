@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UserImagesProps } from "@/lib/data/account/get-images";
+import { ImagesProps } from "@/lib/data/account/get-images";
 
 export type FileSelectionProps = {
-  selected: UserImagesProps[];
-  userImages?: UserImagesProps[];
+  selected: ImagesProps[];
+  userImages?: ImagesProps[];
   handleSelect: (id: string) => void;
   disabled?: boolean;
 };

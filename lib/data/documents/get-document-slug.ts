@@ -7,15 +7,24 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
+export type DocumentBySlugProps = Pick<
+  typeof document.$inferSelect,
+  "id" | "title" | "slug" | "isPublished" | "createdAt" | "updatedAt"
+> & {
+  collectionSlug: string;
+  collectionTitle: string;
+  collectionColor: string;
+};
+
 export async function getDocumentBySlug(
   userId: string,
   collectionSlug: string,
   documentSlug: string,
-) {
+): Promise<DocumentBySlugProps | undefined> {
   "use cache";
   cacheTag(`document-${collectionSlug}-${documentSlug}`);
 
-  const [result] = await db
+  const [documentSlugData] = await db
     .select({
       id: document.id,
       title: document.title,
@@ -37,5 +46,5 @@ export async function getDocumentBySlug(
       ),
     );
 
-  return result ?? null;
+  return documentSlugData;
 }

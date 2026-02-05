@@ -10,7 +10,7 @@ import { updateUserSchema } from "@/schemas/account/update-user.schema";
 export const updateUser = authActionClient
   .metadata({ actionName: "updateUser" })
   .inputSchema(updateUserSchema)
-  .action(async ({ parsedInput, ctx: { sessionData } }) => {
+  .action(async ({ parsedInput }) => {
     await auth.api.updateUser({
       body: {
         name: parsedInput?.name,
@@ -19,5 +19,5 @@ export const updateUser = authActionClient
       headers: await headers(),
     });
 
-    updateTag(`${sessionData.user}`);
+    updateTag("session");
   });

@@ -1,29 +1,31 @@
 import { cacheTag } from "next/cache";
 
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { image } from "@/lib/db/schema";
 
 import "server-only";
 
-export type UserImagesProps = Pick<
+export type ImagesProps = Pick<
   typeof image.$inferSelect,
   "id" | "url" | "name" | "key"
 >;
 
-export async function getImages(userId: string): Promise<UserImagesProps[]> {
-  "use cache: private";
-  cacheTag("user");
+export async function getImages(userId: string): Promise<ImagesProps[]> {
+  "use cache";
+  cacheTag("session");
 
-  return db.query.image.findMany({
-    where: eq(image.userId, userId),
-    columns: {
-      id: true,
-      url: true,
-      name: true,
-      key: true,
-    },
-    orderBy: (image, { desc }) => [desc(image.uploadedAt)],
-  });
+  const imagesData = await db
+    .select({
+      id: image.id,
+      url: image.url,
+      name: image.name,
+      key: image.key,
+    })
+    .from(image)
+    .where(eq(image.userId, userId))
+    .orderBy(desc(image.uploadedAt));
+
+  return imagesData;
 }

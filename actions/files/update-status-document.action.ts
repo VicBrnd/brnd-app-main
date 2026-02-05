@@ -9,8 +9,8 @@ import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { authActionClient } from "@/lib/safe-action";
 
-export const togglePublishStatusAction = authActionClient
-  .metadata({ actionName: "TogglePublishStatus" })
+export const updateStatusDocument = authActionClient
+  .metadata({ actionName: "UpdateStatusDocument" })
   .inputSchema(z.object({ id: z.string() }))
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
     const [doc] = await db

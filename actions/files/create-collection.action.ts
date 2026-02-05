@@ -11,8 +11,8 @@ import { getErrorMessage } from "@/lib/handle-error";
 import { authActionClient } from "@/lib/safe-action";
 import { CreateCollectionFormSchema } from "@/schemas/files/create-collection.schema";
 
-export const CreateCollectionAction = authActionClient
-  .metadata({ actionName: "NewCollection" })
+export const createCollection = authActionClient
+  .metadata({ actionName: "createCollection" })
   .inputSchema(CreateCollectionFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
     try {

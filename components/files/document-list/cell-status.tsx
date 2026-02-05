@@ -2,7 +2,7 @@
 
 import { useOptimistic, useTransition } from "react";
 
-import { togglePublishStatusAction } from "@/actions/files/update-status-document";
+import { updateStatusDocument } from "@/actions/files/update-status-document.action";
 import { Badge } from "@/components/ui/brnd-ui/badge";
 
 interface PublishStatusBadgeProps {
@@ -21,7 +21,7 @@ export function CellStatus({
   const handleToggle = () => {
     startTransition(async () => {
       setOptimisticPublished(!optimisticPublished);
-      await togglePublishStatusAction({ id: documentId });
+      await updateStatusDocument({ id: documentId });
     });
   };
 

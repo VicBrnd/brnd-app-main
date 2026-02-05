@@ -61,5 +61,5 @@ export const deleteAvatar = authActionClient
       );
     }
 
-    updateTag(`${sessionData.user}`);
+    updateTag("session");
   });

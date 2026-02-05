@@ -18,9 +18,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DocumentWithCollection } from "@/lib/db/types";
+import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
-export const columns: ColumnDef<DocumentWithCollection>[] = [
+export const columns: ColumnDef<DocumentsProps>[] = [
   {
     accessorKey: "title",
     header: () => (

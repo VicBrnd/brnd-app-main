@@ -1,5 +1,6 @@
 "use client";
 
+import NextImage from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +14,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { User } from "better-auth";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,9 +33,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/auth-client";
 
-export function NavUser({ user }: { user: User }) {
+export function NavUser(props: { user: User }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { data } = authClient.useSession();
+  const user = data?.user || props.user;
 
   const handleSignout = async () => {
     await authClient.signOut({
@@ -58,8 +61,18 @@ export function NavUser({ user }: { user: User }) {
               />
             }
           >
-            <Avatar className="h-8 w-8 rounded-lg grayscale">
-              <AvatarImage src={user.image || ""} alt={user.name} />
+            <Avatar className="h-8 w-8 rounded-lg overflow-hidden">
+              {user.image && (
+                <NextImage
+                  src={user.image}
+                  alt={user.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                  priority
+                  loading="eager"
+                />
+              )}
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -79,8 +92,18 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuGroup>
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.image || ""} alt={user.name} />
+                  <Avatar className="h-8 w-8 rounded-lg overflow-hidden">
+                    {user.image && (
+                      <NextImage
+                        src={user.image}
+                        alt={user.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover"
+                        priority
+                        loading="eager"
+                      />
+                    )}
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col gap-2 text-left text-sm leading-tight">

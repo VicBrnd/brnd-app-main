@@ -7,11 +7,21 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getCollectionBySlug(userId: string, slug: string) {
+export type CollectionBySlugProps = Pick<
+  typeof collection.$inferSelect,
+  "id" | "userId" | "title" | "slug" | "color" | "createdAt" | "updatedAt"
+> & {
+  filesCount: number;
+};
+
+export async function getCollectionBySlug(
+  userId: string,
+  slug: string,
+): Promise<CollectionBySlugProps | undefined> {
   "use cache";
   cacheTag(`collection-${slug}`);
 
-  const [result] = await db
+  const [collectionSlugData] = await db
     .select({
       id: collection.id,
       userId: collection.userId,
@@ -27,5 +37,5 @@ export async function getCollectionBySlug(userId: string, slug: string) {
     .where(and(eq(collection.userId, userId), eq(collection.slug, slug)))
     .groupBy(collection.id);
 
-  return result ?? null;
+  return collectionSlugData;
 }

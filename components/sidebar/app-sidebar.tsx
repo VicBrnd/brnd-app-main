@@ -1,7 +1,5 @@
 import { Suspense } from "react";
 
-import { unauthorized } from "next/navigation";
-
 import { ArrowRight01Icon, Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -29,7 +27,7 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { data } from "@/config/dashboard.config";
-import { getSession } from "@/lib/data/account/get-session";
+import { getAuthContext } from "@/lib/auth/auth-context";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -51,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <Suspense fallback={<NavUserSkeleton />}>
-          <UserSidebarCache />
+          <UserSidebarAsync />
         </Suspense>
       </SidebarFooter>
     </Sidebar>
@@ -108,12 +106,8 @@ function Tree({ item }: { item: TreeItem }) {
   );
 }
 
-async function UserSidebarCache() {
-  const session = await getSession();
+async function UserSidebarAsync() {
+  const ctx = await getAuthContext();
 
-  if (!session?.user) {
-    return unauthorized();
-  }
-
-  return <NavUser user={session.user} />;
+  return <NavUser user={ctx.user} />;
 }

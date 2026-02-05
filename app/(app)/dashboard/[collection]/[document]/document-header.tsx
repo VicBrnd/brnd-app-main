@@ -26,10 +26,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DocumentWithCollection } from "@/lib/db/types";
+import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 
 interface DocumentHeaderProps {
-  documentData: DocumentWithCollection;
+  documentData: DocumentBySlugProps;
 }
 
 export function DocumentHeader({ documentData }: DocumentHeaderProps) {

@@ -14,3 +14,10 @@ export const getSession = cache(async () => {
   const headersList = await headers();
   return auth.api.getSession({ headers: headersList });
 });
+
+// export async function getSession() {
+//     "use cache: private";
+//     cacheTag(`session`);
+//     const headersList = await headers();
+//     return auth.api.getSession({ headers: headersList });
+// }

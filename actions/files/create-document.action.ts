@@ -9,11 +9,11 @@ import { collection, document } from "@/lib/db/schema";
 import { authActionClient } from "@/lib/safe-action";
 import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
 
-export const CreateDocumentAction = authActionClient
-  .metadata({ actionName: "NewDocument" })
+export const createDocument = authActionClient
+  .metadata({ actionName: "createDocument" })
   .inputSchema(CreateDocumentFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const [collectionRow] = await db
+    const [collectionData] = await db
       .select({ id: collection.id, slug: collection.slug })
       .from(collection)
       .where(
@@ -24,7 +24,7 @@ export const CreateDocumentAction = authActionClient
       )
       .limit(1);
 
-    if (!collectionRow) {
+    if (!collectionData) {
       return { error: "Collection not found" };
     }
 
@@ -33,7 +33,7 @@ export const CreateDocumentAction = authActionClient
       .from(document)
       .where(
         and(
-          eq(document.collectionId, collectionRow.id),
+          eq(document.collectionId, collectionData.id),
           eq(document.slug, parsedInput.slug),
         ),
       )
@@ -48,12 +48,12 @@ export const CreateDocumentAction = authActionClient
     const [{ value: docCount }] = await db
       .select({ value: count() })
       .from(document)
-      .where(eq(document.collectionId, collectionRow.id));
+      .where(eq(document.collectionId, collectionData.id));
 
     const [newDocument] = await db
       .insert(document)
       .values({
-        collectionId: collectionRow.id,
+        collectionId: collectionData.id,
         title: parsedInput.title,
         slug: parsedInput.slug,
         content: "",
@@ -61,12 +61,13 @@ export const CreateDocumentAction = authActionClient
       })
       .returning();
 
-    updateTag(`documents-${collectionRow.slug}`);
-    updateTag(`collection-${collectionRow.slug}`);
+    updateTag("documents");
+    updateTag(`documents-${collectionData.slug}`);
+    updateTag(`collection-${collectionData.slug}`);
 
     return {
       success: true,
       document: newDocument,
-      collectionSlug: collectionRow.slug,
+      collectionSlug: collectionData.slug,
     };
   });

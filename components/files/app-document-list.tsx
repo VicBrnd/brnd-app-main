@@ -30,14 +30,14 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { DocumentWithCollection } from "@/lib/db/types";
+import { DocumentsProps } from "@/lib/data/documents/get-documents";
 import { useFilesStore } from "@/store/files-store";
 
-interface FileListProps {
-  documentsData: DocumentWithCollection[];
+interface AppDocumentListProps {
+  documentsData: DocumentsProps[];
 }
 
-export function AppDocumentList({ documentsData }: FileListProps) {
+export function AppDocumentList({ documentsData }: AppDocumentListProps) {
   const { viewMode } = useFilesStore();
 
   const title = "All Files";

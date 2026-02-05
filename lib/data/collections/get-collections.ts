@@ -7,11 +7,20 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export async function getCollections(userId: string) {
+export type CollectionsProps = Pick<
+  typeof collection.$inferSelect,
+  "id" | "userId" | "title" | "slug" | "color" | "createdAt" | "updatedAt"
+> & {
+  filesCount: number;
+};
+
+export async function getCollections(
+  userId: string,
+): Promise<CollectionsProps[]> {
   "use cache";
   cacheTag("collections");
 
-  return db
+  const collectionData = await db
     .select({
       id: collection.id,
       userId: collection.userId,
@@ -26,4 +35,6 @@ export async function getCollections(userId: string) {
     .leftJoin(document, eq(document.collectionId, collection.id))
     .where(eq(collection.userId, userId))
     .groupBy(collection.id);
+
+  return collectionData;
 }

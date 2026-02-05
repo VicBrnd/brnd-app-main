@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 
-import { AppDocumentList } from "@/components/files/app-document-list";
 import {
-  AppFolderGrid,
-  AppFolderGridSkeleton,
-} from "@/components/files/app-folder-grid";
+  AppCollectionGrid,
+  AppCollectionGridSkeleton,
+} from "@/components/files/app-collection-grid";
+import { AppDocumentList } from "@/components/files/app-document-list";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
@@ -16,7 +16,7 @@ export default function DashboardPage() {
       <Suspense
         fallback={
           <>
-            <AppFolderGridSkeleton />
+            <AppCollectionGridSkeleton />
             <DataTableSkeleton
               columnCount={5}
               withViewOptions={false}
@@ -40,7 +40,7 @@ async function FilesAsync() {
 
   return (
     <>
-      <AppFolderGrid collectionsData={collectionsData} />
+      <AppCollectionGrid collectionsData={collectionsData} />
       <AppDocumentList documentsData={documentsData} />
     </>
   );

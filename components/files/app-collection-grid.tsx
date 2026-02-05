@@ -24,14 +24,14 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CollectionWithCount } from "@/lib/db/types";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { cn } from "@/lib/utils";
 
-interface FolderGridProps {
-  collectionsData: CollectionWithCount[];
+interface AppCollectionGridProps {
+  collectionsData: CollectionsProps[];
 }
 
-export function AppFolderGrid({ collectionsData }: FolderGridProps) {
+export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
   if (collectionsData.length === 0) {
     return (
       <Card>
@@ -115,7 +115,7 @@ export function AppFolderGrid({ collectionsData }: FolderGridProps) {
   );
 }
 
-export function AppFolderGridSkeleton() {
+export function AppCollectionGridSkeleton() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">

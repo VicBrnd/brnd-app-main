@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { CreateCollectionAction } from "@/actions/files/create-collection.action";
+import { createCollection } from "@/actions/files/create-collection.action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -61,7 +61,7 @@ export function CreateCollectionCard() {
     startTransition(() => {
       toast.promise(
         async () => {
-          const result = await CreateCollectionAction(data);
+          const result = await createCollection(data);
 
           if (result?.serverError) {
             throw new Error(result.serverError);

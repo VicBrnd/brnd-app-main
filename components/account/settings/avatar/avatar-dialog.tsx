@@ -38,11 +38,11 @@ import {
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { authClient } from "@/lib/auth/auth-client";
 import { Area, getCroppedImg } from "@/lib/cropper";
-import { UserImagesProps } from "@/lib/data/account/get-images";
+import { ImagesProps } from "@/lib/data/account/get-images";
 
 interface AvatarDialogProps {
   user: User;
-  userImages: UserImagesProps[];
+  userImages: ImagesProps[];
 }
 
 const maxSizeMB = 10;
@@ -67,7 +67,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
   });
 
   const [isLoading, startTransition] = useTransition();
-  const [selected, setSelected] = useState<UserImagesProps[]>([]);
+  const [selected, setSelected] = useState<ImagesProps[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [cropArea, setCropArea] = useState<Area | null>(null);

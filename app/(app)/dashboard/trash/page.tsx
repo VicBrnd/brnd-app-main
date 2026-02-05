@@ -1,3 +1,5 @@
+import { Page } from "@/components/page-layout";
+
 export default function TrashPage() {
-  return <div>Trash Page</div>;
+  return <Page title="Trash" description="Trash Page"></Page>;
 }

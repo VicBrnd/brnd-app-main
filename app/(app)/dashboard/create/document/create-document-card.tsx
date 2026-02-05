@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { CreateDocumentAction } from "@/actions/files/create-document.actions";
+import { createDocument } from "@/actions/files/create-document.action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -27,14 +27,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { CollectionWithCount } from "@/lib/db/types";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
 
-interface NewDocumentCardProps {
-  collectionsData: CollectionWithCount[];
+interface CreateDocumentCardProps {
+  collectionsData: CollectionsProps[];
 }
 
-export function CreateDocumentCard({ collectionsData }: NewDocumentCardProps) {
+export function CreateDocumentCard({
+  collectionsData,
+}: CreateDocumentCardProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
@@ -74,7 +76,7 @@ export function CreateDocumentCard({ collectionsData }: NewDocumentCardProps) {
     startTransition(() => {
       toast.promise(
         async () => {
-          const result = await CreateDocumentAction(data);
+          const result = await createDocument(data);
 
           if (result?.serverError) {
             throw new Error(result.serverError);
