@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -10,7 +8,6 @@ import { CollectionHeader } from "@/app/(app)/dashboard/[collection]/collection-
 import { AppDocumentList } from "@/components/files/app-document-list";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 import {
   Empty,
   EmptyContent,
@@ -63,20 +60,10 @@ export default async function CollectionPage({
           </Empty>
         </Card>
       ) : (
-        <Suspense
-          fallback={
-            <DataTableSkeleton
-              columnCount={5}
-              withViewOptions={false}
-              withPagination={false}
-            />
-          }
-        >
-          <FileListAsync
-            userId={collectionData.userId}
-            collectionSlug={collection}
-          />
-        </Suspense>
+        <FileListAsync
+          userId={collectionData.userId}
+          collectionSlug={collection}
+        />
       )}
     </>
   );
