@@ -13,34 +13,35 @@ import { getDocuments } from "@/lib/data/documents/get-documents";
 export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
-      <Suspense fallback={<AppFolderGridSkeleton />}>
-        <FolderGridAsync />
-      </Suspense>
       <Suspense
         fallback={
-          <DataTableSkeleton
-            columnCount={5}
-            withViewOptions={false}
-            withPagination={false}
-          />
+          <>
+            <AppFolderGridSkeleton />
+            <DataTableSkeleton
+              columnCount={5}
+              withViewOptions={false}
+              withPagination={false}
+            />
+          </>
         }
       >
-        <FileListAsync />
+        <FilesAsync />
       </Suspense>
     </div>
   );
 }
 
-async function FolderGridAsync() {
+async function FilesAsync() {
   const ctx = await getAuthContext();
+  const [collectionsData, documentsData] = await Promise.all([
+    getCollections(ctx.user.id),
+    getDocuments(ctx.user.id),
+  ]);
 
-  const collectionsData = await getCollections(ctx.user.id);
-  return <AppFolderGrid collectionsData={collectionsData} />;
-}
-
-async function FileListAsync() {
-  const ctx = await getAuthContext();
-
-  const documentsData = await getDocuments(ctx.user.id);
-  return <AppDocumentList documentsData={documentsData} />;
+  return (
+    <>
+      <AppFolderGrid collectionsData={collectionsData} />
+      <AppDocumentList documentsData={documentsData} />
+    </>
+  );
 }
