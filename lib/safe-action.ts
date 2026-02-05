@@ -3,7 +3,7 @@ import { unauthorized } from "next/navigation";
 import { createSafeActionClient } from "next-safe-action";
 import { z } from "zod/v4";
 
-import { getSession } from "@/lib/data/get-session";
+import { getSession } from "@/lib/data/account/get-session";
 
 export const actionClient = createSafeActionClient({
   defineMetadataSchema() {

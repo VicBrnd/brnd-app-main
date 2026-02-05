@@ -1,19 +1,17 @@
 import { cacheTag } from "next/cache";
-import { unauthorized } from "next/navigation";
 
-import { count, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
-import { getSession } from "@/lib/data/get-session";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-async function getCollectionsCache(userId: string) {
+export async function getCollectionBySlug(userId: string, slug: string) {
   "use cache";
-  cacheTag("collections");
+  cacheTag(`collection-${slug}`);
 
-  return db
+  const [result] = await db
     .select({
       id: collection.id,
       userId: collection.userId,
@@ -26,16 +24,8 @@ async function getCollectionsCache(userId: string) {
     })
     .from(collection)
     .leftJoin(document, eq(document.collectionId, collection.id))
-    .where(eq(collection.userId, userId))
+    .where(and(eq(collection.userId, userId), eq(collection.slug, slug)))
     .groupBy(collection.id);
-}
 
-export async function getCollections() {
-  const session = await getSession();
-
-  if (!session) {
-    return unauthorized();
-  }
-
-  return getCollectionsCache(session.user.id);
+  return result ?? null;
 }

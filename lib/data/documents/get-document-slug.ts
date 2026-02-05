@@ -1,15 +1,13 @@
 import { cacheTag } from "next/cache";
-import { unauthorized } from "next/navigation";
 
 import { and, eq } from "drizzle-orm";
 
-import { getSession } from "@/lib/data/get-session";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-async function getDocumentBySlugCache(
+export async function getDocumentBySlug(
   userId: string,
   collectionSlug: string,
   documentSlug: string,
@@ -40,17 +38,4 @@ async function getDocumentBySlugCache(
     );
 
   return result ?? null;
-}
-
-export async function getDocumentBySlug(
-  collectionSlug: string,
-  documentSlug: string,
-) {
-  const session = await getSession();
-
-  if (!session) {
-    return unauthorized();
-  }
-
-  return getDocumentBySlugCache(session.user.id, collectionSlug, documentSlug);
 }

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { DocumentHeader } from "@/app/(app)/dashboard/[collection]/[document]/document-header";
-import { getDocumentBySlug } from "@/lib/data/get-document-slug";
+import { getAuthContext } from "@/lib/auth/auth-context";
+import { getDocumentBySlug } from "@/lib/data/documents/get-document-slug";
 
 export default async function DocumentPage({
   params,
@@ -9,8 +10,12 @@ export default async function DocumentPage({
   params: Promise<{ collection: string; document: string }>;
 }) {
   const { collection, document } = await params;
-  const documentData = await getDocumentBySlug(collection, document);
-
+  const ctx = await getAuthContext();
+  const documentData = await getDocumentBySlug(
+    ctx.user.id,
+    collection,
+    document,
+  );
   if (!documentData) {
     return notFound();
   }

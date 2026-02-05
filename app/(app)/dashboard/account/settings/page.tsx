@@ -10,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getUser } from "@/lib/data/get-user";
-import { getUserImages } from "@/lib/data/get-user-images";
+import { getAuthContext } from "@/lib/auth/auth-context";
+import { getImages } from "@/lib/data/account/get-images";
 
 export default function AccountSettingsPage() {
   return (
@@ -44,9 +44,8 @@ export default function AccountSettingsPage() {
 }
 
 export async function AvatarDialogAsync() {
-  const [userData, userImages] = await Promise.all([
-    getUser(),
-    getUserImages(),
-  ]);
-  return <AvatarDialog user={userData} userImages={userImages} />;
+  const ctx = await getAuthContext();
+  const userImages = await getImages(ctx.user.id);
+
+  return <AvatarDialog user={ctx.user} userImages={userImages} />;
 }

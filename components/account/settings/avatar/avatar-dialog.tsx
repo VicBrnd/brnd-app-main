@@ -12,6 +12,7 @@ import {
   ImageDone01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { User } from "better-auth";
 import { toast } from "sonner";
 
 import { addAvatar } from "@/actions/account/add-avatar.action";
@@ -36,14 +37,11 @@ import {
 } from "@/components/ui/tooltip";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { authClient } from "@/lib/auth/auth-client";
-// import { useSession } from "@/lib/auth/auth-client";
 import { Area, getCroppedImg } from "@/lib/cropper";
-// import { useSession } from "@/lib/auth/auth-client";
-import { UserProps } from "@/lib/data/get-user";
-import { UserImagesProps } from "@/lib/data/get-user-images";
+import { UserImagesProps } from "@/lib/data/account/get-images";
 
 interface AvatarDialogProps {
-  user: UserProps;
+  user: User;
   userImages: UserImagesProps[];
 }
 

@@ -29,7 +29,7 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { data } from "@/config/dashboard.config";
-import { getSession } from "@/lib/data/get-session";
+import { getSession } from "@/lib/data/account/get-session";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (

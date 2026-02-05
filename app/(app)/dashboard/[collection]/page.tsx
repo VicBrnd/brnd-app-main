@@ -19,8 +19,9 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { getCollectionBySlug } from "@/lib/data/get-collection-slug";
-import { getDocuments } from "@/lib/data/get-documents";
+import { getAuthContext } from "@/lib/auth/auth-context";
+import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug";
+import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default async function CollectionPage({
   params,
@@ -28,14 +29,15 @@ export default async function CollectionPage({
   params: Promise<{ collection: string }>;
 }) {
   const { collection } = await params;
-  const collectionData = await getCollectionBySlug(collection);
-
-  if (!collectionData) notFound();
+  const ctx = await getAuthContext();
+  const collectionData = await getCollectionBySlug(ctx.user.id, collection);
+  if (!collectionData) {
+    notFound();
+  }
 
   return (
     <>
       <CollectionHeader collectionData={collectionData} />
-
       {collectionData.filesCount === 0 ? (
         <Card>
           <Empty className="flex flex-col justify-center items-center">
@@ -70,14 +72,23 @@ export default async function CollectionPage({
             />
           }
         >
-          <FileListAsync collectionSlug={collection} />
+          <FileListAsync
+            userId={collectionData.userId}
+            collectionSlug={collection}
+          />
         </Suspense>
       )}
     </>
   );
 }
 
-async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
-  const documentsData = await getDocuments(collectionSlug);
+async function FileListAsync({
+  userId,
+  collectionSlug,
+}: {
+  userId: string;
+  collectionSlug: string;
+}) {
+  const documentsData = await getDocuments(userId, collectionSlug);
   return <AppDocumentList documentsData={documentsData} />;
 }

@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { UserImagesProps } from "@/lib/data/get-user-images";
+import { UserImagesProps } from "@/lib/data/account/get-images";
 
 export type FileSelectionProps = {
   selected: UserImagesProps[];

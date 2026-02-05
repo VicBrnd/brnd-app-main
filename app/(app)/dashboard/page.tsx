@@ -6,8 +6,9 @@ import {
   AppFolderGridSkeleton,
 } from "@/components/files/app-folder-grid";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
-import { getCollections } from "@/lib/data/get-collections";
-import { getDocuments } from "@/lib/data/get-documents";
+import { getAuthContext } from "@/lib/auth/auth-context";
+import { getCollections } from "@/lib/data/collections/get-collections";
+import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default function DashboardPage() {
   return (
@@ -31,11 +32,15 @@ export default function DashboardPage() {
 }
 
 async function FolderGridAsync() {
-  const collectionsData = await getCollections();
+  const ctx = await getAuthContext();
+
+  const collectionsData = await getCollections(ctx.user.id);
   return <AppFolderGrid collectionsData={collectionsData} />;
 }
 
 async function FileListAsync() {
-  const documentsData = await getDocuments();
+  const ctx = await getAuthContext();
+
+  const documentsData = await getDocuments(ctx.user.id);
   return <AppDocumentList documentsData={documentsData} />;
 }
