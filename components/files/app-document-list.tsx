@@ -1,5 +1,7 @@
 "use client";
 
+import { useOptimistic, useTransition } from "react";
+
 import Link from "next/link";
 
 import {
@@ -10,6 +12,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { deleteDocument } from "@/actions/files/delete-document.action";
 import { columns } from "@/components/files/document-list/columns";
 import { DataTable } from "@/components/files/document-list/data-table";
 import { MdxIcon } from "@/components/icons/mdx-icons";
@@ -39,6 +42,19 @@ interface AppDocumentListProps {
 
 export function AppDocumentList({ documentsData }: AppDocumentListProps) {
   const { viewMode } = useFilesStore();
+  const [isLoading, startTransition] = useTransition();
+
+  const [optimisticDocuments, removeOptimistic] = useOptimistic(
+    documentsData,
+    (state, deletedId: string) => state.filter((d) => d.id !== deletedId),
+  );
+
+  const handleDeleteDocument = (id: string) => {
+    startTransition(async () => {
+      removeOptimistic(id);
+      await deleteDocument({ ids: [id] });
+    });
+  };
 
   const title = "All Files";
 
@@ -81,13 +97,12 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
       <div className="space-y-4">
         <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {documentsData.map((document) => (
+          {optimisticDocuments.map((document) => (
             <Link
               href={`/dashboard/${document.collectionSlug}/${document.slug}`}
               key={document.id}
             >
               <div
-                key={document.id}
                 className="p-4 rounded-xl border bg-card hover:bg-accent/50 transition-all cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-3">
@@ -116,7 +131,14 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
                           <DropdownMenuItem>Share</DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem variant="destructive">
+                        <DropdownMenuItem
+                          variant="destructive"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteDocument(document.id);
+                          }}
+                          disabled={isLoading}
+                        >
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -143,7 +165,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
   return (
     <div className="space-y-4">
       <h2 className="text-sm font-medium text-muted-foreground">{title}</h2>
-      <DataTable columns={columns} data={documentsData} />
+      <DataTable columns={columns} data={optimisticDocuments} />
     </div>
   );
 }
