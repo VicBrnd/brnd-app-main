@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { CreateCollectionFormSchema } from "@/schemas/files/create-collection.schema";
 
 export function CreateCollectionCard() {
-  const [isLoading, startTransition] = React.useTransition();
+  const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof CreateCollectionFormSchema>>({
