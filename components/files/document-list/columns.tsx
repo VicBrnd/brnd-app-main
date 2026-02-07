@@ -58,13 +58,13 @@ export const getColumns = ({
   {
     accessorKey: "collectionTitle",
     header: () => (
-      <div className="text-xs font-medium text-muted-foreground text-right">
+      <div className="text-xs font-medium text-muted-foreground">
         Collection
       </div>
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-sm text-muted-foreground text-right">
+        <div className="text-sm text-muted-foreground">
           <Badge
             variant="outline"
             className="gap-1.5 rounded-md px-2 py-1 items-center text-xs cursor-default"
@@ -84,13 +84,11 @@ export const getColumns = ({
   {
     accessorKey: "updatedAt",
     header: () => (
-      <div className="text-xs font-medium text-muted-foreground text-right">
-        Modified
-      </div>
+      <div className="text-xs font-medium text-muted-foreground">Modified</div>
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-sm text-muted-foreground text-right">
+        <div className="text-sm text-muted-foreground">
           {row.original.updatedAt.toLocaleDateString("fr-FR")}
         </div>
       );
@@ -99,13 +97,11 @@ export const getColumns = ({
   {
     accessorKey: "createdAt",
     header: () => (
-      <div className="text-xs font-medium text-muted-foreground text-right">
-        Created
-      </div>
+      <div className="text-xs font-medium text-muted-foreground">Created</div>
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-sm text-muted-foreground text-right">
+        <div className="text-sm text-muted-foreground">
           {row.original.createdAt.toLocaleDateString("fr-FR")}
         </div>
       );
@@ -114,9 +110,7 @@ export const getColumns = ({
   {
     accessorKey: "Status",
     header: () => (
-      <div className="text-xs font-medium text-muted-foreground text-right">
-        Status
-      </div>
+      <div className="text-xs font-medium text-muted-foreground">Status</div>
     ),
     cell: ({ row }) => {
       return (

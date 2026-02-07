@@ -279,7 +279,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
       </div>
 
       <DialogContent className="sm:max-w-lg">
-        <div className="size-full space-y-4 p-6">
+        <div className="size-full space-y-4">
           {!cropModalOpen && (
             <>
               <AvatarSelection

@@ -40,7 +40,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
     return (
-      <div className="relative flex gap-2">
+      // <div className="relative flex gap-2">
+      <div className="relative flex">
         <input
           type={password ? (isVisible ? "text" : "password") : type}
           className={cn(

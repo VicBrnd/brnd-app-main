@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { User } from "better-auth";
 
 import { AvatarDialog } from "@/components/account/settings/avatar/avatar-dialog";
 import {
@@ -9,34 +9,57 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getAuthContext } from "@/lib/auth/auth-context";
-import { getImages } from "@/lib/data/account/get-images";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ImagesProps } from "@/lib/data/account/get-images";
 
-export async function AvatarCard() {
-  const ctx = await getAuthContext();
-  const userImages = await getImages(ctx.user.id);
+interface AvatarDialogProps {
+  user: User;
+  userImages: ImagesProps[];
+}
+
+export function AvatarCard({ user, userImages }: AvatarDialogProps) {
   return (
-    <Card className="bg-background pb-0 py-0 gap-0 overflow-auto">
-      <div className="flex gap-0 flex-row justify-between p-6">
-        <CardHeader className="flex-1 px-0">
-          <CardTitle className="text-xl">Avatar</CardTitle>
+    <Card className="bg-background">
+      <div className="flex items-center">
+        <CardHeader className="flex-1">
+          <CardTitle>Avatar</CardTitle>
           <CardDescription>
-            This is your avatar. <br />
-            Click on the avatar to upload a custom one from your files.
+            This is your avatar <br />
+            Click on the avatar to upload a custom one from your files
           </CardDescription>
         </CardHeader>
-        <div className="flex items-start justify-center md:justify-start gap-2">
-          <CardContent className="px-0">
-            <Suspense>
-              <AvatarDialog user={ctx.user} userImages={userImages} />
-            </Suspense>
-          </CardContent>
-        </div>
+        <CardContent>
+          <AvatarDialog user={user} userImages={userImages} />
+        </CardContent>
       </div>
-      <CardFooter className="flex h-auto justify-between rounded-b-xl bg-gray-100 p-0 px-8 py-4 dark:bg-sidebar">
-        <CardDescription>
-          An avatar is optional but strongly recommended.
-        </CardDescription>
+      <CardFooter>
+        <span className="text-muted-foreground text-sm">
+          An avatar is optional but strongly recommended
+        </span>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export function AvatarCardSkeleton() {
+  return (
+    <Card className="bg-background">
+      <div className="flex items-center gap-4">
+        <CardHeader className="flex-1">
+          <CardTitle>
+            <Skeleton className="h-5 w-12" />
+          </CardTitle>
+          <CardDescription className="flex flex-col gap-1">
+            <Skeleton className="h-5 max-w-29" />
+            <Skeleton className="h-5 max-w-92" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="size-20 rounded-full" />
+        </CardContent>
+      </div>
+      <CardFooter>
+        <Skeleton className="h-5 w-76" />
       </CardFooter>
     </Card>
   );

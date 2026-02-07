@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
+import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/auth-client";
 import {
   UpdateUserSchema,
@@ -66,43 +67,59 @@ export function NameCard(props: { user: User }) {
           name="name"
           control={methods.control}
           render={({ field, fieldState }) => (
-            <Card className="bg-background pb-0 py-0 gap-0 overflow-auto">
-              <div className="flex gap-0 flex-col justify-between p-6 space-y-4.5">
-                <CardHeader className="flex-1 px-0">
-                  <CardTitle className="text-xl">
-                    Display Name <span className="text-destructive">*</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Please enter your full name or a display name you are
-                    comfortable with.
-                  </CardDescription>
-                </CardHeader>
-                <div className="flex items-start justify-center md:justify-start gap-2">
-                  <CardContent className="px-0 w-full">
-                    <FieldGroup>
-                      <Input
-                        fieldState={fieldState}
-                        isLoading={isLoading || isPending}
-                        submitButton={true}
-                        {...field}
-                      />
-                    </FieldGroup>
-                  </CardContent>
-                </div>
-              </div>
-              <CardFooter className="flex h-auto justify-between rounded-b-xl bg-gray-100 p-0 px-8 py-4 dark:bg-sidebar">
+            <Card className="bg-background">
+              <CardHeader>
+                <CardTitle>
+                  Display Name <span className="text-destructive">*</span>
+                </CardTitle>
                 <CardDescription>
-                  {fieldState?.error ? (
-                    <span>{fieldState.error.message}</span>
-                  ) : (
-                    <p>Please use 32 characters at maximum.</p>
-                  )}
+                  Please enter your full name or a display name you are
+                  comfortable with.
                 </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FieldGroup>
+                  <Input
+                    fieldState={fieldState}
+                    isLoading={isLoading || isPending}
+                    submitButton={true}
+                    {...field}
+                  />
+                </FieldGroup>
+              </CardContent>
+              <CardFooter>
+                <span className="text-muted-foreground text-sm">
+                  {fieldState?.error
+                    ? fieldState.error.message
+                    : "Please use 32 characters at maximum."}
+                </span>
               </CardFooter>
             </Card>
           )}
         />
       </FieldGroup>
     </form>
+  );
+}
+
+export function NameCardSkeleton() {
+  return (
+    <Card className="bg-background">
+      <CardHeader className="flex-1">
+        <CardTitle>
+          <Skeleton className="h-5 w-28" />
+        </CardTitle>
+        <CardDescription className="flex flex-col gap-1">
+          <Skeleton className="h-5 max-w-114" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-8 max-w-full" />
+      </CardContent>
+
+      <CardFooter>
+        <Skeleton className="h-5 w-62" />
+      </CardFooter>
+    </Card>
   );
 }
