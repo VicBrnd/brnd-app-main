@@ -114,7 +114,7 @@ export function NameCardSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-8 max-w-full" />
+        <Skeleton className="h-9 max-w-full" />
       </CardContent>
 
       <CardFooter>

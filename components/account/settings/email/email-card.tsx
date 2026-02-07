@@ -62,7 +62,7 @@ export function EmailCardSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-8 max-w-full" />
+        <Skeleton className="h-9 max-w-full" />
       </CardContent>
       <CardFooter>
         <Skeleton className="h-5 w-130" />
