@@ -1,18 +1,17 @@
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getSessionCookie } from "better-auth/cookies";
+import { auth } from "@/lib/auth";
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const sessionCookie = getSessionCookie(request);
-  const isAuthRoute = pathname === "/sign-in" || pathname === "/sign-up";
-  const isProtectedRoute = pathname.startsWith("/dashboard");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (sessionCookie && isAuthRoute) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
-  if (!sessionCookie && isProtectedRoute) {
+  // THIS IS NOT SECURE!
+  // This is the recommended approach to optimistically redirect users
+  // We recommend handling auth checks in each page/route
+  if (!session) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -20,5 +19,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/dashboard/:path*", "/sign-in", "/sign-up"],
+  matcher: ["/dashboard"], // Specify the routes the middleware applies to
 };
