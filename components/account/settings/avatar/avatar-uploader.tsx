@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 interface AvatarUploaderProps {
   files: FileWithPreview[];
   isDragging: boolean;
-  maxSizeMB: number;
   handleDragEnter: (e: DragEvent<HTMLElement>) => void;
   handleDragLeave: (e: DragEvent<HTMLElement>) => void;
   handleDragOver: (e: DragEvent<HTMLElement>) => void;
@@ -39,7 +38,6 @@ export function AvatarUploader({
   handleDrop,
   getInputProps,
   removeFile,
-  // maxSizeMB,
 }: AvatarUploaderProps) {
   return (
     <>

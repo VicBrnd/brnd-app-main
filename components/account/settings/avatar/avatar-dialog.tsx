@@ -126,12 +126,8 @@ export function AvatarDialog(props: AvatarDialogProps) {
   };
 
   const handleEdit = async () => {
-    if (!selected || selected.length === 0) {
-      toast.error("Please select an image to continue");
-      return;
-    }
-    if (!selected || selected.length !== 1) {
-      toast.error("Please select only one image");
+    if (selected.length !== 1) {
+      toast.error("Please select exactly one image");
       return;
     }
 
@@ -221,7 +217,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
   };
 
   const handleCancel = () => {
-    removeFile(files[0].id);
+    if (files[0]?.id) removeFile(files[0].id);
     setSelected([]);
     setCropModalOpen(false);
   };
@@ -259,6 +255,19 @@ export function AvatarDialog(props: AvatarDialogProps) {
                   size="icon"
                   aria-label="Remove avatar"
                   className="absolute bottom-0 right-0 size-6 rounded-full"
+                  disabled={isLoading || isPending}
+                  onClick={() => {
+                    startTransition(() => {
+                      toast.promise(updateUser({ image: "" }), {
+                        loading: "Removing avatar...",
+                        success: () => {
+                          refetch();
+                          return "Avatar removed";
+                        },
+                        error: "Failed to remove avatar",
+                      });
+                    });
+                  }}
                 />
               }
             >
@@ -289,7 +298,6 @@ export function AvatarDialog(props: AvatarDialogProps) {
                 handleDrop={handleDrop}
                 getInputProps={getInputProps}
                 removeFile={removeFile}
-                maxSizeMB={maxSizeMB}
               />
             </>
           )}
