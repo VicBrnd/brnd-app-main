@@ -5,11 +5,16 @@ export default function CollectionLoading() {
   return (
     <>
       <CollectionHeaderSkeleton />
-      <DataTableSkeleton
-        columnCount={5}
-        withViewOptions={false}
-        withPagination={false}
-      />
+      <div className="space-y-4">
+        <h2 className="text-sm font-medium text-muted-foreground">
+          All Documents
+        </h2>
+        <DataTableSkeleton
+          columnCount={5}
+          withViewOptions={false}
+          withPagination={false}
+        />
+      </div>
     </>
   );
 }

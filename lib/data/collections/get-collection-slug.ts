@@ -19,7 +19,7 @@ export async function getCollectionBySlug(
   slug: string,
 ): Promise<CollectionBySlugProps | undefined> {
   "use cache";
-  cacheTag(`collection-${slug}`);
+  cacheTag("files");
 
   const [collectionSlugData] = await db
     .select({

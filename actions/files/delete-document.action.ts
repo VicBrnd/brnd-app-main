@@ -31,8 +31,7 @@ export const deleteDocument = authActionClient
         ),
       );
 
-    updateTag("documents");
-    updateTag("collections");
+    updateTag("files");
 
     return { success: true };
   });

@@ -41,8 +41,7 @@ export const updateStatusDocument = authActionClient
       .where(eq(document.id, parsedInput.id))
       .returning({ isPublished: document.isPublished });
 
-    updateTag("documents");
-    updateTag(`documents-${doc.collectionSlug}`);
+    updateTag("files");
 
     return { success: true, isPublished: updated.isPublished };
   });

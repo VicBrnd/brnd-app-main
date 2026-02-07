@@ -21,7 +21,7 @@ export async function getDocuments(
   collectionSlug?: string,
 ): Promise<DocumentsProps[]> {
   "use cache";
-  cacheTag(collectionSlug ? `documents-${collectionSlug}` : "documents");
+  cacheTag("files");
 
   const filters: SQL[] = [];
 

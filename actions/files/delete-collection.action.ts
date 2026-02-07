@@ -2,7 +2,7 @@
 
 import { updateTag } from "next/cache";
 
-import { and, inArray, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod/v4";
 
 import { db } from "@/lib/db";
@@ -38,8 +38,7 @@ export const deleteCollection = authActionClient
         ),
       );
 
-    updateTag("collections");
-    updateTag("documents");
+    updateTag("files");
 
     return { success: true };
   });

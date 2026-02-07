@@ -10,6 +10,7 @@ import {
   MoreVerticalIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { toast } from "sonner";
 
 import { deleteCollection } from "@/actions/files/delete-collection.action";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,6 @@ interface AppCollectionGridProps {
 
 export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
   const [isLoading, startTransition] = useTransition();
-
   const [optimisticCollections, removeOptimistic] = useOptimistic(
     collectionsData,
     (state, deletedId: string) => state.filter((c) => c.id !== deletedId),
@@ -49,7 +49,10 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
   const handleDeleteCollection = (id: string) => {
     startTransition(async () => {
       removeOptimistic(id);
-      await deleteCollection({ ids: [id] });
+      const res = await deleteCollection({ ids: [id] });
+      if (res?.data?.error) {
+        toast.error(res.data.error);
+      }
     });
   };
 
@@ -85,7 +88,7 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
-        <Button variant="outline" disabled={isLoading}>
+        <Button variant="outline" size="sm" disabled={isLoading}>
           <HugeiconsIcon icon={CursorMagicSelection04Icon} />
           Select
         </Button>
@@ -152,6 +155,7 @@ export function AppCollectionGridSkeleton() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
+        <Skeleton className="h-7 w-20" />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {Array.from({ length: 5 }).map((_, i) => (

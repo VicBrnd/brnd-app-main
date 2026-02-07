@@ -61,9 +61,7 @@ export const createDocument = authActionClient
       })
       .returning();
 
-    updateTag("documents");
-    updateTag(`documents-${collectionData.slug}`);
-    updateTag(`collection-${collectionData.slug}`);
+    updateTag("files");
 
     return {
       success: true,

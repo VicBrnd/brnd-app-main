@@ -40,18 +40,23 @@ export function DataTableSkeleton({
       className={cn("flex w-full flex-col gap-2.5 overflow-auto", className)}
       {...props}
     >
-      <div className="flex w-full items-center justify-between gap-2 overflow-auto p-1">
-        <div className="flex flex-1 items-center gap-2">
-          {filterCount > 0
-            ? Array.from({ length: filterCount }).map((_, i) => (
-                <Skeleton key={i} className="h-7 w-18 border-dashed" />
-              ))
-            : null}
-        </div>
-        {withViewOptions ? (
+      {filterCount > 0
+        ? Array.from({ length: filterCount }).map((_, i) => (
+            <div
+              key={i}
+              className="flex w-full items-center justify-between gap-2 overflow-auto p-1"
+            >
+              <div className="flex flex-1 items-center gap-2">
+                <Skeleton className="h-7 w-18 border-dashed" />
+              </div>
+            </div>
+          ))
+        : null}
+      {withViewOptions ? (
+        <div className="flex w-full items-center justify-between gap-2 overflow-auto p-1">
           <Skeleton className="ml-auto hidden h-7 w-18 lg:flex" />
-        ) : null}
-      </div>
+        </div>
+      ) : null}
       <div className="rounded-md border">
         <Table>
           <TableHeader className="bg-sidebar dark:bg-input/30">

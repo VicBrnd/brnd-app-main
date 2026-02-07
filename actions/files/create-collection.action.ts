@@ -40,7 +40,7 @@ export const createCollection = authActionClient
       .returning()
       .then(takeFirstOrThrow);
 
-    updateTag("collections");
+    updateTag("files");
 
     return { success: true, collection: newCollection };
   });

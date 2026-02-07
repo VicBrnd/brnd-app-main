@@ -18,7 +18,7 @@ export async function getCollections(
   userId: string,
 ): Promise<CollectionsProps[]> {
   "use cache";
-  cacheTag("collections");
+  cacheTag("files");
 
   const collectionData = await db
     .select({

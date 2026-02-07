@@ -22,7 +22,7 @@ export async function getDocumentBySlug(
   documentSlug: string,
 ): Promise<DocumentBySlugProps | undefined> {
   "use cache";
-  cacheTag(`document-${collectionSlug}-${documentSlug}`);
+  cacheTag("files");
 
   const [documentSlugData] = await db
     .select({

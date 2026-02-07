@@ -4,8 +4,10 @@ import {
   AppCollectionGrid,
   AppCollectionGridSkeleton,
 } from "@/components/files/app-collection-grid";
-import { AppDocumentList } from "@/components/files/app-document-list";
-import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
+import {
+  AppDocumentList,
+  AppDocumentListSkeleton,
+} from "@/components/files/app-document-list";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
@@ -17,11 +19,7 @@ export default function DashboardPage() {
         fallback={
           <>
             <AppCollectionGridSkeleton />
-            <DataTableSkeleton
-              columnCount={5}
-              withViewOptions={false}
-              withPagination={false}
-            />
+            <AppDocumentListSkeleton />
           </>
         }
       >

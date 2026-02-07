@@ -20,7 +20,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
-export const columns: ColumnDef<DocumentsProps>[] = [
+interface ColumnsOptions {
+  onDelete: (id: string) => void;
+  isDeleting?: boolean;
+}
+
+export const getColumns = ({
+  onDelete,
+  isDeleting,
+}: ColumnsOptions): ColumnDef<DocumentsProps>[] => [
   {
     accessorKey: "title",
     header: () => (
@@ -121,7 +129,7 @@ export const columns: ColumnDef<DocumentsProps>[] = [
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="text-right">
           <DropdownMenu>
@@ -138,7 +146,13 @@ export const columns: ColumnDef<DocumentsProps>[] = [
                 <DropdownMenuItem>Share</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => onDelete(row.original.id)}
+                disabled={isDeleting}
+              >
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
