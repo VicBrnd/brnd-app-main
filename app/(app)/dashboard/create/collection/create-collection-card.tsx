@@ -91,7 +91,7 @@ export function CreateCollectionCard() {
   }
 
   return (
-    <Card>
+    <Card className="bg-background">
       <CardContent>
         <form
           id="form-new-collection"
@@ -147,7 +147,13 @@ export function CreateCollectionCard() {
         </form>
       </CardContent>
       <CardFooter className="justify-end">
-        <Button disabled={isLoading} type="submit" form="form-new-collection">
+        <Button
+          variant="outline"
+          size="sm"
+          type="submit"
+          form="form-new-collection"
+          disabled={isLoading}
+        >
           {isLoading && <Spinner className="mr-1" />}
           Create Collection
         </Button>

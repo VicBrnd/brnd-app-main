@@ -56,10 +56,9 @@ export async function SessionsCardSkeleton() {
           <Skeleton className="h-6 w-6" />
           <div className="flex flex-col gap-1">
             <Skeleton className="h-5 w-27" />
-            <Skeleton className="h-4 w-44" />
+            <Skeleton className="h-3.5 w-44" />
           </div>
-
-          <Skeleton className="h-7 w-20 ml-auto" />
+          <Skeleton className="h-7 w-19 ml-auto" />
         </Card>
       </CardContent>
     </Card>

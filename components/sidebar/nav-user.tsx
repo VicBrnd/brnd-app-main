@@ -9,7 +9,6 @@ import {
   Logout01Icon,
   MoreVerticalIcon,
   SecurityIcon,
-  UserCircleIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { User } from "better-auth";
@@ -119,7 +118,7 @@ export function NavUser(props: { user: User }) {
                 <DropdownMenuItem
                   render={<Link href="/dashboard/account/settings" />}
                 >
-                  <HugeiconsIcon icon={UserCircleIcon} />
+                  <HugeiconsIcon icon={AccountSetting02Icon} />
                   Account
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -128,15 +127,9 @@ export function NavUser(props: { user: User }) {
                   <HugeiconsIcon icon={SecurityIcon} />
                   Security
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  render={<Link href="/dashboard/account/settings" />}
-                >
-                  <HugeiconsIcon icon={AccountSetting02Icon} />
-                  Settings
-                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignout}>
+              <DropdownMenuItem variant="destructive" onClick={handleSignout}>
                 <HugeiconsIcon icon={Logout01Icon} />
                 Log out
               </DropdownMenuItem>

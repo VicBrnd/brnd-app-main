@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { DeleteCard } from "@/components/account/security/delete/delete-card";
 import {
   SessionsCard,
   SessionsCardSkeleton,
@@ -14,6 +15,7 @@ export default function AccountSecurityPage() {
       <Suspense fallback={<SessionsCardSkeleton />}>
         <AccountSecurityAsync />
       </Suspense>
+      <DeleteCard />
     </Page>
   );
 }
@@ -22,8 +24,6 @@ export async function AccountSecurityAsync() {
   const [ctx, sessions] = await Promise.all([getAuthContext(), getSessions()]);
 
   return (
-    <>
-      <SessionsCard listSessions={sessions} currentSession={ctx.session.id} />
-    </>
+    <SessionsCard listSessions={sessions} currentSession={ctx.session.id} />
   );
 }

@@ -106,7 +106,7 @@ export function CreateDocumentCard({
   }
 
   return (
-    <Card>
+    <Card className="bg-background">
       <CardContent>
         <form
           id="form-new-document"
@@ -193,7 +193,13 @@ export function CreateDocumentCard({
         </form>
       </CardContent>
       <CardFooter className="justify-end">
-        <Button disabled={isLoading} type="submit" form="form-new-document">
+        <Button
+          variant="outline"
+          size="sm"
+          type="submit"
+          form="form-new-document"
+          disabled={isLoading}
+        >
           {isLoading && <Spinner />}
           Create Document
         </Button>

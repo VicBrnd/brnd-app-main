@@ -12,6 +12,22 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
+  account: {
+    accountLinking: {
+      enabled: true,
+    },
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+    },
+  },
+  session: {
+    cookieCache: {
+      enabled: false,
+      maxAge: 7 * 24 * 60 * 60,
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -20,12 +36,6 @@ export const auth = betterAuth({
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    },
-  },
-  session: {
-    cookieCache: {
-      enabled: false,
-      maxAge: 7 * 24 * 60 * 60,
     },
   },
   plugins: [

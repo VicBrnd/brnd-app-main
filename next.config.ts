@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       static: 3600,
     },
     serverActions: {
-      bodySizeLimit: "1mb",
+      bodySizeLimit: "10mb",
     },
   },
   cacheComponents: true,

@@ -69,13 +69,13 @@ export function NavMain({
                     render={<Link href="/dashboard/create/collection" />}
                   >
                     <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
-                    New Collection
+                    Create Collection
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     render={<Link href="/dashboard/create/document" />}
                   >
                     <HugeiconsIcon icon={File01Icon} className="mr-1" />
-                    New Document
+                    Create Document
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
