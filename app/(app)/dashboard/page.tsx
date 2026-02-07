@@ -8,22 +8,28 @@ import {
   AppDocumentList,
   AppDocumentListSkeleton,
 } from "@/components/files/app-document-list";
+import { Page } from "@/components/page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default function DashboardPage() {
   return (
-    <Suspense
-      fallback={
-        <>
-          <AppCollectionGridSkeleton />
-          <AppDocumentListSkeleton />
-        </>
-      }
+    <Page
+      title="All Files"
+      description="Access your recent collections and documents"
     >
-      <FilesAsync />
-    </Suspense>
+      <Suspense
+        fallback={
+          <>
+            <AppCollectionGridSkeleton />
+            <AppDocumentListSkeleton />
+          </>
+        }
+      >
+        <FilesAsync />
+      </Suspense>
+    </Page>
   );
 }
 
@@ -35,9 +41,9 @@ async function FilesAsync() {
   ]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <>
       <AppCollectionGrid collectionsData={collectionsData} />
       <AppDocumentList documentsData={documentsData} />
-    </div>
+    </>
   );
 }
