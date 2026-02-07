@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       dynamic: 300,
       static: 3600,
     },
+    serverActions: {
+      bodySizeLimit: "1mb",
+    },
   },
   cacheComponents: true,
   logging: {

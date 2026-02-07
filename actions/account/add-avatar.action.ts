@@ -14,6 +14,13 @@ export const addAvatar = authActionClient
   .metadata({ actionName: "addAvatar" })
   .inputSchema(z.array(z.instanceof(File)))
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    for (const file of parsedInput) {
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error("Invalid file type. Only JPEG, PNG, and WebP are allowed.");
+      }
+    }
+
     const [result] = await utapi.uploadFiles(parsedInput);
 
     if (result.error) {
