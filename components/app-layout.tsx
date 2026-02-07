@@ -16,7 +16,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <AppHeader />
         <main className="h-full p-4 md:p-6">{children}</main>
-        {/* <main className="h-full">{children}</main> */}
       </SidebarInset>
     </SidebarProvider>
   );

@@ -4,11 +4,7 @@ import { useOptimistic, useTransition } from "react";
 
 import Link from "next/link";
 
-import {
-  CursorMagicSelection04Icon,
-  Folder01Icon,
-  MoreVerticalIcon,
-} from "@hugeicons/core-free-icons";
+import { Folder01Icon, MoreVerticalIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
@@ -86,13 +82,7 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
-        <Button variant="outline" size="sm" disabled={isLoading}>
-          <HugeiconsIcon icon={CursorMagicSelection04Icon} />
-          Select
-        </Button>
-      </div>
+      <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {optimisticCollections.map((collection) => (
           <Link
@@ -153,10 +143,7 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
 export function AppCollectionGridSkeleton() {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
-        <Skeleton className="h-7 w-20" />
-      </div>
+      <h2 className="text-sm font-medium text-muted-foreground">Folders</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="p-4 rounded-xl border bg-card">

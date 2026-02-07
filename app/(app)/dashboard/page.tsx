@@ -14,18 +14,16 @@ import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6">
-      <Suspense
-        fallback={
-          <>
-            <AppCollectionGridSkeleton />
-            <AppDocumentListSkeleton />
-          </>
-        }
-      >
-        <FilesAsync />
-      </Suspense>
-    </div>
+    <Suspense
+      fallback={
+        <>
+          <AppCollectionGridSkeleton />
+          <AppDocumentListSkeleton />
+        </>
+      }
+    >
+      <FilesAsync />
+    </Suspense>
   );
 }
 
@@ -37,9 +35,9 @@ async function FilesAsync() {
   ]);
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <AppCollectionGrid collectionsData={collectionsData} />
       <AppDocumentList documentsData={documentsData} />
-    </>
+    </div>
   );
 }

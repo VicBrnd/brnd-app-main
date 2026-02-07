@@ -8,7 +8,7 @@ import { ButtonGroup } from "@/components/ui/button-group";
 
 export default function Page() {
   return (
-    <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
+    <main className="flex min-h-full flex-col items-center justify-center px-4 py-12">
       <div className="flex w-full max-w-4xl flex-col items-center gap-3">
         <div className="text-center">
           <h1 className="text-5xl font-normal tracking-tighter text-spektr-cyan-50 md:text-7xl">
@@ -55,6 +55,6 @@ export default function Page() {
           </ButtonGroup>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
