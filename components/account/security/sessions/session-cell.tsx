@@ -14,15 +14,17 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth/auth-client";
 
-export function SessionCell(props: {
-  currentSession: string;
+interface SessionCellProps {
   listSession: Session;
-}) {
+  currentSession: string;
+}
+
+export function SessionCell({ listSession, currentSession }: SessionCellProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
-  const parser = UAParser(props.listSession.userAgent || undefined);
-  const isCurrentSession = props.listSession.id === props.currentSession;
+  const parser = UAParser(listSession.userAgent || undefined);
+  const isCurrentSession = listSession.id === currentSession;
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -39,7 +41,7 @@ export function SessionCell(props: {
   const handleRevoke = async () => {
     startTransition(async () => {
       await authClient.revokeSession({
-        token: props.listSession.token,
+        token: listSession.token,
         fetchOptions: {
           onSuccess: () => {
             router.refresh();
@@ -61,7 +63,7 @@ export function SessionCell(props: {
         <span className="font-semibold text-sm">
           {isCurrentSession
             ? "Current Session"
-            : props.listSession.ipAddress || "Unknown"}
+            : listSession.ipAddress || "Unknown"}
         </span>
 
         <span className="text-muted-foreground text-xs">
