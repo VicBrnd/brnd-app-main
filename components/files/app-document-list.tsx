@@ -45,7 +45,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
 
   if (viewMode === "grid") {
     return (
-      <div className="space-y-4">
+      <div className="flex flex-col gap-2">
         <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {optimisticDocuments.map((document) => (
@@ -112,7 +112,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
       <DataTable
         columns={getColumns({
@@ -127,7 +127,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
 
 export function AppDocumentListSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       <h2 className="text-sm font-medium text-muted-foreground">
         All Documents
       </h2>

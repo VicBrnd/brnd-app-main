@@ -5,7 +5,7 @@ export default function CollectionLoading() {
   return (
     <>
       <CollectionHeaderSkeleton />
-      <div className="space-y-4">
+      <div className="flex flex-col gap-2">
         <h2 className="text-sm font-medium text-muted-foreground">
           All Documents
         </h2>

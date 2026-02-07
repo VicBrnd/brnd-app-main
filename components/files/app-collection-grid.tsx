@@ -81,7 +81,7 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       <h2 className="text-sm font-medium text-muted-foreground">Collections</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {optimisticCollections.map((collection) => (
@@ -142,7 +142,7 @@ export function AppCollectionGrid({ collectionsData }: AppCollectionGridProps) {
 
 export function AppCollectionGridSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       <h2 className="text-sm font-medium text-muted-foreground">Collections</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {Array.from({ length: 5 }).map((_, i) => (
