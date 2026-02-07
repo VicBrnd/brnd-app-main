@@ -74,7 +74,7 @@ export function NameCard(props: { user: User }) {
                 </CardTitle>
                 <CardDescription>
                   Please enter your full name or a display name you are
-                  comfortable with.
+                  comfortable with
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -114,7 +114,7 @@ export function NameCardSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-9 max-w-full" />
+        <Skeleton className="h-9.5 max-w-full" />
       </CardContent>
 
       <CardFooter>

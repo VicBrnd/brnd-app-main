@@ -28,7 +28,7 @@ export function EmailCard(props: { user: User }) {
         </CardTitle>
         <CardDescription>
           Enter the email addresses you want to use to log in with Brnd. Your
-          primary email will be used for account-related notifications.
+          primary email will be used for account-related notifications
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -62,7 +62,7 @@ export function EmailCardSkeleton() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-9 max-w-full" />
+        <Skeleton className="h-9.5 max-w-full" />
       </CardContent>
       <CardFooter>
         <Skeleton className="h-5 w-130" />
