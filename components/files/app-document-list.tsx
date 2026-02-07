@@ -128,9 +128,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
 export function AppDocumentListSkeleton() {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-sm font-medium text-muted-foreground">
-        All Documents
-      </h2>
+      <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
       <DataTableSkeleton
         columnCount={5}
         withViewOptions={false}
