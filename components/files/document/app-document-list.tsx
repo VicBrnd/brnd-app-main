@@ -2,7 +2,7 @@
 
 import { useOptimistic, useTransition } from "react";
 
-import { deleteDocument } from "@/actions/files/delete-document.action";
+import { deleteDocument } from "@/actions/files/document/delete-document.action";
 import { getColumns } from "@/components/files/document/document-list/columns";
 import { DataTable } from "@/components/files/document/document-list/data-table";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";

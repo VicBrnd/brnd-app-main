@@ -1,24 +1,12 @@
-"use client";
-
 import Link from "next/link";
 
-import {
-  Add01Icon,
-  File01Icon,
-  Folder01Icon,
-} from "@hugeicons/core-free-icons";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 
+import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
 import { NavSearch } from "@/components/sidebar/nav-search";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DialogTrigger } from "@/components/ui/dialog";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -42,41 +30,21 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <NavSearch />
-            <DropdownMenu>
-              <DropdownMenuTrigger
+            <AppFilesDialog>
+              <DialogTrigger
+                nativeButton={true}
                 render={
                   <Button
                     size="icon"
                     className="size-8 group-data-[collapsible=icon]:opacity-0"
                     variant="outline"
-                  >
-                    <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-                    <span className="sr-only">Quick Create</span>
-                  </Button>
+                  />
                 }
-              />
-              <DropdownMenuContent
-                align="end"
-                sideOffset={9}
-                className="w-auto"
               >
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Write</DropdownMenuLabel>
-                  <DropdownMenuItem
-                    render={<Link href="/dashboard/create/collection" />}
-                  >
-                    <HugeiconsIcon icon={Folder01Icon} className="mr-1" />
-                    Create Collection
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    render={<Link href="/dashboard/create/document" />}
-                  >
-                    <HugeiconsIcon icon={File01Icon} className="mr-1" />
-                    Create Document
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+                <span className="sr-only">Quick Create</span>
+              </DialogTrigger>
+            </AppFilesDialog>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

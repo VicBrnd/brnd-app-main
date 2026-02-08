@@ -1,16 +1,16 @@
 import { useTransition } from "react";
 
-import Link from "next/link";
-
 import {
   Delete01Icon,
+  FileAddIcon,
   FolderOpenIcon,
   PencilEdit02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
-import { deleteCollection } from "@/actions/files/delete-collection.action";
+import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
+import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -20,11 +20,12 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 interface CollectionContextMenuProps {
+  children: React.ReactNode;
   collectionId: string;
   removeOptimistic: (action: string) => void;
-  children: React.ReactNode;
 }
 
 export function CollectionContextMenu({
@@ -44,44 +45,42 @@ export function CollectionContextMenu({
     });
   };
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>{children}</ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuGroup>
-          <ContextMenuLabel>Collection</ContextMenuLabel>
-          <ContextMenuItem>
-            <HugeiconsIcon icon={FolderOpenIcon} />
-            Open
-          </ContextMenuItem>
-          <ContextMenuItem>
-            <HugeiconsIcon icon={PencilEdit02Icon} />
-            Rename
-          </ContextMenuItem>
-        </ContextMenuGroup>
-        <ContextMenuSeparator />
+    <AppFilesDialog collectionId={collectionId}>
+      <ContextMenu>
+        <ContextMenuTrigger>{children}</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuGroup>
+            <ContextMenuLabel>Collection</ContextMenuLabel>
+            <ContextMenuItem>
+              <HugeiconsIcon icon={FolderOpenIcon} />
+              Open
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <HugeiconsIcon icon={PencilEdit02Icon} />
+              Rename
+            </ContextMenuItem>
+          </ContextMenuGroup>
+          <ContextMenuGroup>
+            <ContextMenuLabel>Document</ContextMenuLabel>
+            <DialogTrigger nativeButton={false} render={<ContextMenuItem />}>
+              <HugeiconsIcon icon={FileAddIcon} />
+              Create Document
+            </DialogTrigger>
+          </ContextMenuGroup>
 
-        <ContextMenuGroup>
-          <ContextMenuLabel>Document</ContextMenuLabel>
-          <ContextMenuItem
-            render={<Link href={`/dashboard/create/document?collectionId=${collectionId}`} />}
-          >
-            <HugeiconsIcon icon={FolderOpenIcon} />
-            Create Document
-          </ContextMenuItem>
-        </ContextMenuGroup>
-
-        <ContextMenuSeparator />
-        <ContextMenuGroup>
-          <ContextMenuItem
-            variant="destructive"
-            onClick={() => handleDeleteCollection(collectionId)}
-            disabled={isLoading}
-          >
-            <HugeiconsIcon icon={Delete01Icon} />
-            Delete collection
-          </ContextMenuItem>
-        </ContextMenuGroup>
-      </ContextMenuContent>
-    </ContextMenu>
+          <ContextMenuSeparator />
+          <ContextMenuGroup>
+            <ContextMenuItem
+              variant="destructive"
+              onClick={() => handleDeleteCollection(collectionId)}
+              disabled={isLoading}
+            >
+              <HugeiconsIcon icon={Delete01Icon} />
+              Delete collection
+            </ContextMenuItem>
+          </ContextMenuGroup>
+        </ContextMenuContent>
+      </ContextMenu>
+    </AppFilesDialog>
   );
 }
