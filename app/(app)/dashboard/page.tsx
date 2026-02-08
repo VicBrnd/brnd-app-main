@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 
 import {
-  AppCollectionGrid,
-  AppCollectionGridSkeleton,
-} from "@/components/files/app-collection-grid";
+  AppCollectionCard,
+  AppCollectionCardSkeleton,
+} from "@/components/files/collection/app-collection-card";
 import {
   AppDocumentList,
   AppDocumentListSkeleton,
-} from "@/components/files/app-document-list";
+} from "@/components/files/document/app-document-list";
 import { Page } from "@/components/page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
@@ -22,7 +22,7 @@ export default function DashboardPage() {
       <Suspense
         fallback={
           <>
-            <AppCollectionGridSkeleton />
+            <AppCollectionCardSkeleton />
             <AppDocumentListSkeleton />
           </>
         }
@@ -42,7 +42,7 @@ async function FilesAsync() {
 
   return (
     <>
-      <AppCollectionGrid collectionsData={collectionsData} />
+      <AppCollectionCard collectionsData={collectionsData} />
       <AppDocumentList documentsData={documentsData} />
     </>
   );

@@ -6,7 +6,7 @@ import { Folder01Icon, MoreHorizontalIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { CellStatus } from "@/components/files/document-list/cell-status";
+import { CellStatus } from "@/components/files/document/document-list/cell-status";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Badge } from "@/components/ui/brnd-ui/badge";
 import { Button } from "@/components/ui/button";

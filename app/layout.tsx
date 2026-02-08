@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeStorage } from "@/components/theme/theme-storage";
@@ -28,10 +29,12 @@ export default function RootLayout({
     >
       <ThemeStorage />
       <body className={cn("h-full antialiased")}>
-        <ThemeProvider>
-          <Toaster richColors position="top-center" />
-          {children}
-        </ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider>
+            <Toaster richColors position="top-center" />
+            {children}
+          </ThemeProvider>
+        </NuqsAdapter>
         <SpeedInsights />
       </body>
     </html>

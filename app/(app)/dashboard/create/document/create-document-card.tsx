@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -26,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
@@ -38,6 +40,10 @@ export function CreateDocumentCard({
   collectionsData,
 }: CreateDocumentCardProps) {
   const [isLoading, startTransition] = useTransition();
+  const [collectionId, setCollectionId] = useQueryState(
+    "collectionId",
+    parseAsString.withDefault(""),
+  );
   const router = useRouter();
 
   const form = useForm<z.infer<typeof CreateDocumentFormSchema>>({
@@ -45,7 +51,7 @@ export function CreateDocumentCard({
     defaultValues: {
       title: "",
       slug: "",
-      collection: "",
+      collection: collectionId,
     },
   });
 
@@ -169,8 +175,15 @@ export function CreateDocumentCard({
                   </FieldLabel>
                   <Select
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setCollectionId(value);
+                    }}
                     aria-invalid={fieldState.invalid}
+                    items={collectionsData.map((c) => ({
+                      value: c.id,
+                      label: c.title,
+                    }))}
                   >
                     <SelectTrigger aria-invalid={fieldState.invalid}>
                       <SelectValue placeholder="Select a collection" />
@@ -203,6 +216,32 @@ export function CreateDocumentCard({
           {isLoading && <Spinner />}
           Create Document
         </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export function CreateDocumentSkeleton() {
+  return (
+    <Card>
+      <CardContent>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 w-10" />
+            <Skeleton className="h-9 w-full rounded-lg" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 w-8" />
+            <Skeleton className="h-9 w-full rounded-lg" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 w-16" />
+            <Skeleton className="h-9 w-full rounded-lg" />
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="justify-end">
+        <Skeleton className="h-7 w-36 rounded-lg" />
       </CardFooter>
     </Card>
   );

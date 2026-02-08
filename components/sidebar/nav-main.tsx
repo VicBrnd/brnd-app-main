@@ -6,10 +6,10 @@ import {
   Add01Icon,
   File01Icon,
   Folder01Icon,
-  Search01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 
+import { NavSearch } from "@/components/sidebar/nav-search";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -41,10 +41,7 @@ export function NavMain({
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <Button variant="outline" className="w-full shrink">
-              <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />{" "}
-              <span>Search</span>
-            </Button>
+            <NavSearch />
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={

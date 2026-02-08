@@ -5,7 +5,7 @@ import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { CollectionHeader } from "@/app/(app)/dashboard/[collection]/collection-header";
-import { AppDocumentList } from "@/components/files/app-document-list";
+import { AppDocumentList } from "@/components/files/document/app-document-list";
 import { Page } from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

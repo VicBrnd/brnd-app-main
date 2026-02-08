@@ -8,7 +8,7 @@ import {
   CropperCropArea,
   CropperDescription,
   CropperImage,
-} from "@/components/ui/base-ui/cropper";
+} from "@/components/ui/coss-ui/cropper";
 import {
   DialogDescription,
   DialogHeader,
@@ -72,7 +72,9 @@ export function AvatarCropper({
               min={1}
               max={3}
               step={0.1}
-              onValueChange={(value) => setCropZoom(Array.isArray(value) ? value[0] : value)}
+              onValueChange={(value) =>
+                setCropZoom(Array.isArray(value) ? value[0] : value)
+              }
               aria-label="Zoom slider"
             />
             <HugeiconsIcon
