@@ -2,7 +2,7 @@
 
 import { updateTag } from "next/cache";
 
-import { and, eq, not } from "drizzle-orm";
+import { and, eq, inArray, not } from "drizzle-orm";
 import { z } from "zod/v4";
 
 import { db } from "@/lib/db";
@@ -35,10 +35,20 @@ export const updateStatusDocument = authActionClient
       return { error: "Document not found" };
     }
 
+    const userCollections = db
+      .select({ id: collection.id })
+      .from(collection)
+      .where(eq(collection.userId, sessionData.user.id));
+
     const [updated] = await db
       .update(document)
       .set({ isPublished: not(document.isPublished) })
-      .where(eq(document.id, parsedInput.id))
+      .where(
+        and(
+          eq(document.id, parsedInput.id),
+          inArray(document.collectionId, userCollections),
+        ),
+      )
       .returning({ isPublished: document.isPublished });
 
     updateTag("files");

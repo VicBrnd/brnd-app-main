@@ -20,7 +20,13 @@ export const deleteCollection = authActionClient
     const hasDocuments = await db
       .select({ id: document.id })
       .from(document)
-      .where(inArray(document.collectionId, parsedInput.ids))
+      .innerJoin(collection, eq(document.collectionId, collection.id))
+      .where(
+        and(
+          inArray(document.collectionId, parsedInput.ids),
+          eq(collection.userId, sessionData.user.id),
+        ),
+      )
       .limit(1);
 
     if (hasDocuments.length > 0) {

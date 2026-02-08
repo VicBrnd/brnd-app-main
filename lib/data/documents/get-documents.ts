@@ -25,7 +25,7 @@ export async function getDocuments(
 
   const filters: SQL[] = [];
 
-  if (userId) filters.push(eq(collection.userId, userId));
+  filters.push(eq(collection.userId, userId));
   if (collectionSlug) filters.push(eq(collection.slug, collectionSlug));
 
   const documentsData = await db
