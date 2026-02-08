@@ -27,8 +27,7 @@ export default function AccountSettingsPage() {
 }
 
 export async function AccountSettingsAsync() {
-  const ctx = await getAuthContext();
-  const userImages = await getImages(ctx.user.id);
+  const [ctx, userImages] = await Promise.all([getAuthContext(), getImages()]);
 
   return (
     <>

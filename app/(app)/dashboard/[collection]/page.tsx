@@ -17,7 +17,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
@@ -27,8 +26,7 @@ export default async function CollectionPage({
   params: Promise<{ collection: string }>;
 }) {
   const { collection } = await params;
-  const ctx = await getAuthContext();
-  const collectionData = await getCollectionBySlug(ctx.user.id, collection);
+  const collectionData = await getCollectionBySlug(collection);
   if (!collectionData) {
     notFound();
   }
@@ -65,23 +63,14 @@ export default async function CollectionPage({
           title="Overview"
           description="View, edit, and manage the documents in this collection"
         >
-          <FileListAsync
-            userId={collectionData.userId}
-            collectionSlug={collection}
-          />
+          <FileListAsync collectionSlug={collection} />
         </Page>
       )}
     </>
   );
 }
 
-async function FileListAsync({
-  userId,
-  collectionSlug,
-}: {
-  userId: string;
-  collectionSlug: string;
-}) {
-  const documentsData = await getDocuments(userId, collectionSlug);
+async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
+  const documentsData = await getDocuments(collectionSlug);
   return <AppDocumentList documentsData={documentsData} />;
 }

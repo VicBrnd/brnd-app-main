@@ -9,7 +9,6 @@ import {
   AppDocumentListSkeleton,
 } from "@/components/files/document/app-document-list";
 import { Page } from "@/components/page-layout";
-import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
@@ -34,10 +33,9 @@ export default function DashboardPage() {
 }
 
 async function FilesAsync() {
-  const ctx = await getAuthContext();
   const [collectionsData, documentsData] = await Promise.all([
-    getCollections(ctx.user.id),
-    getDocuments(ctx.user.id),
+    getCollections(),
+    getDocuments(),
   ]);
 
   return (

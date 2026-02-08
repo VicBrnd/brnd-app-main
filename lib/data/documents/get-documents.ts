@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { and, desc, eq, SQL } from "drizzle-orm";
 
+import { getAuthContext } from "@/lib/auth/auth-context";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
@@ -17,15 +18,16 @@ export type DocumentsProps = Pick<
 };
 
 export async function getDocuments(
-  userId: string,
   collectionSlug?: string,
 ): Promise<DocumentsProps[]> {
-  "use cache";
+  "use cache: private";
   cacheTag("files");
+
+  const ctx = await getAuthContext();
 
   const filters: SQL[] = [];
 
-  filters.push(eq(collection.userId, userId));
+  filters.push(eq(collection.userId, ctx.user.id));
   if (collectionSlug) filters.push(eq(collection.slug, collectionSlug));
 
   const documentsData = await db

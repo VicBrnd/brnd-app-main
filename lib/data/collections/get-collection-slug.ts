@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { and, count, eq } from "drizzle-orm";
 
+import { getAuthContext } from "@/lib/auth/auth-context";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
@@ -15,11 +16,12 @@ export type CollectionBySlugProps = Pick<
 };
 
 export async function getCollectionBySlug(
-  userId: string,
   slug: string,
 ): Promise<CollectionBySlugProps | undefined> {
-  "use cache";
+  "use cache: private";
   cacheTag("files");
+
+  const ctx = await getAuthContext();
 
   const [collectionSlugData] = await db
     .select({
@@ -34,7 +36,7 @@ export async function getCollectionBySlug(
     })
     .from(collection)
     .leftJoin(document, eq(document.collectionId, collection.id))
-    .where(and(eq(collection.userId, userId), eq(collection.slug, slug)))
+    .where(and(eq(collection.userId, ctx.user.id), eq(collection.slug, slug)))
     .groupBy(collection.id);
 
   return collectionSlugData;

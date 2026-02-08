@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { desc, eq } from "drizzle-orm";
 
+import { getAuthContext } from "@/lib/auth/auth-context";
 import { db } from "@/lib/db";
 import { image } from "@/lib/db/schema";
 
@@ -12,9 +13,11 @@ export type ImagesProps = Pick<
   "id" | "url" | "name" | "key"
 >;
 
-export async function getImages(userId: string): Promise<ImagesProps[]> {
-  "use cache";
+export async function getImages(): Promise<ImagesProps[]> {
+  "use cache: private";
   cacheTag("session");
+
+  const ctx = await getAuthContext();
 
   const imagesData = await db
     .select({
@@ -24,7 +27,7 @@ export async function getImages(userId: string): Promise<ImagesProps[]> {
       key: image.key,
     })
     .from(image)
-    .where(eq(image.userId, userId))
+    .where(eq(image.userId, ctx.user.id))
     .orderBy(desc(image.uploadedAt));
 
   return imagesData;

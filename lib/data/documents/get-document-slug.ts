@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { and, eq } from "drizzle-orm";
 
+import { getAuthContext } from "@/lib/auth/auth-context";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
@@ -17,12 +18,13 @@ export type DocumentBySlugProps = Pick<
 };
 
 export async function getDocumentBySlug(
-  userId: string,
   collectionSlug: string,
   documentSlug: string,
 ): Promise<DocumentBySlugProps | undefined> {
-  "use cache";
+  "use cache: private";
   cacheTag("files");
+
+  const ctx = await getAuthContext();
 
   const [documentSlugData] = await db
     .select({
@@ -40,7 +42,7 @@ export async function getDocumentBySlug(
     .innerJoin(collection, eq(collection.id, document.collectionId))
     .where(
       and(
-        eq(collection.userId, userId),
+        eq(collection.userId, ctx.user.id),
         eq(collection.slug, collectionSlug),
         eq(document.slug, documentSlug),
       ),

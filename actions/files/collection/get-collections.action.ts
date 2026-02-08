@@ -5,6 +5,6 @@ import { authActionClient } from "@/lib/safe-action";
 
 export const getCollectionsAction = authActionClient
   .metadata({ actionName: "getCollections" })
-  .action(async ({ ctx: { sessionData } }) => {
-    return await getCollections(sessionData.user.id);
+  .action(async () => {
+    return await getCollections();
   });

@@ -2,6 +2,7 @@ import { cacheTag } from "next/cache";
 
 import { count, eq } from "drizzle-orm";
 
+import { getAuthContext } from "@/lib/auth/auth-context";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
@@ -14,11 +15,11 @@ export type CollectionsProps = Pick<
   filesCount: number;
 };
 
-export async function getCollections(
-  userId: string,
-): Promise<CollectionsProps[]> {
-  "use cache";
+export async function getCollections(): Promise<CollectionsProps[]> {
+  "use cache: private";
   cacheTag("files");
+
+  const ctx = await getAuthContext();
 
   const collectionData = await db
     .select({
@@ -33,7 +34,7 @@ export async function getCollections(
     })
     .from(collection)
     .leftJoin(document, eq(document.collectionId, collection.id))
-    .where(eq(collection.userId, userId))
+    .where(eq(collection.userId, ctx.user.id))
     .groupBy(collection.id);
 
   return collectionData;
