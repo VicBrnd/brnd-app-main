@@ -2,26 +2,25 @@
 
 import { useState } from "react";
 
+import { Add01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useAction } from "next-safe-action/hooks";
 
 import { getCollectionsAction } from "@/actions/files/collection/get-collections.action";
 import { CreateCollectionStep } from "@/components/files/create/create-collection-step";
 import { CreateDocumentStep } from "@/components/files/create/create-document-step";
 import { SelectFilesStep } from "@/components/files/create/select-files-step";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 
 export type OptionType = "collection" | "document";
 
 interface AppFilesDialogProps {
-  children?: React.ReactNode;
   collectionId?: CollectionsProps["id"];
 }
 
-export function AppFilesDialog({
-  children,
-  collectionId,
-}: AppFilesDialogProps) {
+export function AppFilesDialog({ collectionId }: AppFilesDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentOption, setOption] = useState<OptionType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -50,7 +49,18 @@ export function AppFilesDialog({
 
   return (
     <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
-      {children}
+      <DialogTrigger
+        render={
+          <Button
+            size="icon"
+            className="size-8 group-data-[collapsible=icon]:opacity-0"
+            variant="outline"
+          />
+        }
+      >
+        <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+        <span className="sr-only">Quick Create</span>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         {currentStep === 0 && (
           <SelectFilesStep

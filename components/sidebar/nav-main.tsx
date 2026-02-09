@@ -1,12 +1,9 @@
 import Link from "next/link";
 
-import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 
 import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
 import { NavSearch } from "@/components/sidebar/nav-search";
-import { Button } from "@/components/ui/button";
-import { DialogTrigger } from "@/components/ui/dialog";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -30,21 +27,7 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <NavSearch />
-            <AppFilesDialog>
-              <DialogTrigger
-                nativeButton={true}
-                render={
-                  <Button
-                    size="icon"
-                    className="size-8 group-data-[collapsible=icon]:opacity-0"
-                    variant="outline"
-                  />
-                }
-              >
-                <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-                <span className="sr-only">Quick Create</span>
-              </DialogTrigger>
-            </AppFilesDialog>
+            <AppFilesDialog />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

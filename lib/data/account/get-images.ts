@@ -1,4 +1,4 @@
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { desc, eq } from "drizzle-orm";
 
@@ -16,6 +16,7 @@ export type ImagesProps = Pick<
 export async function getImages(): Promise<ImagesProps[]> {
   "use cache: private";
   cacheTag("session");
+  cacheLife({ expire: 3600 });
 
   const ctx = await getAuthContext();
 

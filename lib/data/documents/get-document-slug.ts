@@ -1,4 +1,4 @@
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { and, eq } from "drizzle-orm";
 
@@ -23,6 +23,7 @@ export async function getDocumentBySlug(
 ): Promise<DocumentBySlugProps | undefined> {
   "use cache: private";
   cacheTag("files");
+  cacheLife({ expire: 3600 });
 
   const ctx = await getAuthContext();
 
