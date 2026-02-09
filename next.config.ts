@@ -12,12 +12,12 @@ const nextConfig: NextConfig = {
     },
   },
   cacheComponents: true,
-  logging: {
-    fetches: {
-      fullUrl: true,
-      hmrRefreshes: true,
-    },
-  },
+  // logging: {
+  //   fetches: {
+  //     fullUrl: true,
+  //     hmrRefreshes: true,
+  //   },
+  // },
   images: {
     remotePatterns: [
       {
