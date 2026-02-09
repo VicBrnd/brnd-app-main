@@ -25,10 +25,13 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
@@ -196,17 +199,20 @@ export function CreateDocumentStep({
                 >
                   <SelectTrigger aria-invalid={fieldState.invalid}>
                     {isLoadingCollections ? (
-                      <span className="text-muted-foreground">Loading...</span>
+                      <Skeleton className="w-full h-4" />
                     ) : (
                       <SelectValue placeholder="Select a collection" />
                     )}
                   </SelectTrigger>
                   <SelectContent>
-                    {collectionsData.map((collection) => (
-                      <SelectItem key={collection.id} value={collection.id}>
-                        {collection.title}
-                      </SelectItem>
-                    ))}
+                    <SelectGroup>
+                      <SelectLabel>Collections</SelectLabel>
+                      {collectionsData.map((collection) => (
+                        <SelectItem key={collection.id} value={collection.id}>
+                          {collection.title}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 {fieldState.invalid && (

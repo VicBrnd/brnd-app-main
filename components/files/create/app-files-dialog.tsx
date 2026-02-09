@@ -76,13 +76,15 @@ export function AppFilesDialog({ collectionId }: AppFilesDialogProps) {
           />
         )}
         {currentStep === 1 && currentOption === "document" && (
-          <CreateDocumentStep
-            collectionsData={collectionsData}
-            isLoadingCollections={isPending}
-            collectionId={collectionId}
-            onBack={() => setCurrentStep(0)}
-            onClose={() => setOpenDialog(false)}
-          />
+          <>
+            <CreateDocumentStep
+              collectionsData={collectionsData}
+              isLoadingCollections={isPending}
+              collectionId={collectionId}
+              onBack={() => setCurrentStep(0)}
+              onClose={() => setOpenDialog(false)}
+            />
+          </>
         )}
       </DialogContent>
     </Dialog>

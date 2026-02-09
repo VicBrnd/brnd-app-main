@@ -46,6 +46,7 @@ export function AppDocumentListSkeleton() {
       <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
       <DataTableSkeleton
         columnCount={5}
+        rowCount={5}
         withViewOptions={false}
         withPagination={false}
       />

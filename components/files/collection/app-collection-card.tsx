@@ -8,6 +8,7 @@ import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { CollectionContextMenu } from "@/components/files/collection/collection-context-menu";
+import { Badge } from "@/components/ui/brnd-ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
-import { cn } from "@/lib/utils";
 
 interface AppCollectionCardProps {
   collectionsData: CollectionsProps[];
@@ -70,15 +70,10 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
             collectionId={collection.id}
             removeOptimistic={removeOptimistic}
           >
-            <Link
-              href={`/dashboard/${collection.slug}`}
-              className={cn(
-                "p-4 rounded-xl border bg-background dark:bg-input/30 hover:bg-accent/50 transition-all cursor-pointer group block",
-              )}
-            >
-              <div className="flex items-start justify-between mb-3">
+            <div className="flex flex-col rounded-xl border bg-background dark:bg-sidebar/50 p-2 gap-2 cursor-default">
+              <div className="flex flex-col items-center justify-center p-7 rounded-lg bg-sidebar dark:bg-input/30">
                 <div
-                  className="size-10 rounded-lg flex items-center justify-center"
+                  className="flex items-center justify-center size-10 rounded-lg"
                   style={{ backgroundColor: `${collection.color}15` }}
                 >
                   <HugeiconsIcon
@@ -88,13 +83,25 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
                   />
                 </div>
               </div>
-              <p className="font-medium text-sm truncate mb-0.5">
-                {collection.title}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {collection.filesCount} files
-              </p>
-            </Link>
+              <div className="flex items-center">
+                <Badge
+                  variant="outline"
+                  className="gap-1.5 rounded-md px-2 py-1 items-center text-xs cursor-default"
+                  render={<Link href={`/dashboard/${collection.slug}`} />}
+                >
+                  <HugeiconsIcon
+                    icon={Folder01Icon}
+                    className="size-5"
+                    style={{ color: collection.color }}
+                  />
+                  {collection.title}
+                </Badge>
+                <span className="text-xs leading-relaxed text-muted-foreground ml-auto">
+                  <span className="font-bold"> {collection.filesCount}</span>{" "}
+                  files
+                </span>
+              </div>
+            </div>
           </CollectionContextMenu>
         ))}
       </div>
@@ -108,14 +115,18 @@ export function AppCollectionCardSkeleton() {
       <h2 className="text-sm font-medium text-muted-foreground">Collections</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="p-4 rounded-xl border bg-card">
-            <div className="flex items-start justify-between mb-3">
-              <Skeleton className="size-10 rounded-lg" />
-              <Skeleton className="size-4 rounded" />
+          <Skeleton
+            key={i}
+            className="flex flex-col rounded-xl border bg-card p-2 gap-2 cursor-default"
+          >
+            <div className="flex flex-col items-center justify-center p-5 rounded-lg bg-sidebar dark:bg-input/30 ">
+              <div className="flex items-center justify-center size-10 rounded-lg" />
             </div>
-            <Skeleton className="h-5 w-3/4 mb-0.5" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
+            <div className="flex items-center">
+              <Skeleton className="h-5 w-20" />
+              <Skeleton className="h-4 w-15 ml-auto" />
+            </div>
+          </Skeleton>
         ))}
       </div>
     </div>

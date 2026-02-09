@@ -41,6 +41,7 @@ export function CollectionContextMenu({
       }
     });
   };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
