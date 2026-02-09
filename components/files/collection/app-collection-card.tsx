@@ -11,6 +11,7 @@ import { CollectionContextMenu } from "@/components/files/collection/collection-
 import { Badge } from "@/components/ui/brnd-ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -67,38 +68,46 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
         {optimisticCollections.map((collection) => (
           <CollectionContextMenu
             key={collection.id}
+            collection={collection}
             collectionId={collection.id}
             removeOptimistic={removeOptimistic}
           >
             <div className="flex flex-col rounded-xl border bg-background dark:bg-sidebar/50 p-2 gap-2 cursor-default">
-              <div className="flex flex-col items-center justify-center p-7 rounded-lg bg-sidebar dark:bg-input/30">
-                <div
-                  className="flex items-center justify-center size-10 rounded-lg"
-                  style={{ backgroundColor: `${collection.color}15` }}
-                >
-                  <HugeiconsIcon
-                    icon={Folder01Icon}
-                    className="size-5"
-                    style={{ color: collection.color }}
-                  />
+              <div className="flex flex-col rounded-lg bg-sidebar dark:bg-input/30">
+                <div className="p-2">
+                  <Checkbox className="absolute rounded-full" />
+                </div>
+                <div className="flex items-center justify-center p-7">
+                  <div
+                    className="flex items-center justify-center size-10 rounded-lg"
+                    style={{ backgroundColor: `${collection.color}15` }}
+                  >
+                    <HugeiconsIcon
+                      icon={Folder01Icon}
+                      className="size-5"
+                      style={{ color: collection.color }}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center overflow-auto">
                 <Badge
                   variant="outline"
-                  className="gap-1.5 rounded-md px-2 py-1 items-center text-xs cursor-default"
+                  className="gap-1.5 rounded-md px-2 py-1 items-center text-xs cursor-default max-w-40 overflow-hidden"
                   render={<Link href={`/dashboard/${collection.slug}`} />}
                 >
                   <HugeiconsIcon
                     icon={Folder01Icon}
-                    className="size-5"
+                    className="size-5 shrink-0"
                     style={{ color: collection.color }}
                   />
-                  {collection.title}
+                  <span className="overflow-x-auto whitespace-nowrap">
+                    {collection.title}
+                  </span>
                 </Badge>
                 <span className="text-xs leading-relaxed text-muted-foreground ml-auto">
-                  <span className="font-bold"> {collection.filesCount}</span>{" "}
-                  files
+                  <span className="font-bold">{collection.filesCount}</span>{" "}
+                  {collection.filesCount > 1 ? "files" : "file"}
                 </span>
               </div>
             </div>

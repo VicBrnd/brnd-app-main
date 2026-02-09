@@ -160,7 +160,7 @@ export function CreateCollectionStep({
         </FieldGroup>
       </form>
       <DialogFooter>
-        <Button variant="outline" size="sm" onClick={onBack}>
+        <Button variant="outline-destructive" size="sm" onClick={onBack}>
           Back
         </Button>
         <Button

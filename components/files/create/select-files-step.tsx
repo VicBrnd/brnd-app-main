@@ -66,7 +66,7 @@ export function SelectFilesStep({
       <DialogFooter>
         <DialogClose
           render={
-            <Button variant="outline" size="sm">
+            <Button variant="outline-destructive" size="sm">
               Cancel
             </Button>
           }
