@@ -14,7 +14,7 @@ export const createCollection = authActionClient
   .metadata({ actionName: "createCollection" })
   .inputSchema(CreateCollectionFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const existing = await db
+    const duplicateCollection = await db
       .select({ id: collection.id })
       .from(collection)
       .where(
@@ -26,8 +26,8 @@ export const createCollection = authActionClient
       .limit(1)
       .then(takeFirstOrNull);
 
-    if (existing) {
-      return { error: "A collection with this slug already exists" };
+    if (duplicateCollection) {
+      return { error: "A collection with this slug already exists." };
     }
 
     const newCollection = await db

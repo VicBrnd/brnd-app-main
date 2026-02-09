@@ -2,10 +2,12 @@
 
 import { updateTag } from "next/cache";
 
-import { and, count, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
+import { getDocumentCount } from "@/lib/data/documents/get-document-count";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
+import { takeFirstOrNull, takeFirstOrThrow } from "@/lib/db/utils";
 import { authActionClient } from "@/lib/safe-action";
 import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
 
@@ -13,7 +15,7 @@ export const createDocument = authActionClient
   .metadata({ actionName: "createDocument" })
   .inputSchema(CreateDocumentFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const [collectionData] = await db
+    const parsedCollection = await db
       .select({ id: collection.id, slug: collection.slug })
       .from(collection)
       .where(
@@ -22,50 +24,50 @@ export const createDocument = authActionClient
           eq(collection.userId, sessionData.user.id),
         ),
       )
-      .limit(1);
+      .limit(1)
+      .then(takeFirstOrNull);
 
-    if (!collectionData) {
-      return { error: "Collection not found" };
+    if (!parsedCollection) {
+      return { error: "Collection not found or access denied." };
     }
 
-    const [verifySlug] = await db
+    const duplicateSlug = await db
       .select({ id: document.id })
       .from(document)
       .where(
         and(
-          eq(document.collectionId, collectionData.id),
+          eq(document.collectionId, parsedCollection.id),
           eq(document.slug, parsedInput.slug),
         ),
       )
-      .limit(1);
+      .limit(1)
+      .then(takeFirstOrNull);
 
-    if (verifySlug) {
+    if (duplicateSlug) {
       return {
-        error: "A document with this slug already exists in this collection",
+        error: "A document with this slug already exists in this collection.",
       };
     }
 
-    const [{ value: docCount }] = await db
-      .select({ value: count() })
-      .from(document)
-      .where(eq(document.collectionId, collectionData.id));
+    const documentCount = await getDocumentCount(parsedCollection.id);
 
-    const [newDocument] = await db
+    const newDocument = await db
       .insert(document)
       .values({
-        collectionId: collectionData.id,
+        collectionId: parsedCollection.id,
         title: parsedInput.title,
         slug: parsedInput.slug,
         content: "",
-        orderIndex: docCount,
+        orderIndex: documentCount,
       })
-      .returning();
+      .returning()
+      .then(takeFirstOrThrow);
 
     updateTag("files");
 
     return {
       success: true,
       document: newDocument,
-      collectionSlug: collectionData.slug,
+      collection: parsedCollection,
     };
   });

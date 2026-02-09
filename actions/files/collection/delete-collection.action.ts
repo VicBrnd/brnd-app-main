@@ -7,6 +7,7 @@ import { z } from "zod/v4";
 
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
+import { takeFirstOrNull } from "@/lib/db/utils";
 import { authActionClient } from "@/lib/safe-action";
 
 export const deleteCollection = authActionClient
@@ -17,7 +18,7 @@ export const deleteCollection = authActionClient
     }),
   )
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const hasDocuments = await db
+    const emptyCollection = await db
       .select({ id: document.id })
       .from(document)
       .innerJoin(collection, eq(document.collectionId, collection.id))
@@ -27,9 +28,10 @@ export const deleteCollection = authActionClient
           eq(collection.userId, sessionData.user.id),
         ),
       )
-      .limit(1);
+      .limit(1)
+      .then(takeFirstOrNull);
 
-    if (hasDocuments.length > 0) {
+    if (emptyCollection) {
       return {
         error: "Delete documents before deleting the collection.",
       };

@@ -9,8 +9,6 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-import { timestamps } from "@/lib/db/utils";
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -21,7 +19,11 @@ export const user = pgTable("user", {
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
-  ...timestamps,
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export const session = pgTable(
@@ -36,7 +38,11 @@ export const session = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     impersonatedBy: text("impersonated_by"),
-    ...timestamps,
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [index("idx_session_user_id").on(table.userId)],
 );
@@ -57,7 +63,11 @@ export const account = pgTable(
     refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
     scope: text("scope"),
     password: text("password"),
-    ...timestamps,
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [index("idx_account_user_id").on(table.userId)],
 );
@@ -67,7 +77,11 @@ export const verification = pgTable("verification", {
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
-  ...timestamps,
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export const passkey = pgTable(
@@ -137,7 +151,11 @@ export const collection = pgTable(
             Math.floor(Math.random() * 5)
           ],
       ),
-    ...timestamps,
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [
     uniqueIndex("collection_user_slug_idx").on(table.userId, table.slug),
@@ -160,7 +178,11 @@ export const document = pgTable(
     compiledContent: text("compiled_content"),
     isPublished: boolean("is_published").notNull().default(false),
     orderIndex: integer("order_index").notNull(),
-    ...timestamps,
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [
     uniqueIndex("document_collection_slug_idx").on(

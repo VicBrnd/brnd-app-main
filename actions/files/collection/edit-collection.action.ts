@@ -14,30 +14,35 @@ export const editCollection = authActionClient
   .metadata({ actionName: "editCollection" })
   .inputSchema(EditCollectionFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const { id, title, slug, color } = parsedInput;
-
-    const existingCollection = await db
+    const duplicateCollection = await db
       .select({ id: collection.id })
       .from(collection)
       .where(
         and(
-          eq(collection.slug, slug),
-          ne(collection.id, id),
+          eq(collection.slug, parsedInput.slug),
+          ne(collection.id, parsedInput.id),
           eq(collection.userId, sessionData.user.id),
         ),
       )
       .limit(1)
       .then(takeFirstOrNull);
 
-    if (existingCollection) {
-      return { error: "A collection with this slug already exists" };
+    if (duplicateCollection) {
+      return { error: "A collection with this slug already exists." };
     }
 
     await db
       .update(collection)
-      .set({ title, slug, color })
+      .set({
+        title: parsedInput.title,
+        slug: parsedInput.slug,
+        color: parsedInput.color,
+      })
       .where(
-        and(eq(collection.id, id), eq(collection.userId, sessionData.user.id)),
+        and(
+          eq(collection.id, parsedInput.id),
+          eq(collection.userId, sessionData.user.id),
+        ),
       );
 
     updateTag("files");

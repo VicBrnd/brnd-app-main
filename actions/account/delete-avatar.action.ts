@@ -15,7 +15,7 @@ export const deleteAvatar = authActionClient
   .metadata({ actionName: "deleteAvatar" })
   .inputSchema(deleteAvatarSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const imagesToDelete = await db
+    const imagesDelete = await db
       .select({ key: image.key, url: image.url })
       .from(image)
       .where(
@@ -25,13 +25,13 @@ export const deleteAvatar = authActionClient
         ),
       );
 
-    if (imagesToDelete.length !== parsedInput.keys.length) {
+    if (imagesDelete.length !== parsedInput.keys.length) {
       throw new Error("Some images not found or access denied");
     }
 
     const shouldUpdateUserImage =
       sessionData.user.image &&
-      imagesToDelete.some((img) => sessionData.user.image === img.url);
+      imagesDelete.some((img) => sessionData.user.image === img.url);
 
     await db
       .delete(image)

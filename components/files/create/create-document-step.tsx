@@ -111,7 +111,7 @@ export function CreateDocumentStep({
           success: (result) => {
             onClose();
             router.push(
-              `/dashboard/${result.collectionSlug}/${result.document.slug}`,
+              `/dashboard/${result.collection.slug}/${result.document.slug}`,
             );
             return "Document created successfully";
           },

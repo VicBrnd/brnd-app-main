@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Folder01Icon } from "@hugeicons/core-free-icons";
@@ -7,11 +6,9 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { CollectionHeader } from "@/app/(app)/dashboard/[collection]/collection-header";
 import { AppDocumentList } from "@/components/files/document/app-document-list";
 import { Page } from "@/components/page-layout";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -47,15 +44,6 @@ export default async function CollectionPage({
                 creating your first document.
               </EmptyDescription>
             </EmptyHeader>
-            <EmptyContent className="flex-row justify-center gap-2">
-              <Button
-                nativeButton={false}
-                variant="outline"
-                render={<Link href="/dashboard/create/document" />}
-              >
-                New Document
-              </Button>
-            </EmptyContent>
           </Empty>
         </Card>
       ) : (
