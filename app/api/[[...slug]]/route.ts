@@ -7,12 +7,18 @@ import { OpenAPI } from "@/lib/auth/auth-openapi";
 
 export const app = new Elysia({ name: "app", prefix: "/api" })
   .use(
-    openapi({
-      documentation: {
-        components: await OpenAPI.components,
-        paths: await OpenAPI.getPaths(),
-      },
-    }),
+    process.env.NODE_ENV === "development"
+      ? openapi({
+          documentation: {
+            info: {
+              title: "Brnd Documentation",
+              version: "1.0.0",
+            },
+            components: await OpenAPI.components,
+            paths: await OpenAPI.getPaths(),
+          },
+        })
+      : (app) => app,
   )
   .use(BetterAuth)
   .use(Collections);
