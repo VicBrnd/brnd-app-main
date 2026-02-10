@@ -2,30 +2,25 @@
 
 import Link from "next/link";
 
-import { Folder01Icon, MoreHorizontalIcon } from "@hugeicons/core-free-icons";
+import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { CellStatus } from "@/components/files/document/document-list/cell-status";
+import { ActionsCell } from "@/components/files/document/document-list/cell/actions-cell";
+import { StatusCell } from "@/components/files/document/document-list/cell/status-cell";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Badge } from "@/components/ui/brnd-ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
 interface ColumnsOptions {
+  collectionsData: CollectionsProps[];
   onDelete: (id: string) => void;
   isDeleting?: boolean;
 }
 
 export const getColumns = ({
+  collectionsData,
   onDelete,
   isDeleting,
 }: ColumnsOptions): ColumnDef<DocumentsProps>[] => [
@@ -114,7 +109,7 @@ export const getColumns = ({
     ),
     cell: ({ row }) => {
       return (
-        <CellStatus
+        <StatusCell
           documentId={row.original.id}
           isPublished={row.original.isPublished}
         />
@@ -123,34 +118,13 @@ export const getColumns = ({
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="text-right">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant="ghost" className="h-8 w-8 p-0" />}
-            >
-              <span className="sr-only">Open menu</span>
-              <HugeiconsIcon icon={MoreHorizontalIcon} className="h-4 w-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Download</DropdownMenuItem>
-                <DropdownMenuItem>Rename</DropdownMenuItem>
-                <DropdownMenuItem>Share</DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => onDelete(row.original.id)}
-                disabled={isDeleting}
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <ActionsCell
+        collectionsData={collectionsData}
+        documentData={row.original}
+        onDelete={onDelete}
+        isDeleting={isDeleting}
+      />
+    ),
   },
 ];

@@ -11,7 +11,6 @@ import { CollectionContextMenu } from "@/components/files/collection/collection-
 import { Badge } from "@/components/ui/brnd-ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -74,9 +73,6 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
           >
             <div className="flex flex-col rounded-xl border bg-background dark:bg-sidebar/50 p-2 gap-2 cursor-default">
               <div className="flex flex-col rounded-lg bg-sidebar dark:bg-input/30">
-                <div className="p-2">
-                  <Checkbox className="absolute rounded-full" />
-                </div>
                 <div className="flex items-center justify-center p-7">
                   <div
                     className="flex items-center justify-center size-10 rounded-lg"

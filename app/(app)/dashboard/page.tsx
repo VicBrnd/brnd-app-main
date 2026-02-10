@@ -41,7 +41,10 @@ async function FilesAsync() {
   return (
     <>
       <AppCollectionCard collectionsData={collectionsData} />
-      <AppDocumentList documentsData={documentsData} />
+      <AppDocumentList
+        collectionsData={collectionsData}
+        documentsData={documentsData}
+      />
     </>
   );
 }

@@ -2,12 +2,6 @@ import { useState, useTransition } from "react";
 
 import Link from "next/link";
 
-import {
-  Delete01Icon,
-  FolderOpenIcon,
-  PencilEdit02Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
 import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
@@ -60,11 +54,9 @@ export function CollectionContextMenu({
             <ContextMenuItem
               render={<Link href={`/dashboard/${collection.slug}`} />}
             >
-              <HugeiconsIcon icon={FolderOpenIcon} />
               Open
             </ContextMenuItem>
             <ContextMenuItem onClick={() => setDialogOpen(true)}>
-              <HugeiconsIcon icon={PencilEdit02Icon} />
               Edit
             </ContextMenuItem>
           </ContextMenuGroup>
@@ -75,7 +67,6 @@ export function CollectionContextMenu({
               onClick={() => handleDeleteCollection(collectionId)}
               disabled={isLoading}
             >
-              <HugeiconsIcon icon={Delete01Icon} />
               Delete
             </ContextMenuItem>
           </ContextMenuGroup>

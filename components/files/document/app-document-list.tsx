@@ -6,13 +6,18 @@ import { deleteDocument } from "@/actions/files/document/delete-document.action"
 import { getColumns } from "@/components/files/document/document-list/columns";
 import { DataTable } from "@/components/files/document/document-list/data-table";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
 interface AppDocumentListProps {
+  collectionsData: CollectionsProps[];
   documentsData: DocumentsProps[];
 }
 
-export function AppDocumentList({ documentsData }: AppDocumentListProps) {
+export function AppDocumentList({
+  collectionsData,
+  documentsData,
+}: AppDocumentListProps) {
   const [isLoading, startTransition] = useTransition();
   const [optimisticDocuments, removeOptimistic] = useOptimistic(
     documentsData,
@@ -31,6 +36,7 @@ export function AppDocumentList({ documentsData }: AppDocumentListProps) {
       <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
       <DataTable
         columns={getColumns({
+          collectionsData: collectionsData,
           onDelete: handleDeleteDocument,
           isDeleting: isLoading,
         })}

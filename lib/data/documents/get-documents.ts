@@ -12,6 +12,7 @@ export type DocumentsProps = Pick<
   typeof document.$inferSelect,
   "id" | "title" | "slug" | "isPublished" | "createdAt" | "updatedAt"
 > & {
+  collectionId: string;
   collectionSlug: string;
   collectionTitle: string;
   collectionColor: string;
@@ -39,6 +40,7 @@ export async function getDocuments(
       isPublished: document.isPublished,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,
+      collectionId: collection.id,
       collectionSlug: collection.slug,
       collectionTitle: collection.title,
       collectionColor: collection.color,

@@ -15,6 +15,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug";
+import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default async function CollectionPage({
@@ -60,5 +61,11 @@ export default async function CollectionPage({
 
 async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
   const documentsData = await getDocuments(collectionSlug);
-  return <AppDocumentList documentsData={documentsData} />;
+  const collectionData = await getCollections();
+  return (
+    <AppDocumentList
+      documentsData={documentsData}
+      collectionsData={collectionData}
+    />
+  );
 }
