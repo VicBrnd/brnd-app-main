@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
-import { EditCollectionFormSchema } from "@/schemas/files/edit-collection.schema";
+import { EditCollectionFormSchema } from "@/schemas/files/collection/edit-collection.schema";
 
 interface EditCollectionDialogProps {
   dialogOpen: boolean;

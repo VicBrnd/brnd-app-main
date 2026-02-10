@@ -1,7 +1,7 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { magicLink } from "better-auth/plugins";
+import { magicLink, openAPI } from "better-auth/plugins";
 
 import SignInEmail from "@/emails/sign-in-email";
 import { db, schema } from "@/lib/db";
@@ -52,6 +52,7 @@ export const auth = betterAuth({
         console.log(emailDev);
       },
     }),
+    openAPI(),
     nextCookies(),
   ],
 });

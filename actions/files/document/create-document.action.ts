@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull, takeFirstOrThrow } from "@/lib/db/utils";
 import { authActionClient } from "@/lib/safe-action";
-import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
+import { CreateDocumentFormSchema } from "@/schemas/files/document/create-document.schema";
 
 export const createDocument = authActionClient
   .metadata({ actionName: "createDocument" })

@@ -34,7 +34,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
-import { CreateDocumentFormSchema } from "@/schemas/files/create-document.schema";
+import { CreateDocumentFormSchema } from "@/schemas/files/document/create-document.schema";
 
 interface CreateDocumentStepProps {
   collectionsData: CollectionsProps[];

@@ -1,18 +1,11 @@
 import { Suspense } from "react";
 
-import { ArrowRight01Icon, Folder01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-
-import { MdxIcon } from "@/components/icons/mdx-icons";
+import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
 import { NavHeader } from "@/components/sidebar/nav-header";
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavSecondary } from "@/components/sidebar/nav-secondary";
+import { NavTree } from "@/components/sidebar/nav-tree";
 import { NavUser, NavUserSkeleton } from "@/components/sidebar/nav-user";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -21,30 +14,28 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { data } from "@/config/dashboard.config";
 import { getAuthContext } from "@/lib/auth/auth-context";
+import { getCollections } from "@/lib/data/collections/get-collections";
+import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <NavHeader />
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <SidebarGroup>
-          <SidebarGroupLabel>Files</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {data.tree.map((item, index) => (
-                <Tree key={index} item={item} />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain
+          items={data.navMain}
+          AppFilesDialog={
+            <Suspense>
+              <NavMainAppFilesDialog />
+            </Suspense>
+          }
+        />
+        <Suspense fallback={<div className="p-4">Loading...</div>}>
+          <NavTreeAsync />
+        </Suspense>
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
@@ -56,58 +47,45 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   );
 }
 
-type TreeItem = string | TreeItem[];
-
-function Tree({ item }: { item: TreeItem }) {
-  const [name, ...items] = Array.isArray(item) ? item : [item];
-
-  if (!items.length) {
-    return (
-      <SidebarMenuButton
-        isActive={name === "button.tsx"}
-        className="data-[active=true]:bg-transparent"
-      >
-        <MdxIcon />
-        {name}
-      </SidebarMenuButton>
-    );
-  }
+async function NavTreeAsync() {
+  const [collections, documents] = await Promise.all([
+    getCollections(),
+    getDocuments(),
+  ]);
 
   return (
-    <SidebarMenuItem>
-      <Collapsible
-        className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90"
-        // defaultOpen={name === "components" || name === "ui"}
-      >
-        <SidebarMenuButton>
-          <HugeiconsIcon icon={Folder01Icon} />
-          {name}
-        </SidebarMenuButton>
-        <CollapsibleTrigger
-          render={
-            <SidebarMenuAction className="[&>button[data-panel-open]>svg:last-child]:rotate-90" />
-          }
-        >
-          <HugeiconsIcon
-            icon={ArrowRight01Icon}
-            className="transition-transform"
-          />
-        </CollapsibleTrigger>
-
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {items.map((subItem, index) => (
-              <Tree key={index} item={subItem} />
-            ))}
-          </SidebarMenuSub>
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarMenuItem>
+    <SidebarGroup>
+      <SidebarGroupLabel>Files</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {collections.map((collection) => (
+            <NavTree
+              key={collection.id}
+              item={{
+                name: collection.title,
+                href: `/dashboard/${collection.slug}`,
+                color: collection.color,
+                children: documents
+                  .filter((document) => document.collectionId === collection.id)
+                  .map((document) => ({
+                    name: document.title,
+                    href: `/dashboard/${collection.slug}/${document.slug}`,
+                  })),
+              }}
+            />
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
+}
+
+async function NavMainAppFilesDialog() {
+  const collectionsData = await getCollections();
+  return <AppFilesDialog collectionsData={collectionsData} />;
 }
 
 async function UserSidebarAsync() {
   const ctx = await getAuthContext();
-
   return <NavUser user={ctx.user} />;
 }

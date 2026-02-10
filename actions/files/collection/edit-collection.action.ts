@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { collection } from "@/lib/db/schema";
 import { takeFirstOrNull } from "@/lib/db/utils";
 import { authActionClient } from "@/lib/safe-action";
-import { EditCollectionFormSchema } from "@/schemas/files/edit-collection.schema";
+import { EditCollectionFormSchema } from "@/schemas/files/collection/edit-collection.schema";
 
 export const editCollection = authActionClient
   .metadata({ actionName: "editCollection" })

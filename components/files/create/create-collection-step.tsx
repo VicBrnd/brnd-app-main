@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { CreateCollectionFormSchema } from "@/schemas/files/create-collection.schema";
+import { CreateCollectionFormSchema } from "@/schemas/files/collection/create-collection.schema";
 
 interface CreateCollectionStepProps {
   onBack: () => void;

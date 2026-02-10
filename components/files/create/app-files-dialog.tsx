@@ -4,9 +4,7 @@ import { useState } from "react";
 
 import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useAction } from "next-safe-action/hooks";
 
-import { getCollectionsAction } from "@/actions/files/collection/get-collections.action";
 import { CreateCollectionStep } from "@/components/files/create/create-collection-step";
 import { CreateDocumentStep } from "@/components/files/create/create-document-step";
 import { SelectFilesStep } from "@/components/files/create/select-files-step";
@@ -17,16 +15,17 @@ import { CollectionsProps } from "@/lib/data/collections/get-collections";
 export type OptionType = "collection" | "document";
 
 interface AppFilesDialogProps {
+  collectionsData: CollectionsProps[];
   collectionId?: CollectionsProps["id"];
 }
 
-export function AppFilesDialog({ collectionId }: AppFilesDialogProps) {
+export function AppFilesDialog({
+  collectionId,
+  collectionsData,
+}: AppFilesDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentOption, setOption] = useState<OptionType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
-
-  const { execute, result, isPending } = useAction(getCollectionsAction);
-  const collectionsData = result.data ?? [];
 
   const nextStep = () => {
     if (currentOption && currentStep < 1) {
@@ -37,7 +36,6 @@ export function AppFilesDialog({ collectionId }: AppFilesDialogProps) {
   const handleOpenDialog = (open: boolean) => {
     setOpenDialog(open);
     if (open) {
-      execute();
       setOption(null);
       setCurrentStep(0);
     }
@@ -79,7 +77,6 @@ export function AppFilesDialog({ collectionId }: AppFilesDialogProps) {
           <>
             <CreateDocumentStep
               collectionsData={collectionsData}
-              isLoadingCollections={isPending}
               collectionId={collectionId}
               onBack={() => setCurrentStep(0)}
               onClose={() => setOpenDialog(false)}

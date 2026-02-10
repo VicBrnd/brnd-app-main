@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
 
-import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
 import { NavSearch } from "@/components/sidebar/nav-search";
 import {
   SidebarGroup,
@@ -14,12 +13,14 @@ import {
 
 export function NavMain({
   items,
+  AppFilesDialog,
 }: {
   items: {
     title: string;
     url: string;
     icon?: IconSvgElement;
   }[];
+  AppFilesDialog?: React.ReactNode;
 }) {
   return (
     <SidebarGroup>
@@ -27,7 +28,7 @@ export function NavMain({
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <NavSearch />
-            <AppFilesDialog />
+            {AppFilesDialog}
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
