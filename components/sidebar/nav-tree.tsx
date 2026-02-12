@@ -10,11 +10,16 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type TreeNode = {
   name: string;
@@ -65,5 +70,33 @@ export function NavTree({ item }: { item: TreeNode }) {
         </CollapsibleContent>
       </Collapsible>
     </SidebarMenuItem>
+  );
+}
+
+export function NavTreeSkeleton() {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>Files</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SidebarMenuItem key={i}>
+              <SidebarMenuButton className="pointer-events-none">
+                <Skeleton className="size-4 rounded" />
+                <Skeleton className="h-4 w-24" />
+              </SidebarMenuButton>
+              <SidebarMenuSub>
+                {Array.from({ length: i === 0 ? 3 : 2 }).map((_, j) => (
+                  <SidebarMenuButton key={j} className="pointer-events-none">
+                    <Skeleton className="size-4 rounded" />
+                    <Skeleton className="h-3.5 w-20" />
+                  </SidebarMenuButton>
+                ))}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

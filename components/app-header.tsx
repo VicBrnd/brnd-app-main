@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 
-import { AppBreadcrumb } from "@/components/breadcrumb/app-breadcrumb";
+import {
+  AppBreadcrumb,
+  AppBreadcrumbSkeleton,
+} from "@/components/breadcrumb/app-breadcrumb";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -18,7 +21,7 @@ export function AppHeader() {
             className="mx-2 hidden md:block data-[orientation=vertical]:h-4"
           />
           <div className="hidden md:block min-w-0 flex-1">
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<AppBreadcrumbSkeleton />}>
               <AppBreadcrumbAsync />
             </Suspense>
           </div>
@@ -28,7 +31,7 @@ export function AppHeader() {
         </div>
       </header>
       <div className="flex md:hidden items-center border-b px-4 py-2 overflow-x-auto overflow-y-hidden">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<AppBreadcrumbSkeleton />}>
           <AppBreadcrumbAsync />
         </Suspense>
       </div>

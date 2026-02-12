@@ -16,6 +16,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AppBreadcrumb({
   collections,
@@ -34,7 +35,7 @@ export function AppBreadcrumb({
   }));
 
   const documentItems = documents
-    .filter((doc) => doc.collectionSlug === collectionSlug)
+    .filter((d) => d.collectionSlug === collectionSlug)
     .map((d) => ({
       value: d.slug,
       label: d.title,
@@ -63,12 +64,27 @@ export function AppBreadcrumb({
             <BreadcrumbSeparator>
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </BreadcrumbSeparator>
-            <NavDocument
-              items={documentItems}
-              currentSlug={documentSlug}
-            />
+            <NavDocument items={documentItems} currentSlug={documentSlug} />
           </>
         )}
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+export function AppBreadcrumbSkeleton() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList className="flex-nowrap">
+        <Skeleton className="h-7 w-35" />
+        <BreadcrumbSeparator>
+          <HugeiconsIcon icon={ArrowRight01Icon} />
+        </BreadcrumbSeparator>
+        <Skeleton className="h-7 w-29" />
+        <BreadcrumbSeparator>
+          <HugeiconsIcon icon={ArrowRight01Icon} />
+        </BreadcrumbSeparator>
+        <Skeleton className="h-7 w-45" />
       </BreadcrumbList>
     </Breadcrumb>
   );
