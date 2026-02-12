@@ -5,7 +5,8 @@ export const EditCollectionFormSchema = z.object({
   title: z
     .string()
     .min(1, "Title must be at least 1 characters.")
-    .max(32, "Title must be at most 32 characters."),
+    .max(32, "Title must be at most 32 characters.")
+    .optional(),
   slug: z
     .string()
     .min(1, "Slug must be at least 1 characters.")
@@ -13,6 +14,8 @@ export const EditCollectionFormSchema = z.object({
     .regex(
       /^[\da-z-]+$/,
       "Slug can only contain lowercase letters, numbers, and hyphens",
-    ),
-  color: z.string(),
+    )
+    .optional(),
+
+  color: z.string().optional(),
 });

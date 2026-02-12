@@ -1,17 +1,37 @@
 "use client";
 
+import { useOptimistic, useState, useTransition } from "react";
+
 import Link from "next/link";
 
 import {
   ArrowLeft02Icon,
   Delete01Icon,
   Folder01Icon,
+  PaintBoardIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { toast } from "sonner";
 
+import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
+import { editCollection } from "@/actions/files/collection/edit-collection.action";
 import { Button } from "@/components/ui/button";
+import { ColorPicker } from "@/components/ui/coss-ui/color-picker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Collection } from "@/lib/db/types";
 
 interface CollectionHeaderProps {
@@ -19,6 +39,53 @@ interface CollectionHeaderProps {
 }
 
 export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
+  const [isDeleting, startDeleteTransition] = useTransition();
+  const [, startSaveTransition] = useTransition();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(collectionData.title);
+
+  const [optimisticTitle, setOptimisticTitle] = useOptimistic(
+    collectionData.title,
+  );
+  const [optimisticColor, setOptimisticColor] = useOptimistic(
+    collectionData.color,
+  );
+
+  const handleDeleteCollection = (collectionId: string) => {
+    startDeleteTransition(async () => {
+      const res = await deleteCollection({ ids: [collectionId] });
+      if (res?.data?.error) toast.error(res.data.error);
+      if (res?.data?.success) toast.success("Collection deleted successfully");
+    });
+  };
+
+  const handleSaveTitle = () => {
+    if (editValue === collectionData.title) return;
+    startSaveTransition(async () => {
+      setOptimisticTitle(editValue);
+      const res = await editCollection({
+        id: collectionData.id,
+        title: editValue,
+      });
+      if (res?.data?.error) {
+        toast.error(res.data.error);
+        setEditValue(collectionData.title);
+      }
+    });
+  };
+
+  const handleSaveColor = (newColor: string) => {
+    startSaveTransition(async () => {
+      setOptimisticColor(newColor);
+      const res = await editCollection({
+        id: collectionData.id,
+        color: newColor,
+      });
+      if (res?.data?.error) toast.error(res.data.error);
+    });
+  };
+
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) -m-4 md:-m-6 mb-4 md:mb-6">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -28,28 +95,102 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
           variant="ghost"
           size="icon-sm"
           className="-ml-1"
-          render={<Link href={`/dashboard`} />}
+          render={<Link href="/dashboard" />}
         >
           <HugeiconsIcon icon={ArrowLeft02Icon} />
           <span className="sr-only">Back</span>
         </Button>
-        {/* Separator */}
+
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        {/* Title */}
+
+        {/* Folder icon with optimistic color */}
         <HugeiconsIcon
           icon={Folder01Icon}
           size={14}
           className="shrink-0"
-          style={{ color: collectionData.color }}
+          style={{ color: optimisticColor }}
         />
-        <h1 className="text-sm font-semibold">{collectionData.title}</h1>
+
+        {/* Inline title editing */}
+        {isEditing ? (
+          <input
+            className="text-sm font-semibold border-none outline-none px-0 py-0 bg-transparent"
+            autoFocus
+            value={editValue.charAt(0).toUpperCase() + editValue.slice(1)}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={() => {
+              setIsEditing(false);
+              handleSaveTitle();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setIsEditing(false);
+                handleSaveTitle();
+              }
+              if (e.key === "Escape") {
+                setEditValue(collectionData.title);
+                setIsEditing(false);
+              }
+            }}
+          />
+        ) : (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <h1
+                  className="text-sm font-semibold"
+                  onClick={() => {
+                    setEditValue(optimisticTitle);
+                    setIsEditing(true);
+                  }}
+                />
+              }
+            >
+              {optimisticTitle.charAt(0).toUpperCase() +
+                optimisticTitle.slice(1)}
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              Click to edit the title
+            </TooltipContent>
+          </Tooltip>
+        )}
+
         <div className="ml-auto flex items-center gap-2">
-          {/* Button Delete */}
-          <Button variant="outline-destructive" size="sm">
-            <HugeiconsIcon icon={Delete01Icon} />
+          {/* Color picker */}
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  style={{ color: optimisticColor }}
+                >
+                  <HugeiconsIcon icon={PaintBoardIcon} />
+                  <span className="sr-only sm:not-sr-only">Color</span>
+                </Button>
+              }
+            />
+            <PopoverContent className="w-auto" align="end">
+              <PopoverHeader>
+                <PopoverTitle>Color Picker</PopoverTitle>
+              </PopoverHeader>
+              <ColorPicker
+                color={optimisticColor}
+                onChange={(newColor) => handleSaveColor(newColor)}
+              />
+            </PopoverContent>
+          </Popover>
+
+          {/* Delete button */}
+          <Button
+            variant="outline-destructive"
+            size="sm"
+            onClick={() => handleDeleteCollection(collectionData.id)}
+          >
+            {isDeleting ? <Spinner /> : <HugeiconsIcon icon={Delete01Icon} />}
             <span className="flex items-center gap-1 sr-only md:not-sr-only">
               Delete
             </span>
@@ -64,17 +205,13 @@ export function CollectionHeaderSkeleton() {
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) -m-4 md:-m-6 mb-4 md:mb-6">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        {/* Back button */}
         <Skeleton className="h-4 w-6" />
-        {/* Separator */}
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        {/* Title */}
         <Skeleton className="h-4 w-30" />
         <div className="ml-auto flex items-center gap-2">
-          {/* Button Delete */}
           <Skeleton className="h-4 w-20.5" />
         </div>
       </div>

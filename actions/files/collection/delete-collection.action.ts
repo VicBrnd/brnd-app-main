@@ -33,7 +33,7 @@ export const deleteCollection = authActionClient
 
     if (emptyCollection) {
       return {
-        error: "Delete documents before deleting the collection.",
+        error: "Collection is not empty.",
       };
     }
 

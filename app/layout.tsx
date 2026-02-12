@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={cn("h-full antialiased")}>
         <NuqsAdapter>
           <ThemeProvider>
-            <Toaster richColors position="top-center" />
+            <Toaster richColors />
             {children}
           </ThemeProvider>
         </NuqsAdapter>

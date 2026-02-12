@@ -14,30 +14,33 @@ export const editCollection = authActionClient
   .metadata({ actionName: "editCollection" })
   .inputSchema(EditCollectionFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
-    const duplicateCollection = await db
-      .select({ id: collection.id })
-      .from(collection)
-      .where(
-        and(
-          eq(collection.slug, parsedInput.slug),
-          ne(collection.id, parsedInput.id),
-          eq(collection.userId, sessionData.user.id),
-        ),
-      )
-      .limit(1)
-      .then(takeFirstOrNull);
+    if (parsedInput.slug) {
+      const duplicateCollection = await db
+        .select({ id: collection.id })
+        .from(collection)
+        .where(
+          and(
+            eq(collection.slug, parsedInput.slug),
+            ne(collection.id, parsedInput.id),
+            eq(collection.userId, sessionData.user.id),
+          ),
+        )
+        .limit(1)
+        .then(takeFirstOrNull);
 
-    if (duplicateCollection) {
-      return { error: "A collection with this slug already exists." };
+      if (duplicateCollection) {
+        return { error: "A collection with this slug already exists." };
+      }
     }
+
+    const updateData: Record<string, string> = {};
+    if (parsedInput.title) updateData.title = parsedInput.title;
+    if (parsedInput.slug) updateData.slug = parsedInput.slug;
+    if (parsedInput.color) updateData.color = parsedInput.color;
 
     await db
       .update(collection)
-      .set({
-        title: parsedInput.title,
-        slug: parsedInput.slug,
-        color: parsedInput.color,
-      })
+      .set(updateData)
       .where(
         and(
           eq(collection.id, parsedInput.id),
