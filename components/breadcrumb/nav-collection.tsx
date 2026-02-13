@@ -49,7 +49,11 @@ export function NavCollection({
             <HugeiconsIcon icon={Folder01Icon} />
             <SelectValue />
           </Button>
-          <SelectTrigger className="w-full max-w-48" size="sm">
+          <SelectTrigger
+            className="w-full max-w-48"
+            size="sm"
+            aria-label="Select collection"
+          >
             <span className="sr-only">Arrow select</span>
           </SelectTrigger>
         </ButtonGroup>

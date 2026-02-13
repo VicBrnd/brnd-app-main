@@ -50,7 +50,11 @@ export function NavApp() {
             <HugeiconsIcon icon={DashboardSquare02Icon} />
             <SelectValue />
           </Button>
-          <SelectTrigger className="w-full max-w-48" size="sm">
+          <SelectTrigger
+            className="w-full max-w-48"
+            size="sm"
+            aria-label="Select app section"
+          >
             <span className="sr-only">Arrow select</span>
           </SelectTrigger>
         </ButtonGroup>

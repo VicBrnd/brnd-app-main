@@ -163,12 +163,11 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
           <Popover>
             <PopoverTrigger
               render={
-                <Button
-                  variant="outline"
-                  size="sm"
-                  style={{ color: optimisticColor }}
-                >
-                  <HugeiconsIcon icon={PaintBoardIcon} />
+                <Button variant="outline" size="sm">
+                  <HugeiconsIcon
+                    icon={PaintBoardIcon}
+                    style={{ color: optimisticColor }}
+                  />
                   <span className="sr-only sm:not-sr-only">Color</span>
                 </Button>
               }
