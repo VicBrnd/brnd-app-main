@@ -44,13 +44,7 @@ interface CreateDocumentStepProps {
   onClose: () => void;
 }
 
-export function CreateDocumentStep({
-  collectionsData,
-  isLoadingCollections,
-  collectionId,
-  onBack,
-  onClose,
-}: CreateDocumentStepProps) {
+export function CreateDocumentStep(props: CreateDocumentStepProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
@@ -59,7 +53,7 @@ export function CreateDocumentStep({
     defaultValues: {
       title: "",
       slug: "",
-      collection: collectionId ?? "",
+      collection: props.collectionId ?? "",
     },
   });
 
@@ -109,7 +103,7 @@ export function CreateDocumentStep({
         {
           loading: "Creating document...",
           success: (result) => {
-            onClose();
+            props.onClose();
             router.push(
               `/dashboard/${result.collection.slug}/${result.document.slug}`,
             );
@@ -190,15 +184,15 @@ export function CreateDocumentStep({
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
-                  disabled={isLoadingCollections}
+                  disabled={props.isLoadingCollections}
                   aria-invalid={fieldState.invalid}
-                  items={collectionsData.map((c) => ({
+                  items={props.collectionsData.map((c) => ({
                     value: c.id,
                     label: c.title,
                   }))}
                 >
                   <SelectTrigger aria-invalid={fieldState.invalid}>
-                    {isLoadingCollections ? (
+                    {props.isLoadingCollections ? (
                       <Skeleton className="w-full h-4" />
                     ) : (
                       <SelectValue placeholder="Select a collection" />
@@ -207,7 +201,7 @@ export function CreateDocumentStep({
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Collections</SelectLabel>
-                      {collectionsData.map((collection) => (
+                      {props.collectionsData.map((collection) => (
                         <SelectItem key={collection.id} value={collection.id}>
                           {collection.title}
                         </SelectItem>
@@ -224,7 +218,7 @@ export function CreateDocumentStep({
         </FieldGroup>
       </form>
       <DialogFooter>
-        <Button variant="outline-destructive" size="sm" onClick={onBack}>
+        <Button variant="outline-destructive" size="sm" onClick={props.onBack}>
           Back
         </Button>
         <Button

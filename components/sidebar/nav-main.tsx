@@ -11,28 +11,27 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-export function NavMain({
-  items,
-  AppFilesDialog,
-}: {
+interface NavMainProps {
   items: {
     title: string;
     url: string;
     icon?: IconSvgElement;
   }[];
   AppFilesDialog?: React.ReactNode;
-}) {
+}
+
+export function NavMain(props: NavMainProps) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <NavSearch />
-            {AppFilesDialog}
+            {props.AppFilesDialog}
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
+          {props.items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton render={<Link href={item.url} />}>
                 {item.icon && (

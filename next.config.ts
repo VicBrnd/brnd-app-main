@@ -1,23 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    authInterrupts: true,
-    staleTimes: {
-      dynamic: 300,
-      static: 3600,
-    },
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
-  },
+  reactCompiler: true,
   cacheComponents: true,
-  // logging: {
-  //   fetches: {
-  //     fullUrl: true,
-  //     hmrRefreshes: true,
-  //   },
-  // },
   images: {
     remotePatterns: [
       {
@@ -50,6 +35,16 @@ const nextConfig: NextConfig = {
         hostname: "randomuser.me",
       },
     ],
+  },
+  experimental: {
+    authInterrupts: true,
+    staleTimes: {
+      dynamic: 300,
+      static: 3600,
+    },
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
   },
 };
 

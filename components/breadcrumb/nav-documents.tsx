@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Folder01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-
+import { MdxIcon } from "@/components/icons/mdx-icons";
 import { BreadcrumbItem } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -19,50 +17,62 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type NavCollectionItem = { value: string; label: string };
-
-export function NavCollection({
-  items,
-  currentSlug,
-}: {
-  items: NavCollectionItem[];
+interface NavDocumentsProps {
+  documentsData: { slug: string; title: string; collectionSlug: string }[];
   currentSlug: string;
-}) {
+}
+
+export function NavDocuments(props: NavDocumentsProps) {
   const router = useRouter();
+
+  const items = props.documentsData.map((document) => ({
+    value: document.slug,
+    label: document.title,
+    collectionSlug: document.collectionSlug,
+  }));
+
+  const currentItem =
+    items.find((d) => d.value === props.currentSlug) ?? items[0];
 
   return (
     <BreadcrumbItem>
       <Select
         items={items}
-        value={currentSlug}
+        value={props.currentSlug}
         onValueChange={(slug: string | null) => {
-          if (slug) router.push(`/dashboard/${slug}`);
+          if (!slug) return;
+          const doc = items.find((d) => d.value === slug);
+          if (doc) router.push(`/dashboard/${doc.collectionSlug}/${slug}`);
         }}
       >
         <ButtonGroup>
           <Button
             nativeButton={false}
-            render={<Link href={`/dashboard/${currentSlug}`} />}
+            render={
+              <Link
+                href={`/dashboard/${currentItem?.collectionSlug}/${props.currentSlug}`}
+              />
+            }
             variant="outline"
             size="sm"
           >
-            <HugeiconsIcon icon={Folder01Icon} />
+            <MdxIcon />
             <SelectValue />
           </Button>
           <SelectTrigger
             className="w-full max-w-48"
             size="sm"
-            aria-label="Select collection"
+            aria-label="Select document"
           >
             <span className="sr-only">Arrow select</span>
           </SelectTrigger>
         </ButtonGroup>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Collections</SelectLabel>
-            {items.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
+            <SelectLabel>Documents</SelectLabel>
+            {items.map((document) => (
+              <SelectItem key={document.value} value={document.value}>
+                {document.label}
               </SelectItem>
             ))}
           </SelectGroup>

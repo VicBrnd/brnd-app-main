@@ -10,14 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImagesProps } from "@/lib/data/account/get-images";
+import { AvatarsProps } from "@/lib/data/account/get-images";
 
-interface AvatarDialogProps {
-  user: User;
-  userImages: ImagesProps[];
+interface AvatarCardProps {
+  userData: User;
+  userAvatars: AvatarsProps[];
 }
 
-export function AvatarCard({ user, userImages }: AvatarDialogProps) {
+export function AvatarCard(props: AvatarCardProps) {
   return (
     <Card className="bg-background">
       <div className="flex items-center">
@@ -29,7 +29,10 @@ export function AvatarCard({ user, userImages }: AvatarDialogProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <AvatarDialog user={user} userImages={userImages} />
+          <AvatarDialog
+            userData={props.userData}
+            userAvatars={props.userAvatars}
+          />
         </CardContent>
       </div>
       <CardFooter>

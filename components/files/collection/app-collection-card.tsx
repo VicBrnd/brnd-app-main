@@ -26,13 +26,13 @@ interface AppCollectionCardProps {
   collectionsData: CollectionsProps[];
 }
 
-export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
+export function AppCollectionCard(props: AppCollectionCardProps) {
   const [optimisticCollections, removeOptimistic] = useOptimistic(
-    collectionsData,
+    props.collectionsData,
     (state, deletedId: string) => state.filter((c) => c.id !== deletedId),
   );
 
-  if (collectionsData.length === 0) {
+  if (optimisticCollections.length === 0) {
     return (
       <Card>
         <Empty className="flex flex-col justify-center items-center">
@@ -68,7 +68,6 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
           <CollectionContextMenu
             key={collection.id}
             collection={collection}
-            collectionId={collection.id}
             removeOptimistic={removeOptimistic}
           >
             <div className="flex flex-col rounded-xl border bg-background dark:bg-sidebar/50 p-2 gap-2 cursor-default">
@@ -76,7 +75,9 @@ export function AppCollectionCard({ collectionsData }: AppCollectionCardProps) {
                 <div className="flex items-center justify-center p-7">
                   <div
                     className="flex items-center justify-center size-10 rounded-lg"
-                    style={{ backgroundColor: `${collection.color}15` }}
+                    style={{
+                      backgroundColor: `${collection.color}15`,
+                    }}
                   >
                     <HugeiconsIcon
                       icon={Folder01Icon}

@@ -32,7 +32,7 @@ interface DocumentHeaderProps {
   documentData: DocumentBySlugProps;
 }
 
-export function DocumentHeader({ documentData }: DocumentHeaderProps) {
+export function DocumentHeader(props: DocumentHeaderProps) {
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) -m-4 md:-m-6 mb-4 md:mb-6">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -42,7 +42,9 @@ export function DocumentHeader({ documentData }: DocumentHeaderProps) {
           variant="ghost"
           size="icon-sm"
           className="-ml-1"
-          render={<Link href={`/dashboard/${documentData.collectionSlug}`} />}
+          render={
+            <Link href={`/dashboard/${props.documentData.collectionSlug}`} />
+          }
         >
           <HugeiconsIcon icon={ArrowLeft02Icon} />
           <span className="sr-only">Back</span>
@@ -59,9 +61,9 @@ export function DocumentHeader({ documentData }: DocumentHeaderProps) {
           icon={File01Icon}
           size={14}
           className="shrink-0"
-          style={{ color: documentData.collectionColor }}
+          style={{ color: props.documentData.collectionColor }}
         />
-        <h1 className="text-sm font-semibold">{documentData.title}</h1>
+        <h1 className="text-sm font-semibold">{props.documentData.title}</h1>
 
         <div className="ml-auto flex items-center gap-2">
           {/* Button Save */}

@@ -19,10 +19,7 @@ interface AppFilesDialogProps {
   collectionId?: CollectionsProps["id"];
 }
 
-export function AppFilesDialog({
-  collectionId,
-  collectionsData,
-}: AppFilesDialogProps) {
+export function AppFilesDialog(props: AppFilesDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentOption, setOption] = useState<OptionType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -39,7 +36,7 @@ export function AppFilesDialog({
       setOption(null);
       setCurrentStep(0);
     }
-    if (collectionId) {
+    if (props.collectionId) {
       setOption("document");
       setCurrentStep(1);
     }
@@ -76,8 +73,8 @@ export function AppFilesDialog({
         {currentStep === 1 && currentOption === "document" && (
           <>
             <CreateDocumentStep
-              collectionsData={collectionsData}
-              collectionId={collectionId}
+              collectionsData={props.collectionsData}
+              collectionId={props.collectionId}
               onBack={() => setCurrentStep(0)}
               onClose={() => setOpenDialog(false)}
             />

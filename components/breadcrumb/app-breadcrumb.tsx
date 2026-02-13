@@ -9,8 +9,8 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { NavApp } from "@/components/breadcrumb/nav-app";
-import { NavCollection } from "@/components/breadcrumb/nav-collection";
-import { NavDocument } from "@/components/breadcrumb/nav-document";
+import { NavCollections } from "@/components/breadcrumb/nav-collections";
+import { NavDocuments } from "@/components/breadcrumb/nav-documents";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -18,51 +18,43 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function AppBreadcrumb({
-  collections,
-  documents,
-}: {
-  collections: CollectionsProps[];
-  documents: DocumentsProps[];
-}) {
+interface AppBreadcrumbProps {
+  collectionsData: CollectionsProps[];
+  documentsData: DocumentsProps[];
+}
+
+export function AppBreadcrumb(props: AppBreadcrumbProps) {
   const params = useParams<{ collection?: string; document?: string }>();
   const collectionSlug = params.collection;
   const documentSlug = params.document;
-
-  const collectionItems = collections.map((c) => ({
-    value: c.slug,
-    label: c.title,
-  }));
-
-  const documentItems = documents
-    .filter((d) => d.collectionSlug === collectionSlug)
-    .map((d) => ({
-      value: d.slug,
-      label: d.title,
-      collectionSlug: d.collectionSlug,
-    }));
+  const documentsByCollection = props.documentsData.filter(
+    (document) => document.collectionSlug === collectionSlug,
+  );
 
   return (
     <Breadcrumb>
       <BreadcrumbList className="flex-nowrap">
         <NavApp />
-        {collectionSlug && collectionItems.length > 0 && (
+        {collectionSlug && props.collectionsData.length > 0 && (
           <>
             <BreadcrumbSeparator>
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </BreadcrumbSeparator>
-            <NavCollection
-              items={collectionItems}
+            <NavCollections
+              collectionsData={props.collectionsData}
               currentSlug={collectionSlug}
             />
           </>
         )}
-        {documentSlug && documentItems.length > 0 && (
+        {documentSlug && documentsByCollection.length > 0 && (
           <>
             <BreadcrumbSeparator>
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </BreadcrumbSeparator>
-            <NavDocument items={documentItems} currentSlug={documentSlug} />
+            <NavDocuments
+              documentsData={documentsByCollection}
+              currentSlug={documentSlug}
+            />
           </>
         )}
       </BreadcrumbList>

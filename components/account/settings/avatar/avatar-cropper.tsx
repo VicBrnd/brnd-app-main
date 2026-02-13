@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 import { SearchAddIcon, SearchMinusIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -24,18 +22,11 @@ interface AvatarCropperProps {
   setCropArea: (pixels: Area | null) => void;
 }
 
-export function AvatarCropper({
-  filePreview,
-  cropZoom,
-  setCropZoom,
-  setCropArea,
-}: AvatarCropperProps) {
-  const handleCropChange = useCallback(
-    (pixels: Area | null) => {
-      setCropArea(pixels);
-    },
-    [setCropArea],
-  );
+export function AvatarCropper(props: AvatarCropperProps) {
+  const handleCropChange = (pixels: Area | null) => {
+    props.setCropArea(pixels);
+  };
+
   return (
     <>
       <DialogHeader>
@@ -44,15 +35,15 @@ export function AvatarCropper({
           Crop your avatar image and save it.
         </DialogDescription>
       </DialogHeader>
-      {filePreview && (
+      {props.filePreview && (
         <div className="flex flex-col items-center justify-center gap-4">
           <Cropper
             className="aspect-square size-80 rounded-full"
             cropPadding={0}
-            image={filePreview}
-            zoom={cropZoom}
+            image={props.filePreview}
+            zoom={props.cropZoom}
             onCropChange={handleCropChange}
-            onZoomChange={setCropZoom}
+            onZoomChange={props.setCropZoom}
           >
             <CropperDescription />
             <CropperImage />
@@ -68,12 +59,12 @@ export function AvatarCropper({
 
             <Slider
               defaultValue={[1]}
-              value={[cropZoom]}
+              value={[props.cropZoom]}
               min={1}
               max={3}
               step={0.1}
               onValueChange={(value) =>
-                setCropZoom(Array.isArray(value) ? value[0] : value)
+                props.setCropZoom(Array.isArray(value) ? value[0] : value)
               }
               aria-label="Zoom slider"
             />

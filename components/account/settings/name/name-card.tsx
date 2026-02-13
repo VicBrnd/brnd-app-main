@@ -25,11 +25,15 @@ import {
   updateUserSchema,
 } from "@/schemas/account/update-user.schema";
 
-export function NameCard(props: { user: User }) {
+interface NameCardProps {
+  userData: User;
+}
+
+export function NameCard(props: NameCardProps) {
   const [isLoading, startTransition] = useTransition();
 
   const { data, isPending, refetch } = authClient.useSession();
-  const user = data?.user || props.user;
+  const user = data?.user || props.userData;
 
   const methods = useForm({
     resolver: zodResolver(updateUserSchema),

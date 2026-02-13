@@ -40,10 +40,15 @@ export function AppHeader() {
 }
 
 async function AppBreadcrumbAsync() {
-  const [collections, documents] = await Promise.all([
+  const [collectionsData, documentsData] = await Promise.all([
     getCollections(),
     getDocuments(),
   ]);
 
-  return <AppBreadcrumb collections={collections} documents={documents} />;
+  return (
+    <AppBreadcrumb
+      collectionsData={collectionsData}
+      documentsData={documentsData}
+    />
+  );
 }

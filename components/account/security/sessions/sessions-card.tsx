@@ -15,10 +15,7 @@ interface SessionsCardProps {
   currentSession: string;
 }
 
-export async function SessionsCard({
-  listSessions,
-  currentSession,
-}: SessionsCardProps) {
+export async function SessionsCard(props: SessionsCardProps) {
   return (
     <Card className="bg-background">
       <CardHeader>
@@ -28,10 +25,10 @@ export async function SessionsCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        {listSessions.map((listSession) => (
+        {props.listSessions.map((listSession) => (
           <SessionCell
             key={listSession.id}
-            currentSession={currentSession}
+            currentSession={props.currentSession}
             listSession={listSession}
           />
         ))}

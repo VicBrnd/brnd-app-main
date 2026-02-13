@@ -32,10 +32,7 @@ interface CreateCollectionStepProps {
   onClose: () => void;
 }
 
-export function CreateCollectionStep({
-  onBack,
-  onClose,
-}: CreateCollectionStepProps) {
+export function CreateCollectionStep(props: CreateCollectionStepProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
@@ -89,7 +86,7 @@ export function CreateCollectionStep({
         {
           loading: "Creating collection...",
           success: (result) => {
-            onClose();
+            props.onClose();
             router.push(`/dashboard/${result.collection.slug}`);
             return "Collection created successfully";
           },
@@ -160,7 +157,7 @@ export function CreateCollectionStep({
         </FieldGroup>
       </form>
       <DialogFooter>
-        <Button variant="outline-destructive" size="sm" onClick={onBack}>
+        <Button variant="outline-destructive" size="sm" onClick={props.onBack}>
           Back
         </Button>
         <Button

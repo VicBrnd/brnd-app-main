@@ -10,18 +10,16 @@ interface PublishStatusBadgeProps {
   isPublished: boolean;
 }
 
-export function StatusCell({
-  documentId,
-  isPublished,
-}: PublishStatusBadgeProps) {
+export function StatusCell(props: PublishStatusBadgeProps) {
   const [isPending, startTransition] = useTransition();
-  const [optimisticPublished, setOptimisticPublished] =
-    useOptimistic(isPublished);
+  const [optimisticPublished, setOptimisticPublished] = useOptimistic(
+    props.isPublished,
+  );
 
   const handleToggle = () => {
     startTransition(async () => {
       setOptimisticPublished(!optimisticPublished);
-      await updateStatusDocument({ id: documentId });
+      await updateStatusDocument({ id: props.documentId });
     });
   };
 

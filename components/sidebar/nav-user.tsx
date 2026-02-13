@@ -32,7 +32,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/auth-client";
 
-export function NavUser(props: { user: User }) {
+interface NavUserProps {
+  user: User;
+}
+
+export function NavUser(props: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const { data } = authClient.useSession();

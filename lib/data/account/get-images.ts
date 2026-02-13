@@ -8,12 +8,12 @@ import { image } from "@/lib/db/schema";
 
 import "server-only";
 
-export type ImagesProps = Pick<
+export type AvatarsProps = Pick<
   typeof image.$inferSelect,
   "id" | "url" | "name" | "key"
 >;
 
-export async function getImages(): Promise<ImagesProps[]> {
+export async function getImages(): Promise<AvatarsProps[]> {
   "use cache: private";
   cacheTag("session");
   cacheLife({ expire: 3600 });

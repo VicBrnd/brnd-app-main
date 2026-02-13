@@ -1,14 +1,16 @@
 import * as React from "react";
 
+interface PageProps {
+  title: string;
+  description: string;
+}
+
 export function Page({
   title,
   description,
   children,
   ...props
-}: React.ComponentProps<"div"> & {
-  title: string;
-  description: string;
-}) {
+}: PageProps & React.ComponentProps<"div">) {
   const Comp = "div";
 
   return (

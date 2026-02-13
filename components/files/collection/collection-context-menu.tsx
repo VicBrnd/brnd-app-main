@@ -20,22 +20,16 @@ import { CollectionsProps } from "@/lib/data/collections/get-collections";
 interface CollectionContextMenuProps {
   children: React.ReactNode;
   collection: CollectionsProps;
-  collectionId: string;
   removeOptimistic: (action: string) => void;
 }
 
-export function CollectionContextMenu({
-  children,
-  collection,
-  collectionId,
-  removeOptimistic,
-}: CollectionContextMenuProps) {
+export function CollectionContextMenu(props: CollectionContextMenuProps) {
   const [isLoading, startTransition] = useTransition();
 
-  const handleDeleteCollection = (id: string) => {
+  const handleDeleteCollection = () => {
     startTransition(async () => {
-      removeOptimistic(id);
-      const res = await deleteCollection({ ids: [id] });
+      props.removeOptimistic(props.collection.id);
+      const res = await deleteCollection({ ids: [props.collection.id] });
       if (res?.data?.error) {
         toast.error(res.data.error);
       }
@@ -47,12 +41,16 @@ export function CollectionContextMenu({
   return (
     <>
       <ContextMenu>
-        <ContextMenuTrigger>{children}</ContextMenuTrigger>
+        <ContextMenuTrigger>{props.children}</ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuGroup>
-            <ContextMenuLabel>{collection.title}</ContextMenuLabel>
+            <ContextMenuLabel>
+              {props.collection.title}
+            </ContextMenuLabel>
             <ContextMenuItem
-              render={<Link href={`/dashboard/${collection.slug}`} />}
+              render={
+                <Link href={`/dashboard/${props.collection.slug}`} />
+              }
             >
               Open
             </ContextMenuItem>
@@ -64,7 +62,7 @@ export function CollectionContextMenu({
           <ContextMenuGroup>
             <ContextMenuItem
               variant="destructive"
-              onClick={() => handleDeleteCollection(collectionId)}
+              onClick={handleDeleteCollection}
               disabled={isLoading}
             >
               Delete
@@ -75,7 +73,7 @@ export function CollectionContextMenu({
       <EditCollectionDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
-        collection={collection}
+        collection={props.collection}
       />
     </>
   );

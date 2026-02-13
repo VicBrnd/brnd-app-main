@@ -21,9 +21,12 @@ export default function AccountSecurityPage() {
 }
 
 export async function AccountSecurityAsync() {
-  const [ctx, sessions] = await Promise.all([getAuthContext(), getSessions()]);
+  const [ctx, listSessions] = await Promise.all([
+    getAuthContext(),
+    getSessions(),
+  ]);
 
   return (
-    <SessionsCard listSessions={sessions} currentSession={ctx.session.id} />
+    <SessionsCard listSessions={listSessions} currentSession={ctx.session.id} />
   );
 }

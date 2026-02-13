@@ -14,13 +14,10 @@ interface AppDocumentListProps {
   documentsData: DocumentsProps[];
 }
 
-export function AppDocumentList({
-  collectionsData,
-  documentsData,
-}: AppDocumentListProps) {
+export function AppDocumentList(props: AppDocumentListProps) {
   const [isLoading, startTransition] = useTransition();
   const [optimisticDocuments, removeOptimistic] = useOptimistic(
-    documentsData,
+    props.documentsData,
     (state, deletedId: string) => state.filter((d) => d.id !== deletedId),
   );
 
@@ -36,7 +33,7 @@ export function AppDocumentList({
       <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
       <DataTable
         columns={getColumns({
-          collectionsData: collectionsData,
+          collectionsData: props.collectionsData,
           onDelete: handleDeleteDocument,
           isDeleting: isLoading,
         })}

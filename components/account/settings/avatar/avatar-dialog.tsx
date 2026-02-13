@@ -38,11 +38,11 @@ import {
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { authClient } from "@/lib/auth/auth-client";
 import { Area, getCroppedImg } from "@/lib/cropper";
-import { ImagesProps } from "@/lib/data/account/get-images";
+import { AvatarsProps } from "@/lib/data/account/get-images";
 
 interface AvatarDialogProps {
-  user: User;
-  userImages: ImagesProps[];
+  userData: User;
+  userAvatars: AvatarsProps[];
 }
 
 const maxSizeMB = 10;
@@ -67,14 +67,14 @@ export function AvatarDialog(props: AvatarDialogProps) {
   });
 
   const [isLoading, startTransition] = useTransition();
-  const [selected, setSelected] = useState<ImagesProps[]>([]);
+  const [selected, setSelected] = useState<AvatarsProps[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [cropArea, setCropArea] = useState<Area | null>(null);
   const [cropZoom, setCropZoom] = useState(1);
 
   const { data, isPending, refetch } = authClient.useSession();
-  const user = data?.user || props.user;
+  const user = data?.user || props.userData;
 
   const resetCropper = () => {
     setCropArea(null);
@@ -205,7 +205,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
 
   const handleSelect = (id: string) => {
     const isSelected = selected.some((item) => item.id === id);
-    const matchingFile = props.userImages.find((img) => img.id === id);
+    const matchingFile = props.userAvatars.find((img) => img.id === id);
 
     if (matchingFile) {
       setSelected((prev) =>
@@ -285,7 +285,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
               <AvatarSelection
                 selected={selected}
                 handleSelect={handleSelect}
-                userImages={props.userImages}
+                userImages={props.userAvatars}
                 disabled={files.length > 0}
               />
               <AvatarUploader

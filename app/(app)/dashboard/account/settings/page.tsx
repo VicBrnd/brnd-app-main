@@ -27,13 +27,13 @@ export default function AccountSettingsPage() {
 }
 
 export async function AccountSettingsAsync() {
-  const [ctx, userImages] = await Promise.all([getAuthContext(), getImages()]);
+  const [ctx, userAvatars] = await Promise.all([getAuthContext(), getImages()]);
 
   return (
     <>
-      <AvatarCard user={ctx.user} userImages={userImages} />
-      <NameCard user={ctx.user} />
-      <EmailCard user={ctx.user} />
+      <AvatarCard userData={ctx.user} userAvatars={userAvatars} />
+      <NameCard userData={ctx.user} />
+      <EmailCard userData={ctx.user} />
     </>
   );
 }

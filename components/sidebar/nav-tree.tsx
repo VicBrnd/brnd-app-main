@@ -28,16 +28,16 @@ export type TreeNode = {
   children?: TreeNode[];
 };
 
-export function NavTree({ item }: { item: TreeNode }) {
+export function NavTree(props: { item: TreeNode }) {
   // If the item has no children, render it as a simple menu button
-  if (!item.children) {
+  if (!props.item.children) {
     return (
       <SidebarMenuButton
-        render={item.href ? <Link href={item.href} /> : undefined}
+        render={props.item.href ? <Link href={props.item.href} /> : undefined}
         className="data-[active=true]:bg-transparent"
       >
         <MdxIcon />
-        {item.name}
+        {props.item.name}
       </SidebarMenuButton>
     );
   }
@@ -47,13 +47,13 @@ export function NavTree({ item }: { item: TreeNode }) {
     <SidebarMenuItem>
       <Collapsible className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90">
         <SidebarMenuButton
-          render={item.href ? <Link href={item.href} /> : undefined}
+          render={props.item.href ? <Link href={props.item.href} /> : undefined}
         >
           <HugeiconsIcon
             icon={Folder01Icon}
-            style={item.color ? { color: item.color } : undefined}
+            style={props.item.color ? { color: props.item.color } : undefined}
           />
-          {item.name}
+          {props.item.name}
         </SidebarMenuButton>
         <CollapsibleTrigger render={<SidebarMenuAction />}>
           <span className="sr-only">Arrow menu action</span>
@@ -64,7 +64,7 @@ export function NavTree({ item }: { item: TreeNode }) {
         </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {item.children.map((child, index) => (
+            {props.item.children.map((child, index) => (
               <NavTree key={index} item={child} />
             ))}
           </SidebarMenuSub>

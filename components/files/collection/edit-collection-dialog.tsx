@@ -35,20 +35,16 @@ interface EditCollectionDialogProps {
   collection: CollectionsProps;
 }
 
-export function EditCollectionDialog({
-  dialogOpen,
-  setDialogOpen,
-  collection,
-}: EditCollectionDialogProps) {
+export function EditCollectionDialog(props: EditCollectionDialogProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof EditCollectionFormSchema>>({
     resolver: zodResolver(EditCollectionFormSchema),
     defaultValues: {
-      id: collection.id,
-      title: collection.title,
-      slug: collection.slug,
-      color: collection.color,
+      id: props.collection.id,
+      title: props.collection.title,
+      slug: props.collection.slug,
+      color: props.collection.color,
     },
   });
 
@@ -86,7 +82,7 @@ export function EditCollectionDialog({
         {
           loading: "Updating collection...",
           success: () => {
-            setDialogOpen(false);
+            props.setDialogOpen(false);
             return "Collection updated successfully";
           },
           error: (err) => err.message,
@@ -96,7 +92,7 @@ export function EditCollectionDialog({
   }
 
   return (
-    <Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
+    <Dialog onOpenChange={props.setDialogOpen} open={props.dialogOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit Collection</DialogTitle>
@@ -163,7 +159,7 @@ export function EditCollectionDialog({
                     Color <span className="text-destructive -ml-1.5">*</span>
                   </FieldLabel>
                   <ColorPicker
-                    color={collection.color}
+                    color={props.collection.color}
                     onChange={(newColor) => {
                       form.setValue("color", newColor);
                     }}

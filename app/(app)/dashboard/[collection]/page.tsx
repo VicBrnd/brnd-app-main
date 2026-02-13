@@ -18,13 +18,13 @@ import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug"
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
-export default async function CollectionPage({
-  params,
-}: {
-  params: Promise<{ collection: string }>;
-}) {
-  const { collection } = await params;
+export default async function CollectionPage(
+  props: PageProps<"/dashboard/[collection]">,
+) {
+  const { collection } = await props.params;
+
   const collectionData = await getCollectionBySlug(collection);
+
   if (!collectionData) {
     notFound();
   }

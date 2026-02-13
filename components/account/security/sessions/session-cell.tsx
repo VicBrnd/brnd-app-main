@@ -19,12 +19,12 @@ interface SessionCellProps {
   currentSession: string;
 }
 
-export function SessionCell({ listSession, currentSession }: SessionCellProps) {
+export function SessionCell(props: SessionCellProps) {
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
 
-  const parser = UAParser(listSession.userAgent || undefined);
-  const isCurrentSession = listSession.id === currentSession;
+  const parser = UAParser(props.listSession.userAgent || undefined);
+  const isCurrentSession = props.listSession.id === props.currentSession;
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -41,7 +41,7 @@ export function SessionCell({ listSession, currentSession }: SessionCellProps) {
   const handleRevoke = async () => {
     startTransition(async () => {
       await authClient.revokeSession({
-        token: listSession.token,
+        token: props.listSession.token,
         fetchOptions: {
           onSuccess: () => {
             router.refresh();
@@ -63,7 +63,7 @@ export function SessionCell({ listSession, currentSession }: SessionCellProps) {
         <span className="font-semibold text-sm">
           {isCurrentSession
             ? "Current Session"
-            : listSession.ipAddress || "Unknown"}
+            : props.listSession.ipAddress || "Unknown"}
         </span>
 
         <span className="text-muted-foreground text-xs">

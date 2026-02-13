@@ -16,9 +16,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/auth-client";
 
-export function EmailCard(props: { user: User }) {
+interface EmailCardProps {
+  userData: User;
+}
+
+export function EmailCard(props: EmailCardProps) {
   const { data } = authClient.useSession();
-  const user = data?.user || props.user;
+  const user = data?.user || props.userData;
 
   return (
     <Card className="bg-background">

@@ -38,18 +38,18 @@ interface CollectionHeaderProps {
   collectionData: Collection;
 }
 
-export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
+export function CollectionHeader(props: CollectionHeaderProps) {
   const [isDeleting, startDeleteTransition] = useTransition();
   const [, startSaveTransition] = useTransition();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(collectionData.title);
+  const [editValue, setEditValue] = useState(props.collectionData.title);
 
   const [optimisticTitle, setOptimisticTitle] = useOptimistic(
-    collectionData.title,
+    props.collectionData.title,
   );
   const [optimisticColor, setOptimisticColor] = useOptimistic(
-    collectionData.color,
+    props.collectionData.color,
   );
 
   const handleDeleteCollection = (collectionId: string) => {
@@ -61,16 +61,16 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
   };
 
   const handleSaveTitle = () => {
-    if (editValue === collectionData.title) return;
+    if (editValue === props.collectionData.title) return;
     startSaveTransition(async () => {
       setOptimisticTitle(editValue);
       const res = await editCollection({
-        id: collectionData.id,
+        id: props.collectionData.id,
         title: editValue,
       });
       if (res?.data?.error) {
         toast.error(res.data.error);
-        setEditValue(collectionData.title);
+        setEditValue(props.collectionData.title);
       }
     });
   };
@@ -79,7 +79,7 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
     startSaveTransition(async () => {
       setOptimisticColor(newColor);
       const res = await editCollection({
-        id: collectionData.id,
+        id: props.collectionData.id,
         color: newColor,
       });
       if (res?.data?.error) toast.error(res.data.error);
@@ -131,7 +131,7 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
                 handleSaveTitle();
               }
               if (e.key === "Escape") {
-                setEditValue(collectionData.title);
+                setEditValue(props.collectionData.title);
                 setIsEditing(false);
               }
             }}
@@ -187,7 +187,7 @@ export function CollectionHeader({ collectionData }: CollectionHeaderProps) {
           <Button
             variant="outline-destructive"
             size="sm"
-            onClick={() => handleDeleteCollection(collectionData.id)}
+            onClick={() => handleDeleteCollection(props.collectionData.id)}
           >
             {isDeleting ? <Spinner /> : <HugeiconsIcon icon={Delete01Icon} />}
             <span className="flex items-center gap-1 sr-only md:not-sr-only">

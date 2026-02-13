@@ -24,11 +24,7 @@ interface SelectFilesStepProps {
   onNext: () => void;
 }
 
-export function SelectFilesStep({
-  currentOption,
-  onOptionChange,
-  onNext,
-}: SelectFilesStepProps) {
+export function SelectFilesStep(props: SelectFilesStepProps) {
   return (
     <>
       <DialogHeader>
@@ -36,8 +32,8 @@ export function SelectFilesStep({
         <DialogDescription>Choose what you want to create</DialogDescription>
       </DialogHeader>
       <RadioGroup
-        value={currentOption}
-        onValueChange={onOptionChange}
+        value={props.currentOption}
+        onValueChange={props.onOptionChange}
         className="max-w-full"
       >
         <FieldLabel htmlFor="create-collection">
@@ -74,8 +70,8 @@ export function SelectFilesStep({
         <Button
           variant="outline"
           size="sm"
-          onClick={onNext}
-          disabled={!currentOption}
+          onClick={props.onNext}
+          disabled={!props.currentOption}
         >
           Continue
         </Button>

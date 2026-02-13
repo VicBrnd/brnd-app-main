@@ -13,17 +13,15 @@ import { Badge } from "@/components/ui/brnd-ui/badge";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
-interface ColumnsOptions {
+interface ColumnsProps {
   collectionsData: CollectionsProps[];
   onDelete: (id: string) => void;
   isDeleting?: boolean;
 }
 
-export const getColumns = ({
-  collectionsData,
-  onDelete,
-  isDeleting,
-}: ColumnsOptions): ColumnDef<DocumentsProps>[] => [
+export const getColumns = (
+  props: ColumnsProps,
+): ColumnDef<DocumentsProps>[] => [
   {
     accessorKey: "title",
     header: () => (
@@ -120,10 +118,10 @@ export const getColumns = ({
     id: "actions",
     cell: ({ row }) => (
       <ActionsCell
-        collectionsData={collectionsData}
+        collectionsData={props.collectionsData}
         documentData={row.original}
-        onDelete={onDelete}
-        isDeleting={isDeleting}
+        onDelete={props.onDelete}
+        isDeleting={props.isDeleting}
       />
     ),
   },

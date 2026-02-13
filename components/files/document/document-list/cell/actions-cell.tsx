@@ -30,19 +30,14 @@ interface ActionsCellProps {
   isDeleting?: boolean;
 }
 
-export function ActionsCell({
-  collectionsData,
-  documentData,
-  onDelete,
-  isDeleting,
-}: ActionsCellProps) {
-  const availableCollections = collectionsData.filter(
-    (collection) => collection.id !== documentData.collectionId,
+export function ActionsCell(props: ActionsCellProps) {
+  const availableCollections = props.collectionsData.filter(
+    (collection) => collection.id !== props.documentData.collectionId,
   );
 
   const handleMoveDocument = async (collectionId: string) => {
     await moveDocumentAction({
-      documentId: documentData.id,
+      documentId: props.documentData.id,
       collectionId,
     });
   };
@@ -61,7 +56,7 @@ export function ActionsCell({
             <DropdownMenuItem
               render={
                 <Link
-                  href={`/dashboard/${documentData.collectionSlug}/${documentData.slug}`}
+                  href={`/dashboard/${props.documentData.collectionSlug}/${props.documentData.slug}`}
                 />
               }
             >
@@ -93,8 +88,8 @@ export function ActionsCell({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
-            onClick={() => onDelete(documentData.id)}
-            disabled={isDeleting}
+            onClick={() => props.onDelete(props.documentData.id)}
+            disabled={props.isDeleting}
             // disabled={isDeleting || isMoving}
           >
             Delete
