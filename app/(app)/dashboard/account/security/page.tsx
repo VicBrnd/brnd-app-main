@@ -5,7 +5,7 @@ import {
   SessionsCard,
   SessionsCardSkeleton,
 } from "@/components/account/security/sessions/sessions-card";
-import { Page } from "@/components/page-layout";
+import { Page } from "@/components/layout/page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getSessions } from "@/lib/data/account/get-sessions";
 

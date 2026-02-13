@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-import { CollectionHeader } from "@/app/(app)/dashboard/[collection]/collection-header";
-import { AppDocumentList } from "@/components/files/document/app-document-list";
-import { Page } from "@/components/page-layout";
+import { CollectionHeader } from "@/components/files/collection/collection-header";
+import { AppDocumentTable } from "@/components/files/document/app-document-table";
+import { Page } from "@/components/layout/page-layout";
 import { Card } from "@/components/ui/card";
 import {
   Empty,
@@ -63,7 +63,7 @@ async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
   const documentsData = await getDocuments(collectionSlug);
   const collectionData = await getCollections();
   return (
-    <AppDocumentList
+    <AppDocumentTable
       documentsData={documentsData}
       collectionsData={collectionData}
     />

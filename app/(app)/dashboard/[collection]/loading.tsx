@@ -1,5 +1,5 @@
-import { CollectionHeaderSkeleton } from "@/app/(app)/dashboard/[collection]/collection-header";
-import { Page } from "@/components/page-layout";
+import { CollectionHeaderSkeleton } from "@/components/files/collection/collection-header";
+import { Page } from "@/components/layout/page-layout";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 
 export default function CollectionLoading() {

@@ -6,8 +6,8 @@ import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { ActionsCell } from "@/components/files/document/document-list/cell/actions-cell";
-import { StatusCell } from "@/components/files/document/document-list/cell/status-cell";
+import { ActionsCell } from "@/components/files/document/document-table/cell/actions-cell";
+import { StatusCell } from "@/components/files/document/document-table/cell/status-cell";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Badge } from "@/components/ui/brnd-ui/badge";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";

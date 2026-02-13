@@ -5,10 +5,10 @@ import {
   AppCollectionCardSkeleton,
 } from "@/components/files/collection/app-collection-card";
 import {
-  AppDocumentList,
   AppDocumentListSkeleton,
-} from "@/components/files/document/app-document-list";
-import { Page } from "@/components/page-layout";
+  AppDocumentTable,
+} from "@/components/files/document/app-document-table";
+import { Page } from "@/components/layout/page-layout";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
@@ -41,7 +41,7 @@ async function FilesAsync() {
   return (
     <>
       <AppCollectionCard collectionsData={collectionsData} />
-      <AppDocumentList
+      <AppDocumentTable
         collectionsData={collectionsData}
         documentsData={documentsData}
       />

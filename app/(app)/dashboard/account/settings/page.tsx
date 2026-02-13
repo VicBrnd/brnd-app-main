@@ -12,7 +12,7 @@ import {
   NameCard,
   NameCardSkeleton,
 } from "@/components/account/settings/name/name-card";
-import { Page } from "@/components/page-layout";
+import { Page } from "@/components/layout/page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getImages } from "@/lib/data/account/get-images";
 
