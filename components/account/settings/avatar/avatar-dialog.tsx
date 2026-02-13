@@ -316,7 +316,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
             {!files || files.length === 0 ? (
               <>
                 <Button
-                  variant="outline"
+                  variant="outline-destructive"
                   size="sm"
                   disabled={selected.length === 0 || isLoading || isPending}
                   onClick={handleDelete}
@@ -366,7 +366,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
             ) : (
               <>
                 <Button
-                  variant="outline"
+                  variant="outline-destructive"
                   size="sm"
                   disabled={isLoading || isPending}
                   onClick={handleCancel}

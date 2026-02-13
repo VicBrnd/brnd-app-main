@@ -46,7 +46,6 @@ export function AppBreadcrumb({
     <Breadcrumb>
       <BreadcrumbList className="flex-nowrap">
         <NavApp />
-
         {collectionSlug && collectionItems.length > 0 && (
           <>
             <BreadcrumbSeparator>
@@ -58,7 +57,6 @@ export function AppBreadcrumb({
             />
           </>
         )}
-
         {documentSlug && documentItems.length > 0 && (
           <>
             <BreadcrumbSeparator>

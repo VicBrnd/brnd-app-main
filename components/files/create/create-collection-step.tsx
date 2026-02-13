@@ -171,7 +171,7 @@ export function CreateCollectionStep({
           disabled={isLoading}
         >
           {isLoading && <Spinner className="mr-1" />}
-          Create Collection
+          Create collection
         </Button>
       </DialogFooter>
     </>

@@ -235,7 +235,7 @@ export function CreateDocumentStep({
           disabled={isLoading}
         >
           {isLoading && <Spinner />}
-          Create Document
+          Create document
         </Button>
       </DialogFooter>
     </>

@@ -56,6 +56,7 @@ export function NavTree({ item }: { item: TreeNode }) {
           {item.name}
         </SidebarMenuButton>
         <CollapsibleTrigger render={<SidebarMenuAction />}>
+          <span className="sr-only">Arrow menu action</span>
           <HugeiconsIcon
             icon={ArrowRight01Icon}
             className="transition-transform"
