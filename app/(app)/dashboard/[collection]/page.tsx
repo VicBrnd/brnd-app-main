@@ -32,29 +32,29 @@ export default async function CollectionPage(
   return (
     <>
       <CollectionHeader collectionData={collectionData} />
-      {collectionData.filesCount === 0 ? (
-        <Card>
-          <Empty className="flex flex-col justify-center items-center">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <HugeiconsIcon icon={Folder01Icon} />
-              </EmptyMedia>
-              <EmptyTitle>No Document Yet</EmptyTitle>
-              <EmptyDescription>
-                You haven&apos;t created any documents yet. Get started by
-                creating your first document.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        </Card>
-      ) : (
-        <Page
-          title="Overview"
-          description="View, edit, and manage the documents in this collection"
-        >
+      <Page
+        title="Overview"
+        description="View, edit, and manage the documents in this collection"
+      >
+        {collectionData.filesCount === 0 ? (
+          <Card>
+            <Empty className="flex flex-col justify-center items-center">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <HugeiconsIcon icon={Folder01Icon} />
+                </EmptyMedia>
+                <EmptyTitle>No Document Yet</EmptyTitle>
+                <EmptyDescription>
+                  You haven&apos;t created any documents yet. Get started by
+                  creating your first document.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </Card>
+        ) : (
           <FileListAsync collectionSlug={collection} />
-        </Page>
-      )}
+        )}
+      </Page>
     </>
   );
 }
