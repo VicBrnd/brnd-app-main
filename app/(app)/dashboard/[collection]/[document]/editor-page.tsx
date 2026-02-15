@@ -2,8 +2,8 @@
 
 import { useRef, useState } from "react";
 
+import { goeyToast } from "goey-toast";
 import { LexicalEditor } from "lexical";
-import { toast } from "sonner";
 
 import { Editor } from "@/app/(app)/dashboard/[collection]/[document]/editor";
 import { DocumentHeader } from "@/components/files/document/document-header";
@@ -18,7 +18,13 @@ export function EditorPage(props: EditorProps) {
   const editorRef = useRef<LexicalEditor | null>(null);
   const [markdownData, setMarkdownData] = useState(props.documentData.content);
   const handleSave = async () => {
-    toast.success("Fake Save Success");
+    goeyToast.success("Fake Saved", {
+      description: (
+        <div>
+          <strong>Fake With Description</strong>
+        </div>
+      ),
+    });
   };
 
   return (

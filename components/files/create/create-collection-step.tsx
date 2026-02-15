@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
 import * as z from "zod";
 
 import { createCollection } from "@/actions/files/collection/create-collection.action";
@@ -69,8 +69,8 @@ export function CreateCollectionStep(props: CreateCollectionStepProps) {
 
   function onSubmit(data: z.infer<typeof CreateCollectionFormSchema>) {
     startTransition(() => {
-      toast.promise(
-        async () => {
+      goeyToast.promise(
+        (async () => {
           const result = await createCollection(data);
           if (result?.serverError) {
             throw new Error(result.serverError);
@@ -82,7 +82,7 @@ export function CreateCollectionStep(props: CreateCollectionStepProps) {
             throw new Error("Erreur inconnue");
           }
           return result.data;
-        },
+        })(),
         {
           loading: "Creating collection...",
           success: (result) => {
@@ -90,7 +90,8 @@ export function CreateCollectionStep(props: CreateCollectionStepProps) {
             router.push(`/dashboard/${result.collection.slug}`);
             return "Collection created successfully";
           },
-          error: (err) => `${err.message}`,
+          error: (err) =>
+            err instanceof Error ? err.message : "Creating collection failed",
         },
       );
     });

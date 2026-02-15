@@ -1,5 +1,7 @@
 "use client";
 
+import { useOptimistic, useState, useTransition } from "react";
+
 import Link from "next/link";
 
 import {
@@ -13,7 +15,9 @@ import {
   ViewIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { goeyToast } from "goey-toast";
 
+import { editDocument } from "@/actions/files/document/edit-document.action";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -26,6 +30,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 
 interface DocumentHeaderProps {
@@ -34,6 +43,28 @@ interface DocumentHeaderProps {
 }
 
 export function DocumentHeader(props: DocumentHeaderProps) {
+  const [, startSaveTransition] = useTransition();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(props.documentData.title);
+  const [optimisticTitle, setOptimisticTitle] = useOptimistic(
+    props.documentData.title,
+  );
+
+  const handleSaveTitle = () => {
+    if (editValue === props.documentData.title) return;
+    startSaveTransition(async () => {
+      setOptimisticTitle(editValue);
+      const res = await editDocument({
+        id: props.documentData.id,
+        collection: props.documentData.collectionId,
+        title: editValue,
+      });
+      if (res?.data?.error) {
+        goeyToast.error(res.data.error);
+        setEditValue(props.documentData.title);
+      }
+    });
+  };
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -64,7 +95,49 @@ export function DocumentHeader(props: DocumentHeaderProps) {
           className="shrink-0"
           style={{ color: props.documentData.collectionColor }}
         />
-        <h1 className="text-sm font-semibold">{props.documentData.title}</h1>
+        {/* Inline title editing */}
+        {isEditing ? (
+          <input
+            className="text-sm font-semibold border-none outline-none px-0 py-0 bg-transparent"
+            autoFocus
+            value={editValue.charAt(0).toUpperCase() + editValue.slice(1)}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={() => {
+              setIsEditing(false);
+              handleSaveTitle();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setIsEditing(false);
+                handleSaveTitle();
+              }
+              if (e.key === "Escape") {
+                setEditValue(props.documentData.title);
+                setIsEditing(false);
+              }
+            }}
+          />
+        ) : (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <h1
+                  className="text-sm font-semibold"
+                  onClick={() => {
+                    setEditValue(optimisticTitle);
+                    setIsEditing(true);
+                  }}
+                />
+              }
+            >
+              {optimisticTitle.charAt(0).toUpperCase() +
+                optimisticTitle.slice(1)}
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              Click to edit the title
+            </TooltipContent>
+          </Tooltip>
+        )}
 
         <div className="ml-auto flex items-center gap-2">
           {/* Button Save */}

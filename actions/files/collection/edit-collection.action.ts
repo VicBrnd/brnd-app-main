@@ -15,7 +15,7 @@ export const editCollection = authActionClient
   .inputSchema(EditCollectionFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
     if (parsedInput.slug) {
-      const duplicateCollection = await db
+      const duplicateCollectionSlug = await db
         .select({ id: collection.id })
         .from(collection)
         .where(
@@ -28,7 +28,7 @@ export const editCollection = authActionClient
         .limit(1)
         .then(takeFirstOrNull);
 
-      if (duplicateCollection) {
+      if (duplicateCollectionSlug) {
         return { error: "A collection with this slug already exists." };
       }
     }

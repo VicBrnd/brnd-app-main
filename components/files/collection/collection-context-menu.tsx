@@ -2,7 +2,7 @@ import { useState, useTransition } from "react";
 
 import Link from "next/link";
 
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
 
 import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
 import { EditCollectionDialog } from "@/components/files/collection/edit-collection-dialog";
@@ -31,7 +31,7 @@ export function CollectionContextMenu(props: CollectionContextMenuProps) {
       props.removeOptimistic(props.collection.id);
       const res = await deleteCollection({ ids: [props.collection.id] });
       if (res?.data?.error) {
-        toast.error(res.data.error);
+        goeyToast.error(res.data.error);
       }
     });
   };
@@ -44,13 +44,9 @@ export function CollectionContextMenu(props: CollectionContextMenuProps) {
         <ContextMenuTrigger>{props.children}</ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuGroup>
-            <ContextMenuLabel>
-              {props.collection.title}
-            </ContextMenuLabel>
+            <ContextMenuLabel>{props.collection.title}</ContextMenuLabel>
             <ContextMenuItem
-              render={
-                <Link href={`/dashboard/${props.collection.slug}`} />
-              }
+              render={<Link href={`/dashboard/${props.collection.slug}`} />}
             >
               Open
             </ContextMenuItem>

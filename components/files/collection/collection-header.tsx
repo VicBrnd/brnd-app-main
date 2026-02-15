@@ -11,7 +11,7 @@ import {
   PaintBoardIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
 
 import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
 import { editCollection } from "@/actions/files/collection/edit-collection.action";
@@ -55,8 +55,9 @@ export function CollectionHeader(props: CollectionHeaderProps) {
   const handleDeleteCollection = (collectionId: string) => {
     startDeleteTransition(async () => {
       const res = await deleteCollection({ ids: [collectionId] });
-      if (res?.data?.error) toast.error(res.data.error);
-      if (res?.data?.success) toast.success("Collection deleted successfully");
+      if (res?.data?.error) goeyToast.error(res.data.error);
+      if (res?.data?.success)
+        goeyToast.success("Collection deleted successfully");
     });
   };
 
@@ -69,7 +70,7 @@ export function CollectionHeader(props: CollectionHeaderProps) {
         title: editValue,
       });
       if (res?.data?.error) {
-        toast.error(res.data.error);
+        goeyToast.error(res.data.error);
         setEditValue(props.collectionData.title);
       }
     });
@@ -82,7 +83,7 @@ export function CollectionHeader(props: CollectionHeaderProps) {
         id: props.collectionData.id,
         color: newColor,
       });
-      if (res?.data?.error) toast.error(res.data.error);
+      if (res?.data?.error) goeyToast.error(res.data.error);
     });
   };
 

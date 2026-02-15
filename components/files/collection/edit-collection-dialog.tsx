@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
 import * as z from "zod";
 
 import { editCollection } from "@/actions/files/collection/edit-collection.action";
@@ -73,19 +73,20 @@ export function EditCollectionDialog(props: EditCollectionDialogProps) {
 
   function onSubmit(data: z.infer<typeof EditCollectionFormSchema>) {
     startTransition(() => {
-      toast.promise(
-        async () => {
+      goeyToast.promise(
+        (async () => {
           const result = await editCollection(data);
           if (result?.data?.error) throw new Error(result.data.error);
           return result.data;
-        },
+        })(),
         {
           loading: "Updating collection...",
           success: () => {
             props.setDialogOpen(false);
             return "Collection updated successfully";
           },
-          error: (err) => err.message,
+          error: (err) =>
+            err instanceof Error ? err.message : "Updating collection failed",
         },
       );
     });

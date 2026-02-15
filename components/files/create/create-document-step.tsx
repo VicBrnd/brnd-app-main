@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
 import * as z from "zod";
 
 import { createDocument } from "@/actions/files/document/create-document.action";
@@ -82,8 +82,8 @@ export function CreateDocumentStep(props: CreateDocumentStepProps) {
 
   function onSubmit(data: z.infer<typeof CreateDocumentFormSchema>) {
     startTransition(() => {
-      toast.promise(
-        async () => {
+      goeyToast.promise(
+        (async () => {
           const result = await createDocument(data);
 
           if (result?.serverError) {
@@ -99,7 +99,7 @@ export function CreateDocumentStep(props: CreateDocumentStepProps) {
           }
 
           return result.data;
-        },
+        })(),
         {
           loading: "Creating document...",
           success: (result) => {
@@ -109,7 +109,8 @@ export function CreateDocumentStep(props: CreateDocumentStepProps) {
             );
             return "Document created successfully";
           },
-          error: (err) => `${err.message}`,
+          error: (err) =>
+            err instanceof Error ? err.message : "An error occurred",
         },
       );
     });

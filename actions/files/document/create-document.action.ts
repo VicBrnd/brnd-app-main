@@ -31,7 +31,7 @@ export const createDocument = authActionClient
       return { error: "Collection not found or access denied." };
     }
 
-    const duplicateSlug = await db
+    const duplicateDocumentSlug = await db
       .select({ id: document.id })
       .from(document)
       .where(
@@ -43,7 +43,7 @@ export const createDocument = authActionClient
       .limit(1)
       .then(takeFirstOrNull);
 
-    if (duplicateSlug) {
+    if (duplicateDocumentSlug) {
       return {
         error: "A document with this slug already exists in this collection.",
       };
