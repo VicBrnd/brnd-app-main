@@ -26,7 +26,7 @@ export function Page({
             {description}
           </p>
         </div>
-        <div className="flex flex-col h-full gap-6 ">{children}</div>
+        <div className="flex flex-col h-full gap-6">{children}</div>
       </Comp>
     </main>
   );

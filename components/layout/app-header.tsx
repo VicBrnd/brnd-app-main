@@ -4,28 +4,13 @@ import {
   AppBreadcrumb,
   AppBreadcrumbSkeleton,
 } from "@/components/breadcrumb/app-breadcrumb";
-import {
-  CollectionHeader,
-  CollectionHeaderSkeleton,
-} from "@/components/files/collection/collection-header";
-import {
-  DocumentHeader,
-  DocumentHeaderSkeleton,
-} from "@/components/files/document/document-header";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug";
 import { getCollections } from "@/lib/data/collections/get-collections";
-import { getDocumentBySlug } from "@/lib/data/documents/get-document-slug";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
-interface AppHeaderProps {
-  collectionSlug?: string;
-  documentSlug?: string;
-}
-
-export function AppHeader({ collectionSlug, documentSlug }: AppHeaderProps) {
+export function AppHeader() {
   return (
     <>
       <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -50,42 +35,8 @@ export function AppHeader({ collectionSlug, documentSlug }: AppHeaderProps) {
           <AppBreadcrumbAsync />
         </Suspense>
       </div>
-      {documentSlug && collectionSlug ? (
-        <Suspense fallback={<DocumentHeaderSkeleton />}>
-          <DocumentHeaderAsync
-            collectionSlug={collectionSlug}
-            documentSlug={documentSlug}
-          />
-        </Suspense>
-      ) : collectionSlug ? (
-        <Suspense fallback={<CollectionHeaderSkeleton />}>
-          <CollectionHeaderAsync collectionSlug={collectionSlug} />
-        </Suspense>
-      ) : null}
     </>
   );
-}
-
-async function CollectionHeaderAsync({
-  collectionSlug,
-}: {
-  collectionSlug: string;
-}) {
-  const collectionData = await getCollectionBySlug(collectionSlug);
-  if (!collectionData) return null;
-  return <CollectionHeader collectionData={collectionData} />;
-}
-
-async function DocumentHeaderAsync({
-  collectionSlug,
-  documentSlug,
-}: {
-  collectionSlug: string;
-  documentSlug: string;
-}) {
-  const documentData = await getDocumentBySlug(collectionSlug, documentSlug);
-  if (!documentData) return null;
-  return <DocumentHeader documentData={documentData} />;
 }
 
 async function AppBreadcrumbAsync() {
