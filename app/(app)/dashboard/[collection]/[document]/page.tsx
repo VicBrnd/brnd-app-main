@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { DocumentHeader } from "@/components/files/document/document-header";
-import { Page } from "@/components/layout/page-layout";
+import { EditorPage } from "@/app/(app)/dashboard/[collection]/[document]/editor-page";
 import { getDocumentBySlug } from "@/lib/data/documents/get-document-slug";
 
 export default async function DocumentPage(
@@ -15,10 +14,5 @@ export default async function DocumentPage(
     return notFound();
   }
 
-  return (
-    <>
-      <DocumentHeader documentData={documentData} />
-      <Page title="Editor" description="Editor Document"></Page>
-    </>
-  );
+  return <EditorPage documentData={documentData} />;
 }

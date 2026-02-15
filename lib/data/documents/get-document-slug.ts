@@ -10,7 +10,14 @@ import "server-only";
 
 export type DocumentBySlugProps = Pick<
   typeof document.$inferSelect,
-  "id" | "title" | "slug" | "isPublished" | "createdAt" | "updatedAt"
+  | "id"
+  | "title"
+  | "slug"
+  | "content"
+  | "compiledContent"
+  | "isPublished"
+  | "createdAt"
+  | "updatedAt"
 > & {
   collectionSlug: string;
   collectionTitle: string;
@@ -32,6 +39,8 @@ export async function getDocumentBySlug(
       id: document.id,
       title: document.title,
       slug: document.slug,
+      content: document.content,
+      compiledContent: document.compiledContent,
       isPublished: document.isPublished,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,

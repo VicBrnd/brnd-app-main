@@ -29,6 +29,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 
 interface DocumentHeaderProps {
+  onSave: () => Promise<void>;
   documentData: DocumentBySlugProps;
 }
 
@@ -67,7 +68,7 @@ export function DocumentHeader(props: DocumentHeaderProps) {
 
         <div className="ml-auto flex items-center gap-2">
           {/* Button Save */}
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={props.onSave}>
             <HugeiconsIcon icon={FloppyDiskIcon} />
             Save
           </Button>
@@ -133,7 +134,7 @@ export function DocumentHeader(props: DocumentHeaderProps) {
 
 export function DocumentHeaderSkeleton() {
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) -m-4 md:-m-6 mb-4 md:mb-6">
+    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         {/* Back button */}
         <Skeleton className="h-4 w-6" />
