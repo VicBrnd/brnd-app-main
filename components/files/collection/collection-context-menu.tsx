@@ -30,11 +30,28 @@ export function CollectionContextMenu(props: CollectionContextMenuProps) {
     startTransition(async () => {
       props.removeOptimistic(props.collection.id);
       const res = await deleteCollection({ ids: [props.collection.id] });
+
       if (res?.data?.error) {
-        goeyToast.error(res.data.error);
+        goeyToast.error(res.data.error, {
+          bounce: 0.8,
+        });
+      }
+      if (res.data?.success) {
+        goeyToast.success(`${props.collection.title} successfully deleted`);
       }
     });
   };
+
+  // const handleDeleteCollection = () => {
+  //   startTransition(async () => {
+  //     props.removeOptimistic(props.collection.id);
+  //     goeyToast.promise(deleteCollection({ ids: [props.collection.id] }), {
+  //       loading: "Deleting...",
+  //       success: `${props.collection.title} successfully deleted`,
+  //       error: "Something went wrong",
+  //     });
+  //   });
+  // };
 
   const [dialogOpen, setDialogOpen] = useState(false);
 

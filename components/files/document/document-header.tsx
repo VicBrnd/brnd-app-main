@@ -40,6 +40,7 @@ import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 interface DocumentHeaderProps {
   onSave: () => Promise<void>;
   documentData: DocumentBySlugProps;
+  setEditor: (type: "lexical-editor" | "markdown-editor") => void;
 }
 
 export function DocumentHeader(props: DocumentHeaderProps) {
@@ -158,11 +159,19 @@ export function DocumentHeader(props: DocumentHeaderProps) {
             </ButtonGroup>
             <ButtonGroup>
               {/* Button Text */}
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => props.setEditor("lexical-editor")}
+              >
                 <HugeiconsIcon icon={TextCreationIcon} />
               </Button>
               {/* Button Mdx */}
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => props.setEditor("markdown-editor")}
+              >
                 <MdxIcon />
               </Button>
             </ButtonGroup>

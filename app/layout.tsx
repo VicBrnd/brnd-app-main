@@ -31,8 +31,8 @@ export default function RootLayout({
       <body className={cn("h-full antialiased")}>
         <NuqsAdapter>
           <ThemeProvider>
-            <GoeyToaster position="top-right" />
             {children}
+            <GoeyToaster position="top-right" />
           </ThemeProvider>
         </NuqsAdapter>
         <SpeedInsights />
