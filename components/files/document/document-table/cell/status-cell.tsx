@@ -5,12 +5,12 @@ import { useOptimistic, useTransition } from "react";
 import { updateStatusDocument } from "@/actions/files/document/update-status-document.action";
 import { Badge } from "@/components/ui/brnd-ui/badge";
 
-interface PublishStatusBadgeProps {
+interface StatusCellProps {
   documentId: string;
   isPublished: boolean;
 }
 
-export function StatusCell(props: PublishStatusBadgeProps) {
+export function StatusCell(props: StatusCellProps) {
   const [isPending, startTransition] = useTransition();
   const [optimisticPublished, setOptimisticPublished] = useOptimistic(
     props.isPublished,

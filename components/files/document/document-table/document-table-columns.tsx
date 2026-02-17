@@ -13,14 +13,14 @@ import { Badge } from "@/components/ui/brnd-ui/badge";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
-interface ColumnsProps {
+interface DocumentTableColumnsProps {
   collectionsData: CollectionsProps[];
   onDelete: (id: string) => void;
   isDeleting?: boolean;
 }
 
-export const getColumns = (
-  props: ColumnsProps,
+export const DocumentTableColumns = (
+  props: DocumentTableColumnsProps,
 ): ColumnDef<DocumentsProps>[] => [
   {
     accessorKey: "title",

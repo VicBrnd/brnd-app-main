@@ -12,17 +12,17 @@ import {
   NameCard,
   NameCardSkeleton,
 } from "@/components/account/settings/name/name-card";
-import { Page } from "@/components/layout/page-layout";
+import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getImages } from "@/lib/data/account/get-images";
 
 export default function AccountSettingsPage() {
   return (
-    <Page title="General" description="Manage your account settings">
+    <AppPageLayout title="General" description="Manage your account settings">
       <Suspense fallback={<AccountSettingsSkeleton />}>
         <AccountSettingsAsync />
       </Suspense>
-    </Page>
+    </AppPageLayout>
   );
 }
 

@@ -1,34 +1,34 @@
 import { Suspense } from "react";
 
 import {
-  AppCollectionCard,
-  AppCollectionCardSkeleton,
-} from "@/components/files/collection/app-collection-card";
+  CollectionCard,
+  CollectionCardSkeleton,
+} from "@/components/files/collection/collection-card";
 import {
-  AppDocumentListSkeleton,
-  AppDocumentTable,
-} from "@/components/files/document/app-document-table";
-import { Page } from "@/components/layout/page-layout";
+  DocumentTable,
+  DocumentTableSkeleton,
+} from "@/components/files/document/document-table/document-table";
+import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default function DashboardPage() {
   return (
-    <Page
+    <AppPageLayout
       title="All Files"
       description="Access your recent collections and documents"
     >
       <Suspense
         fallback={
           <>
-            <AppCollectionCardSkeleton />
-            <AppDocumentListSkeleton />
+            <CollectionCardSkeleton />
+            <DocumentTableSkeleton />
           </>
         }
       >
         <FilesAsync />
       </Suspense>
-    </Page>
+    </AppPageLayout>
   );
 }
 
@@ -40,8 +40,8 @@ async function FilesAsync() {
 
   return (
     <>
-      <AppCollectionCard collectionsData={collectionsData} />
-      <AppDocumentTable
+      <CollectionCard collectionsData={collectionsData} />
+      <DocumentTable
         collectionsData={collectionsData}
         documentsData={documentsData}
       />

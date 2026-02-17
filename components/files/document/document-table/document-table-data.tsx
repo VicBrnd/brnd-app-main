@@ -9,6 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { DocumentEmpty } from "@/components/files/document/document-empty";
 import {
   Table,
   TableBody,
@@ -18,12 +19,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DataTableProps<TData, TValue> {
+interface DocumentTableDataProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
+export function DocumentTableData<TData, TValue>(
+  props: DocumentTableDataProps<TData, TValue>,
+) {
   const table = useReactTable({
     data: props.data,
     columns: props.columns,
@@ -71,7 +74,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
                 colSpan={props.columns.length}
                 className="h-24 text-center"
               >
-                No results.
+                <DocumentEmpty />
               </TableCell>
             </TableRow>
           )}

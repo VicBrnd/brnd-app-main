@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-import { AppFilesDialog } from "@/components/files/create/app-files-dialog";
+import { CreateDialog } from "@/components/files/create/create-dialog";
 import { NavHeader } from "@/components/sidebar/nav-header";
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavSecondary } from "@/components/sidebar/nav-secondary";
@@ -103,7 +103,7 @@ async function NavTreeAsync() {
 
 async function AppFilesDialogAsync() {
   const collectionsData = await getCollections();
-  return <AppFilesDialog collectionsData={collectionsData} />;
+  return <CreateDialog collectionsData={collectionsData} />;
 }
 
 async function NavUserAsync() {

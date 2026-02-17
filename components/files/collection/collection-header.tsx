@@ -3,6 +3,7 @@
 import { useOptimistic, useState, useTransition } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft02Icon,
@@ -39,6 +40,8 @@ interface CollectionHeaderProps {
 }
 
 export function CollectionHeader(props: CollectionHeaderProps) {
+  const router = useRouter();
+
   const [isDeleting, startDeleteTransition] = useTransition();
   const [, startSaveTransition] = useTransition();
 
@@ -58,6 +61,7 @@ export function CollectionHeader(props: CollectionHeaderProps) {
       if (res?.data?.error) goeyToast.error(res.data.error);
       if (res?.data?.success)
         goeyToast.success("Collection deleted successfully");
+      router.push("/dashboard");
     });
   };
 

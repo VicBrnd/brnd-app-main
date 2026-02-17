@@ -5,7 +5,7 @@ import Link from "next/link";
 import { goeyToast } from "goey-toast";
 
 import { deleteCollection } from "@/actions/files/collection/delete-collection.action";
-import { EditCollectionDialog } from "@/components/files/collection/edit-collection-dialog";
+import { CollectionEditDialog } from "@/components/files/collection/collection-edit-dialog";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -83,7 +83,7 @@ export function CollectionContextMenu(props: CollectionContextMenuProps) {
           </ContextMenuGroup>
         </ContextMenuContent>
       </ContextMenu>
-      <EditCollectionDialog
+      <CollectionEditDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         collection={props.collection}

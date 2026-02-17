@@ -8,25 +8,17 @@ import { Folder01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { CollectionContextMenu } from "@/components/files/collection/collection-context-menu";
+import { CollectionEmpty } from "@/components/files/collection/collection-empty";
 import { Badge } from "@/components/ui/brnd-ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 
-interface AppCollectionCardProps {
+interface CollectionCardProps {
   collectionsData: CollectionsProps[];
 }
 
-export function AppCollectionCard(props: AppCollectionCardProps) {
+export function CollectionCard(props: CollectionCardProps) {
   const [optimisticCollections, removeOptimistic] = useOptimistic(
     props.collectionsData,
     (state, deletedId: string) => state.filter((c) => c.id !== deletedId),
@@ -34,29 +26,14 @@ export function AppCollectionCard(props: AppCollectionCardProps) {
 
   if (optimisticCollections.length === 0) {
     return (
-      <Card>
-        <Empty className="flex flex-col justify-center items-center">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <HugeiconsIcon icon={Folder01Icon} />
-            </EmptyMedia>
-            <EmptyTitle>No Collections Yet</EmptyTitle>
-            <EmptyDescription>
-              You haven&apos;t created any collections yet. Get started by
-              creating your first collection.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent className="flex-row justify-center gap-2">
-            <Button
-              nativeButton={false}
-              variant="outline"
-              render={<Link href="/dashboard/create/collection" />}
-            >
-              New Collection
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </Card>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-sm font-medium text-muted-foreground">
+          Collections
+        </h2>
+        <Card>
+          <CollectionEmpty />
+        </Card>
+      </div>
     );
   }
 
@@ -115,7 +92,7 @@ export function AppCollectionCard(props: AppCollectionCardProps) {
   );
 }
 
-export function AppCollectionCardSkeleton() {
+export function CollectionCardSkeleton() {
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-sm font-medium text-muted-foreground">Collections</h2>

@@ -1,5 +1,9 @@
-import { Page } from "@/components/layout/page-layout";
+import { AppPageLayout } from "@/components/layout/app-page-layout";
 
 export default function TrashPage() {
-  return <Page title="Trash" description="Trash Page"></Page>;
+  return (
+    <AppPageLayout title="Trash" description="Trash Page">
+      Work in progress
+    </AppPageLayout>
+  );
 }

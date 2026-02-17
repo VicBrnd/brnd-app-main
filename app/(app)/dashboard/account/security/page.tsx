@@ -5,18 +5,18 @@ import {
   SessionsCard,
   SessionsCardSkeleton,
 } from "@/components/account/security/sessions/sessions-card";
-import { Page } from "@/components/layout/page-layout";
+import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getSessions } from "@/lib/data/account/get-sessions";
 
 export default function AccountSecurityPage() {
   return (
-    <Page title="Security" description="Manage your account security">
+    <AppPageLayout title="Security" description="Manage your account security">
       <Suspense fallback={<SessionsCardSkeleton />}>
         <AccountSecurityAsync />
       </Suspense>
       <DeleteCard />
-    </Page>
+    </AppPageLayout>
   );
 }
 

@@ -8,9 +8,9 @@ import { useParams } from "next/navigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-import { NavApp } from "@/components/breadcrumb/nav-app";
-import { NavCollections } from "@/components/breadcrumb/nav-collections";
-import { NavDocuments } from "@/components/breadcrumb/nav-documents";
+import { BreadcrumbCollections } from "@/components/breadcrumb/breadcrumb-collections";
+import { BreadcrumbDocuments } from "@/components/breadcrumb/breadcrumb-documents";
+import { BreadcrumbHome } from "@/components/breadcrumb/breadcrumb-home";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -34,13 +34,13 @@ export function AppBreadcrumb(props: AppBreadcrumbProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList className="flex-nowrap">
-        <NavApp />
+        <BreadcrumbHome />
         {collectionSlug && props.collectionsData.length > 0 && (
           <>
             <BreadcrumbSeparator>
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </BreadcrumbSeparator>
-            <NavCollections
+            <BreadcrumbCollections
               collectionsData={props.collectionsData}
               currentSlug={collectionSlug}
             />
@@ -51,7 +51,7 @@ export function AppBreadcrumb(props: AppBreadcrumbProps) {
             <BreadcrumbSeparator>
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </BreadcrumbSeparator>
-            <NavDocuments
+            <BreadcrumbDocuments
               documentsData={documentsByCollection}
               currentSlug={documentSlug}
             />

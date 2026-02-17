@@ -17,12 +17,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface NavDocumentsProps {
+interface BreadcrumbDocumentsProps {
   documentsData: { slug: string; title: string; collectionSlug: string }[];
   currentSlug: string;
 }
 
-export function NavDocuments(props: NavDocumentsProps) {
+export function BreadcrumbDocuments(props: BreadcrumbDocumentsProps) {
   const router = useRouter();
 
   const items = props.documentsData.map((document) => ({

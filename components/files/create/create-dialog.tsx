@@ -7,19 +7,19 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { CreateCollectionStep } from "@/components/files/create/create-collection-step";
 import { CreateDocumentStep } from "@/components/files/create/create-document-step";
-import { SelectFilesStep } from "@/components/files/create/select-files-step";
+import { CreateSelectStep } from "@/components/files/create/create-select-step";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 
 export type OptionType = "collection" | "document";
 
-interface AppFilesDialogProps {
+interface CreateDialogProps {
   collectionsData: CollectionsProps[];
   collectionId?: CollectionsProps["id"];
 }
 
-export function AppFilesDialog(props: AppFilesDialogProps) {
+export function CreateDialog(props: CreateDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentOption, setOption] = useState<OptionType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -58,7 +58,7 @@ export function AppFilesDialog(props: AppFilesDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         {currentStep === 0 && (
-          <SelectFilesStep
+          <CreateSelectStep
             currentOption={currentOption}
             onOptionChange={setOption}
             onNext={nextStep}

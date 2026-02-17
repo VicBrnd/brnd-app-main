@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { DashboardSquare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -20,13 +20,28 @@ import {
 } from "@/components/ui/select";
 
 const AppOverview = [
-  { label: "Dashboard", href: "/dashboard", value: null },
-  { label: "Documentation", href: "/documentation", value: "documentation" },
-  { label: "Account", href: "/dashboard/account/settings", value: "account" },
+  { label: "Dashboard", href: "/dashboard", match: "/dashboard", value: null },
+  {
+    label: "Documentation",
+    href: "/documentation",
+    match: "/documentation",
+    value: "documentation",
+  },
+  {
+    label: "Account",
+    href: "/dashboard/account/settings",
+    match: "/dashboard/account",
+    value: "account",
+  },
 ];
 
-export function NavApp() {
+export function BreadcrumbHome() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const currentValue =
+    AppOverview.find((item) => item.value && pathname.startsWith(item.match))
+      ?.value ?? null;
 
   const getAppItem = (value: string | null) =>
     AppOverview.find((i) => i.value === value) ?? AppOverview[0];
@@ -35,6 +50,7 @@ export function NavApp() {
     <BreadcrumbItem>
       <Select
         items={AppOverview}
+        value={currentValue}
         onValueChange={(value: string | null) => {
           const item = getAppItem(value);
           router.push(item.href);
@@ -43,7 +59,7 @@ export function NavApp() {
         <ButtonGroup>
           <Button
             nativeButton={false}
-            render={<Link href={getAppItem(null).href} />}
+            render={<Link href={getAppItem(currentValue).href} />}
             variant="outline"
             size="sm"
           >

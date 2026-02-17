@@ -19,12 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface NavCollectionsProps {
+interface BreadcrumbCollectionsProps {
   collectionsData: { slug: string; title: string }[];
   currentSlug: string;
 }
 
-export function NavCollections(props: NavCollectionsProps) {
+export function BreadcrumbCollections(props: BreadcrumbCollectionsProps) {
   const router = useRouter();
 
   const items = props.collectionsData.map((collection) => ({

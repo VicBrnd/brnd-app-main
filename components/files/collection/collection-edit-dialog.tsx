@@ -29,13 +29,13 @@ import { Input } from "@/components/ui/input";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { EditCollectionFormSchema } from "@/schemas/files/collection/edit-collection.schema";
 
-interface EditCollectionDialogProps {
+interface CollectionEditDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (open: boolean) => void;
   collection: CollectionsProps;
 }
 
-export function EditCollectionDialog(props: EditCollectionDialogProps) {
+export function CollectionEditDialog(props: CollectionEditDialogProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof EditCollectionFormSchema>>({

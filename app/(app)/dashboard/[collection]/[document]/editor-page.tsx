@@ -8,7 +8,7 @@ import { LexicalEditor as LexicalEditorSource } from "lexical";
 import { LexicalEditor } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-editor";
 import { MarkdownEditor } from "@/app/(app)/dashboard/[collection]/[document]/markdown-editor/markdown-editor";
 import { DocumentHeader } from "@/components/files/document/document-header";
-import { Page } from "@/components/layout/page-layout";
+import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { Card } from "@/components/ui/card";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 
@@ -40,7 +40,7 @@ export function EditorPage(props: EditorProps) {
         documentData={props.documentData}
         setEditor={setCurrentEditor}
       />
-      <Page title="Editor" description="Editor Document">
+      <AppPageLayout title="Editor" description="Editor Document">
         <Card className="h-full flex flex-col p-0">
           {currentEditor === "lexical-editor" ? (
             <LexicalEditor
@@ -55,7 +55,7 @@ export function EditorPage(props: EditorProps) {
             />
           )}
         </Card>
-      </Page>
+      </AppPageLayout>
     </>
   );
 }

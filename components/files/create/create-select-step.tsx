@@ -1,6 +1,6 @@
 "use client";
 
-import { type OptionType } from "@/components/files/create/app-files-dialog";
+import { type OptionType } from "@/components/files/create/create-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
@@ -18,13 +18,13 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-interface SelectFilesStepProps {
+interface CreateSelectStepProps {
   currentOption: OptionType | null;
   onOptionChange: (value: OptionType) => void;
   onNext: () => void;
 }
 
-export function SelectFilesStep(props: SelectFilesStepProps) {
+export function CreateSelectStep(props: CreateSelectStepProps) {
   return (
     <>
       <DialogHeader>

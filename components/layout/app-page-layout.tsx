@@ -5,7 +5,7 @@ interface PageProps {
   description: string;
 }
 
-export function Page({
+export function AppPageLayout({
   title,
   description,
   children,
