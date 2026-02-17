@@ -53,7 +53,11 @@ export function SelectBlockFormat() {
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent align="start" alignItemWithTrigger={false}>
+      <SelectContent
+        align="start"
+        alignItemWithTrigger={false}
+        className="w-full"
+      >
         <SelectGroup>
           {items.map((item) => (
             <SelectItem key={item.value} value={item}>

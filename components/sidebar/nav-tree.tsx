@@ -37,7 +37,7 @@ export function NavTree(props: { item: TreeNode }) {
         className="data-[active=true]:bg-transparent"
       >
         <MdxIcon />
-        {props.item.name}
+        <span>{props.item.name}</span>
       </SidebarMenuButton>
     );
   }
@@ -53,7 +53,7 @@ export function NavTree(props: { item: TreeNode }) {
             icon={Folder01Icon}
             style={props.item.color ? { color: props.item.color } : undefined}
           />
-          {props.item.name}
+          <span>{props.item.name}</span>
         </SidebarMenuButton>
         <CollapsibleTrigger render={<SidebarMenuAction />}>
           <span className="sr-only">Arrow menu action</span>
