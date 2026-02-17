@@ -1,5 +1,3 @@
-import { Redo03Icon, Undo03Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { $isCodeNode } from "@lexical/code";
 import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
@@ -12,12 +10,7 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { $getRoot, EditorState, LexicalEditor } from "lexical";
 
-import { Button } from "@/components/ui/button";
-import {
-  Toolbar,
-  ToolbarButton,
-  ToolbarGroup,
-} from "@/components/ui/coss-ui/toolbar";
+import { LexicalPlugins } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-plugins";
 
 interface LexicalEditorProps {
   markdownData: string;
@@ -50,26 +43,23 @@ export function LexicalEditorCore(props: LexicalEditorProps) {
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <EditorRefPlugin editorRef={props.editorRef} />
-      <Toolbar className="border-0 border-b rounded-none">
-        <ToolbarGroup>
-          <ToolbarButton render={<Button variant="ghost" />}>
-            <HugeiconsIcon icon={Undo03Icon} />
-          </ToolbarButton>
-          <ToolbarButton render={<Button variant="ghost" />}>
-            <HugeiconsIcon icon={Redo03Icon} />
-          </ToolbarButton>
-        </ToolbarGroup>
-      </Toolbar>
-      <RichTextPlugin
-        contentEditable={
-          <ContentEditable
-            className="h-full px-8 py-4 outline-none"
-            aria-placeholder={"Enter some text..."}
-            placeholder={<div>Enter somess text...</div>}
-          />
-        }
-        ErrorBoundary={LexicalErrorBoundary}
-      />
+      <LexicalPlugins />
+      <div className="relative flex-1 min-h-0">
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable
+              className="h-full px-8 py-4 outline-none"
+              aria-placeholder={"Press / for commands..."}
+              placeholder={
+                <div className="absolute top-0 left-0 px-8 py-4 text-muted-foreground pointer-events-none">
+                  Press / for commands...
+                </div>
+              }
+            />
+          }
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+      </div>
       <HistoryPlugin />
       <AutoFocusPlugin />
       <OnChangePlugin onChange={handleChange} />
