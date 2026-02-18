@@ -35,7 +35,7 @@ export default async function CollectionPage(
             <DocumentEmpty />
           </Card>
         ) : (
-          <DocumentTableAsync collectionId={collection} />
+          <DocumentTableAsync collectionId={collectionData.id} />
         )}
       </AppPageLayout>
     </>
