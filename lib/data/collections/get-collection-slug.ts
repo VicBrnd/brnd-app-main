@@ -3,12 +3,13 @@ import { cacheLife, cacheTag } from "next/cache";
 import { and, count, eq } from "drizzle-orm";
 
 import { getAuthContext } from "@/lib/auth/auth-context";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export type CollectionBySlugProps = Pick<
+type CollectionBySlugProps = Pick<
   typeof collection.$inferSelect,
   "id" | "userId" | "title" | "slug" | "color" | "createdAt" | "updatedAt"
 > & {
@@ -16,7 +17,7 @@ export type CollectionBySlugProps = Pick<
 };
 
 export async function getCollectionBySlug(
-  slug: string,
+  collectionSlug: CollectionsProps["slug"],
 ): Promise<CollectionBySlugProps | undefined> {
   "use cache: private";
   cacheTag("files");
@@ -37,7 +38,12 @@ export async function getCollectionBySlug(
     })
     .from(collection)
     .leftJoin(document, eq(document.collectionId, collection.id))
-    .where(and(eq(collection.userId, ctx.user.id), eq(collection.slug, slug)))
+    .where(
+      and(
+        eq(collection.userId, ctx.user.id),
+        eq(collection.slug, collectionSlug),
+      ),
+    )
     .groupBy(collection.id);
 
   return collectionSlugData;

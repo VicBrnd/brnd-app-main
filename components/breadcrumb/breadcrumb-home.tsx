@@ -20,13 +20,13 @@ import {
 } from "@/components/ui/select";
 
 const AppOverview = [
-  { label: "Dashboard", href: "/dashboard", match: "/dashboard", value: null },
   {
-    label: "Documentation",
-    href: "/documentation",
-    match: "/documentation",
+    label: "Documentations",
+    href: "/docs",
+    match: "/docs",
     value: "documentation",
   },
+  { label: "Dashboard", href: "/dashboard", match: "/dashboard", value: null },
   {
     label: "Account",
     href: "/dashboard/account/settings",

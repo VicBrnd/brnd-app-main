@@ -45,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </Button>
               }
             >
-              <AppFilesDialogAsync />
+              <CreateDialogAsync />
             </Suspense>
           }
         />
@@ -101,7 +101,7 @@ async function NavTreeAsync() {
   );
 }
 
-async function AppFilesDialogAsync() {
+async function CreateDialogAsync() {
   const collectionsData = await getCollections();
   return <CreateDialog collectionsData={collectionsData} />;
 }

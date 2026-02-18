@@ -12,11 +12,6 @@ export const data = {
       url: "/dashboard",
       icon: Home01Icon,
     },
-    {
-      title: "Trash",
-      url: "/dashboard/trash",
-      icon: Delete01Icon,
-    },
   ],
   tree: [
     ["Uploadthing", ["API"]],
@@ -31,6 +26,11 @@ export const data = {
       title: "Settings",
       url: "#",
       icon: Settings01Icon,
+    },
+    {
+      title: "Trash",
+      url: "/dashboard/trash",
+      icon: Delete01Icon,
     },
     {
       title: "Get Help",

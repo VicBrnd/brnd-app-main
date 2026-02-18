@@ -14,7 +14,7 @@ export function AppPageLayout({
   const Comp = "div";
 
   return (
-    <main className="h-full p-4 md:p-">
+    <main className="h-full p-4">
       <Comp
         data-slot="page"
         className="flex flex-col h-full gap-5 max-w-6xl mx-auto"

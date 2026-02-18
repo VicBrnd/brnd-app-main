@@ -1,12 +1,13 @@
 import { count, eq } from "drizzle-orm";
 
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { db } from "@/lib/db";
 import { document } from "@/lib/db/schema";
 import { takeFirstOrThrow } from "@/lib/db/utils";
 
 import "server-only";
 
-export async function getDocumentCount(collectionId: string) {
+export async function getDocumentCount(collectionId: CollectionsProps["id"]) {
   const { value } = await db
     .select({ value: count() })
     .from(document)

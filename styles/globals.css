@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./neutral.css";
+@import "./preset.css";
+@import "./shiki.css";
 @import "./hide-scrollbar.css";
 
 @custom-variant dark (&:is(.dark *));

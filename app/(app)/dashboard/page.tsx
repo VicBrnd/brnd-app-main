@@ -15,8 +15,8 @@ import { getDocuments } from "@/lib/data/documents/get-documents";
 export default function DashboardPage() {
   return (
     <AppPageLayout
-      title="All Files"
-      description="Access your recent collections and documents"
+      title="Dashboard"
+      description="Edit your collections and documents"
     >
       <Suspense
         fallback={

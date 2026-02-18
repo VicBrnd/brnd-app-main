@@ -6,7 +6,10 @@ import { DocumentTable } from "@/components/files/document/document-table/docume
 import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { Card } from "@/components/ui/card";
 import { getCollectionBySlug } from "@/lib/data/collections/get-collection-slug";
-import { getCollections } from "@/lib/data/collections/get-collections";
+import {
+  CollectionsProps,
+  getCollections,
+} from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
 
 export default async function CollectionPage(
@@ -32,19 +35,17 @@ export default async function CollectionPage(
             <DocumentEmpty />
           </Card>
         ) : (
-          <DocumentTableAsync collectionSlug={collection} />
+          <DocumentTableAsync collectionId={collection} />
         )}
       </AppPageLayout>
     </>
   );
 }
 
-async function DocumentTableAsync({
-  collectionSlug,
-}: {
-  collectionSlug: string;
+async function DocumentTableAsync(props: {
+  collectionId: CollectionsProps["id"];
 }) {
-  const documentsData = await getDocuments(collectionSlug);
+  const documentsData = await getDocuments(props.collectionId);
   const collectionData = await getCollections();
   return (
     <DocumentTable

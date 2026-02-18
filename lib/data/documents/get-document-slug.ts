@@ -3,6 +3,8 @@ import { cacheLife, cacheTag } from "next/cache";
 import { and, eq } from "drizzle-orm";
 
 import { getAuthContext } from "@/lib/auth/auth-context";
+import { CollectionsProps } from "@/lib/data/collections/get-collections";
+import { DocumentsProps } from "@/lib/data/documents/get-documents";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 
@@ -19,15 +21,15 @@ export type DocumentBySlugProps = Pick<
   | "createdAt"
   | "updatedAt"
 > & {
-  collectionId: string;
-  collectionSlug: string;
-  collectionTitle: string;
-  collectionColor: string;
+  collectionId: CollectionsProps["id"];
+  collectionSlug: CollectionsProps["slug"];
+  collectionTitle: CollectionsProps["title"];
+  collectionColor: CollectionsProps["color"];
 };
 
 export async function getDocumentBySlug(
-  collectionSlug: string,
-  documentSlug: string,
+  collectionSlug: CollectionsProps["slug"],
+  documentSlug: DocumentsProps["slug"],
 ): Promise<DocumentBySlugProps | undefined> {
   "use cache: private";
   cacheTag("files");
