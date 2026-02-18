@@ -27,26 +27,6 @@ function ToolbarButton({ className, ...props }: ToolbarPrimitive.Button.Props) {
   );
 }
 
-function ToolbarLink({ className, ...props }: ToolbarPrimitive.Link.Props) {
-  return (
-    <ToolbarPrimitive.Link
-      className={cn(className)}
-      data-slot="toolbar-link"
-      {...props}
-    />
-  );
-}
-
-function ToolbarInput({ className, ...props }: ToolbarPrimitive.Input.Props) {
-  return (
-    <ToolbarPrimitive.Input
-      className={cn(className)}
-      data-slot="toolbar-input"
-      {...props}
-    />
-  );
-}
-
 function ToolbarGroup({ className, ...props }: ToolbarPrimitive.Group.Props) {
   return (
     <ToolbarPrimitive.Group
@@ -77,7 +57,5 @@ export {
   Toolbar,
   ToolbarButton,
   ToolbarGroup,
-  ToolbarInput,
-  ToolbarLink,
   ToolbarSeparator,
 };

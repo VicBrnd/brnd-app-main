@@ -42,5 +42,3 @@ export const SignInEmail = ({ SignInLink }: SignInEmailProps) => {
 SignInEmail.PreviewProps = {
   link: "test",
 } as SignInEmailProps;
-
-export default SignInEmail;

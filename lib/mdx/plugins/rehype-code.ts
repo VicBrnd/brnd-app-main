@@ -17,7 +17,6 @@ import {
 
 import { defaultThemes, getHighlighter } from "@/lib/mdx/shiki";
 import {
-  CodeBlockIcon,
   IconOptions,
   transformerIcon,
 } from "@/lib/mdx/transformer-icon";
@@ -60,7 +59,7 @@ const metaValues: MetaValue[] = [
   },
 ];
 
-export const rehypeCodeDefaultOptions: RehypeCodeOptions = {
+const rehypeCodeDefaultOptions: RehypeCodeOptions = {
   lazy: true,
   themes: defaultThemes,
   defaultColor: false,
@@ -98,7 +97,7 @@ export const rehypeCodeDefaultOptions: RehypeCodeOptions = {
   },
 };
 
-export type RehypeCodeOptions = RehypeShikiOptions & {
+type RehypeCodeOptions = RehypeShikiOptions & {
   /**
    * Filter meta string before processing
    */
@@ -217,4 +216,3 @@ function transformerTab(): ShikiTransformer {
   };
 }
 
-export { transformerIcon, transformerTab, type CodeBlockIcon };

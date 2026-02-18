@@ -1,5 +1,7 @@
 import { type DragEvent, type InputHTMLAttributes } from "react";
 
+import Image from "next/image";
+
 import { Cancel01Icon, ImageUploadIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
@@ -40,7 +42,14 @@ export function AvatarUploader(props: AvatarUploaderProps) {
       <div className="flex flex-col gap-2">
         <div
           role="button"
+          tabIndex={0}
           onClick={props.openFileDialog}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              props.openFileDialog();
+            }
+          }}
           onDragEnter={props.handleDragEnter}
           onDragLeave={props.handleDragLeave}
           onDragOver={props.handleDragOver}
@@ -85,10 +94,13 @@ export function AvatarUploader(props: AvatarUploaderProps) {
             <div className="bg-background flex items-center justify-between gap-2 rounded-lg border border-dashed p-2 pe-3">
               <div className="flex items-center gap-3 overflow-hidden">
                 <div className="bg-accent aspect-square shrink-0 rounded">
-                  <img
-                    src={props.files[0]?.preview}
-                    alt={props.files[0]?.file?.name}
+                  <Image
+                    src={props.files[0]?.preview || ""}
+                    alt={props.files[0]?.file?.name || ""}
+                    width={40}
+                    height={40}
                     className="size-10 rounded-[inherit] object-cover"
+                    unoptimized
                   />
                 </div>
                 <div className="flex min-w-0 flex-col gap-0.5">

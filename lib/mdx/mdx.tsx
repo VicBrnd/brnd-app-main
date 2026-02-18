@@ -1,16 +1,12 @@
-import { memo } from "react";
-
 import type { Message } from "esbuild";
 
 import { bundleMDX } from "mdx-bundler";
-import { getMDXComponent } from "mdx-bundler/client";
 import remarkGfm from "remark-gfm";
 
 import { rehypeCode } from "@/lib/mdx/plugins/rehype-code";
 import { remarkInstall } from "@/lib/mdx/plugins/remark-install";
-import { getMDXComponents } from "@/mdx-components";
 
-export type CompiledMdxResult = {
+type CompiledMdxResult = {
   code: string;
   frontmatter: Record<string, any>;
 };
@@ -69,28 +65,3 @@ export const MDXStorage = {
   },
 };
 
-interface MDXRendererProps {
-  code: string;
-}
-
-const componentCache = new Map<string, ReturnType<typeof getMDXComponent>>();
-
-function getCachedMDXComponent(code: string) {
-  if (!code) return () => null;
-
-  let component = componentCache.get(code);
-  if (!component) {
-    component = getMDXComponent(code);
-    componentCache.set(code, component);
-  }
-
-  return component;
-}
-
-const mdxComponents = getMDXComponents();
-
-export const MDXRenderer = memo(function MDXRenderer({
-  code,
-}: MDXRendererProps) {
-  return getCachedMDXComponent(code)({ components: mdxComponents });
-});

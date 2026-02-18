@@ -5,4 +5,3 @@ export const MoveDocumentSchema = z.object({
   collectionId: z.string().uuid(),
 });
 
-export type MoveDocumentInput = z.infer<typeof MoveDocumentSchema>;

@@ -5,7 +5,7 @@ import { z } from "zod/v4";
 
 import { getSession } from "@/lib/data/account/get-session";
 
-export const actionClient = createSafeActionClient({
+const actionClient = createSafeActionClient({
   defineMetadataSchema() {
     return z.object({
       actionName: z.string(),

@@ -1,19 +1,9 @@
-import { Fragment, type ReactNode } from "react";
-
-import type { Root } from "hast";
 import type { BundledTheme } from "shiki/themes";
 
-import { type Components, toJsxRuntime } from "hast-util-to-jsx-runtime";
-import { jsx, jsxs } from "react/jsx-runtime";
 import {
-  type Awaitable,
   type BundledHighlighterOptions,
   type BundledLanguage,
-  type CodeOptionsMeta,
-  type CodeOptionsThemes,
-  type CodeToHastOptionsCommon,
   type Highlighter,
-  type RegexEngine,
 } from "shiki";
 
 export const defaultThemes = {
@@ -21,55 +11,7 @@ export const defaultThemes = {
   dark: "github-dark",
 };
 
-export type HighlightOptionsCommon = CodeToHastOptionsCommon<BundledLanguage> &
-  CodeOptionsMeta & {
-    engine?: Awaitable<RegexEngine>;
-    components?: Partial<Components>;
-  };
-
-export type HighlightOptionsThemes = CodeOptionsThemes<BundledTheme>;
-
-export type HighlightOptions = HighlightOptionsCommon &
-  (HighlightOptionsThemes | Record<never, never>);
-
 const highlighters = new Map<string, Promise<Highlighter>>();
-
-export async function _highlight(code: string, options: HighlightOptions) {
-  const { lang, components: _, engine, ...rest } = options;
-
-  let themes: CodeOptionsThemes<BundledTheme> = { themes: defaultThemes };
-  if ("theme" in options && options.theme) {
-    themes = { theme: options.theme };
-  } else if ("themes" in options && options.themes) {
-    themes = { themes: options.themes };
-  }
-
-  const highlighter = await getHighlighter("custom", {
-    engine,
-    langs: [lang],
-    themes:
-      "theme" in themes
-        ? [themes.theme]
-        : Object.values(themes.themes).filter((v) => v !== undefined),
-  });
-
-  return highlighter.codeToHast(code, {
-    lang,
-    ...rest,
-    ...themes,
-    defaultColor: "themes" in themes ? false : undefined,
-  });
-}
-
-export function _renderHighlight(hast: Root, options?: HighlightOptions) {
-  return toJsxRuntime(hast, {
-    jsx,
-    jsxs,
-    development: false,
-    components: options?.components,
-    Fragment,
-  });
-}
 
 /**
  * Get Shiki highlighter instance of Fumadocs (mostly for internal use, don't recommend you to use it).
@@ -120,9 +62,3 @@ export async function getHighlighter(
   });
 }
 
-export async function highlight(
-  code: string,
-  options: HighlightOptions,
-): Promise<ReactNode> {
-  return _renderHighlight(await _highlight(code, options), options);
-}

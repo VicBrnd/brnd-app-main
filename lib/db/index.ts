@@ -13,6 +13,4 @@ export const db = drizzle(sql, {
   },
 });
 
-export type Database = typeof db;
-
-export { relations, schema };
+export { schema };

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/incompatible-library */
-
 "use client";
 
 import {
@@ -27,6 +25,8 @@ interface DocumentTableDataProps<TData, TValue> {
 export function DocumentTableData<TData, TValue>(
   props: DocumentTableDataProps<TData, TValue>,
 ) {
+  "use no memo";
+
   const table = useReactTable({
     data: props.data,
     columns: props.columns,

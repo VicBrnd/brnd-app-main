@@ -40,6 +40,16 @@ import { authClient } from "@/lib/auth/auth-client";
 import { Area, getCroppedImg } from "@/lib/cropper";
 import { AvatarsProps } from "@/lib/data/account/get-images";
 
+async function cropImageToFile(
+  preview: string,
+  cropArea: Area,
+  fileName: string,
+): Promise<File> {
+  const croppedBlob = await getCroppedImg(preview, cropArea);
+  if (!croppedBlob) throw new Error("Failed to crop image");
+  return new File([croppedBlob], fileName, { type: croppedBlob.type });
+}
+
 interface AvatarDialogProps {
   userData: User;
   userAvatars: AvatarsProps[];
@@ -96,19 +106,18 @@ export function AvatarDialog(props: AvatarDialogProps) {
       return;
     }
 
-    try {
-      const croppedBlob = await getCroppedImg(files[0].preview || "", cropArea);
-      if (!croppedBlob) throw new Error("Failed to crop image");
+    const preview = files[0].preview || "";
+    const fileName = files[0].file.name;
+    const fileId = files[0].id;
 
-      const croppedFile = new File([croppedBlob], files[0].file.name, {
-        type: croppedBlob.type,
-      });
+    try {
+      const croppedFile = await cropImageToFile(preview, cropArea, fileName);
 
       startTransition(() => {
         goeyToast.promise(addAvatar([croppedFile]), {
           loading: "Uploading your image...",
           success: () => {
-            removeFile(files[0].id);
+            removeFile(fileId);
             setSelected([]);
             setDialogOpen(false);
             setCropModalOpen(false);
@@ -116,8 +125,10 @@ export function AvatarDialog(props: AvatarDialogProps) {
 
             return "Uploaded successfully";
           },
-          error: (err) =>
-            err instanceof Error ? err.message : "Upload failed",
+          error: (err) => {
+            if (err instanceof Error) return err.message;
+            return "Upload failed";
+          },
         });
       });
     } catch (error) {

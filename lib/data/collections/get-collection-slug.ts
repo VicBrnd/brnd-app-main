@@ -8,7 +8,7 @@ import { collection, document } from "@/lib/db/schema";
 
 import "server-only";
 
-export type CollectionBySlugProps = Pick<
+type CollectionBySlugProps = Pick<
   typeof collection.$inferSelect,
   "id" | "userId" | "title" | "slug" | "color" | "createdAt" | "updatedAt"
 > & {

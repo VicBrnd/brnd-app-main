@@ -74,49 +74,6 @@ function AutocompleteInput({
   );
 }
 
-function AutocompletePopup({
-  className,
-  children,
-  side = "bottom",
-  sideOffset = 4,
-  alignOffset,
-  align = "start",
-  ...props
-}: AutocompletePrimitive.Popup.Props & {
-  align?: AutocompletePrimitive.Positioner.Props["align"];
-  sideOffset?: AutocompletePrimitive.Positioner.Props["sideOffset"];
-  alignOffset?: AutocompletePrimitive.Positioner.Props["alignOffset"];
-  side?: AutocompletePrimitive.Positioner.Props["side"];
-}) {
-  return (
-    <AutocompletePrimitive.Portal>
-      <AutocompletePrimitive.Positioner
-        align={align}
-        alignOffset={alignOffset}
-        className="z-50 select-none"
-        data-slot="autocomplete-positioner"
-        side={side}
-        sideOffset={sideOffset}
-      >
-        <span
-          className={cn(
-            "relative flex max-h-full min-w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) rounded-lg border bg-popover not-dark:bg-clip-padding shadow-lg/5 transition-[scale,opacity] before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
-        >
-          <AutocompletePrimitive.Popup
-            className="flex max-h-[min(var(--available-height),23rem)] flex-1 flex-col text-foreground"
-            data-slot="autocomplete-popup"
-            {...props}
-          >
-            {children}
-          </AutocompletePrimitive.Popup>
-        </span>
-      </AutocompletePrimitive.Positioner>
-    </AutocompletePrimitive.Portal>
-  );
-}
-
 function AutocompleteItem({
   className,
   children,
@@ -194,25 +151,6 @@ function AutocompleteEmpty({
   );
 }
 
-function AutocompleteRow({
-  className,
-  ...props
-}: AutocompletePrimitive.Row.Props) {
-  return (
-    <AutocompletePrimitive.Row
-      className={className}
-      data-slot="autocomplete-row"
-      {...props}
-    />
-  );
-}
-
-function AutocompleteValue({ ...props }: AutocompletePrimitive.Value.Props) {
-  return (
-    <AutocompletePrimitive.Value data-slot="autocomplete-value" {...props} />
-  );
-}
-
 function AutocompleteList({
   className,
   ...props
@@ -249,22 +187,6 @@ function AutocompleteClear({
   );
 }
 
-function AutocompleteStatus({
-  className,
-  ...props
-}: AutocompletePrimitive.Status.Props) {
-  return (
-    <AutocompletePrimitive.Status
-      className={cn(
-        "px-3 py-2 font-medium text-muted-foreground text-xs empty:m-0 empty:p-0",
-        className,
-      )}
-      data-slot="autocomplete-status"
-      {...props}
-    />
-  );
-}
-
 function AutocompleteCollection({
   ...props
 }: AutocompletePrimitive.Collection.Props) {
@@ -289,11 +211,8 @@ function AutocompleteTrigger({
   );
 }
 
-const useAutocompleteFilter = AutocompletePrimitive.useFilter;
-
 export {
   Autocomplete,
-  AutocompleteClear,
   AutocompleteCollection,
   AutocompleteEmpty,
   AutocompleteGroup,
@@ -301,11 +220,5 @@ export {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
-  AutocompletePopup,
-  AutocompleteRow,
   AutocompleteSeparator,
-  AutocompleteStatus,
-  AutocompleteTrigger,
-  AutocompleteValue,
-  useAutocompleteFilter,
 };

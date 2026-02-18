@@ -13,7 +13,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:drop": "drizzle-kit drop",
     "db:studio": "drizzle-kit studio",
-    "shadcn": "bunx --bun shadcn@latest add"
+    "shadcn": "bunx --bun shadcn@latest add",
+    "react:doctor": "npx -y react-doctor@latest . --verbose"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",

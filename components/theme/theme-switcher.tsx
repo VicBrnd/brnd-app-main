@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/tooltip";
 import { useMetaColor } from "@/hooks/use-meta-color";
 
-export const DARK_MODE_FORWARD_TYPE = "dark-mode-forward";
-
 export function ThemeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor, metaColor } = useMetaColor();

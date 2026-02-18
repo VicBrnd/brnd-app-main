@@ -15,7 +15,7 @@ interface PackageManager {
   command: (command: string) => string;
 }
 
-export type RemarkInstallOptions = Partial<{
+type RemarkInstallOptions = Partial<{
   Tabs: string;
   Tab: string;
 

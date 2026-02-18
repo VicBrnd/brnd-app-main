@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export type TreeNode = {
+type TreeNode = {
   name: string;
   href?: string;
   color?: string;
@@ -64,8 +64,8 @@ export function NavTree(props: { item: TreeNode }) {
         </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {props.item.children.map((child, index) => (
-              <NavTree key={index} item={child} />
+            {props.item.children.map((child) => (
+              <NavTree key={child.href ?? child.name} item={child} />
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>

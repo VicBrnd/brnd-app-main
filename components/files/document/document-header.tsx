@@ -99,8 +99,8 @@ export function DocumentHeader(props: DocumentHeaderProps) {
         {/* Inline title editing */}
         {isEditing ? (
           <input
+            ref={(el) => el?.focus()}
             className="text-sm font-semibold border-none outline-none px-0 py-0 bg-transparent"
-            autoFocus
             value={editValue.charAt(0).toUpperCase() + editValue.slice(1)}
             onChange={(e) => setEditValue(e.target.value)}
             onBlur={() => {
@@ -123,17 +123,26 @@ export function DocumentHeader(props: DocumentHeaderProps) {
             <TooltipTrigger
               render={
                 <h1
-                  className="text-sm font-semibold"
+                  className="text-sm font-semibold cursor-pointer"
+                  tabIndex={0}
+                  role="button"
                   onClick={() => {
                     setEditValue(optimisticTitle);
                     setIsEditing(true);
                   }}
-                />
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setEditValue(optimisticTitle);
+                      setIsEditing(true);
+                    }
+                  }}
+                >
+                  {optimisticTitle.charAt(0).toUpperCase() +
+                    optimisticTitle.slice(1)}
+                </h1>
               }
-            >
-              {optimisticTitle.charAt(0).toUpperCase() +
-                optimisticTitle.slice(1)}
-            </TooltipTrigger>
+            />
             <TooltipContent side="bottom">
               Click to edit the title
             </TooltipContent>

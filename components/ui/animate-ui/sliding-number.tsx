@@ -4,7 +4,9 @@ import * as React from "react";
 import useMeasure from "react-use-measure";
 
 import {
-  motion,
+  LazyMotion,
+  domAnimation,
+  m,
   useInView,
   useSpring,
   useTransform,
@@ -45,11 +47,11 @@ function SlidingNumberRoller({
       className="relative inline-block w-[1ch] overflow-x-visible overflow-y-clip leading-none tabular-nums"
     >
       <div className="invisible">0</div>
-      {Array.from({ length: 10 }, (_, i) => (
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
         <SlidingNumberDisplay
-          key={i}
+          key={digit}
           motionValue={animatedValue}
-          number={i}
+          number={digit}
           height={height}
           transition={transition}
         />
@@ -85,14 +87,14 @@ function SlidingNumberDisplay({
   }
 
   return (
-    <motion.span
+    <m.span
       data-slot="sliding-number-display"
       style={{ y }}
       className="absolute inset-0 flex items-center justify-center"
       transition={{ ...transition, type: "spring" }}
     >
       {number}
-    </motion.span>
+    </m.span>
   );
 }
 
@@ -133,7 +135,7 @@ function SlidingNumber({
   });
   const isInView = !inView || inViewResult;
 
-  const prevNumberRef = React.useRef<number>(0);
+  const [prevNumber, setPrevNumber] = React.useState(0);
 
   const effectiveNumber = React.useMemo(
     () => (!isInView ? 0 : Math.abs(Number(number))),
@@ -151,8 +153,7 @@ function SlidingNumber({
   const newIntStr =
     padStart && newIntStrRaw?.length === 1 ? "0" + newIntStrRaw : newIntStrRaw;
 
-  // eslint-disable-next-line react-hooks/refs
-  const prevFormatted = formatNumber(prevNumberRef.current);
+  const prevFormatted = formatNumber(prevNumber);
   const [prevIntStrRaw = "", prevDecStrRaw = ""] = prevFormatted.split(".");
   const prevIntStr =
     padStart && prevIntStrRaw.length === 1
@@ -173,7 +174,7 @@ function SlidingNumber({
   }, [prevDecStrRaw, newDecStrRaw]);
 
   React.useEffect(() => {
-    if (isInView) prevNumberRef.current = effectiveNumber;
+    if (isInView) setPrevNumber(effectiveNumber);
   }, [effectiveNumber, isInView]);
 
   const intDigitCount = newIntStr?.length ?? 0;
@@ -198,40 +199,42 @@ function SlidingNumber({
   const prevDecValue = adjustedPrevDec ? parseInt(adjustedPrevDec, 10) : 0;
 
   return (
-    <span
-      ref={localRef}
-      data-slot="sliding-number"
-      className={cn("flex items-center", className)}
-      {...props}
-    >
-      {isInView && Number(number) < 0 && <span className="mr-1">-</span>}
+    <LazyMotion features={domAnimation}>
+      <span
+        ref={localRef}
+        data-slot="sliding-number"
+        className={cn("flex items-center", className)}
+        {...props}
+      >
+        {isInView && Number(number) < 0 && <span className="mr-1">-</span>}
 
-      {intPlaces.map((place) => (
-        <SlidingNumberRoller
-          key={`int-${place}`}
-          prevValue={parseInt(adjustedPrevInt, 10)}
-          value={parseInt(newIntStr ?? "0", 10)}
-          place={place}
-          transition={transition}
-        />
-      ))}
+        {intPlaces.map((place) => (
+          <SlidingNumberRoller
+            key={`int-${place}`}
+            prevValue={parseInt(adjustedPrevInt, 10)}
+            value={parseInt(newIntStr ?? "0", 10)}
+            place={place}
+            transition={transition}
+          />
+        ))}
 
-      {newDecStrRaw && (
-        <>
-          <span>{decimalSeparator}</span>
-          {decPlaces.map((place) => (
-            <SlidingNumberRoller
-              key={`dec-${place}`}
-              prevValue={prevDecValue}
-              value={newDecValue}
-              place={place}
-              transition={transition}
-            />
-          ))}
-        </>
-      )}
-    </span>
+        {newDecStrRaw && (
+          <>
+            <span>{decimalSeparator}</span>
+            {decPlaces.map((place) => (
+              <SlidingNumberRoller
+                key={`dec-${place}`}
+                prevValue={prevDecValue}
+                value={newDecValue}
+                place={place}
+                transition={transition}
+              />
+            ))}
+          </>
+        )}
+      </span>
+    </LazyMotion>
   );
 }
 
-export { SlidingNumber, type SlidingNumberProps };
+export { SlidingNumber };
