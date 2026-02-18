@@ -11,6 +11,8 @@ interface LexicalEditorProps {
 }
 
 export function LexicalEditor(props: LexicalEditorProps) {
+  console.log(`markdownData Editor: ${props.markdownData}`);
+
   return (
     <>
       <EditorCore

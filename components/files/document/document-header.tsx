@@ -17,7 +17,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { goeyToast } from "goey-toast";
 
-import { editDocument } from "@/actions/files/document/edit-document.action";
+import { updateDocument } from "@/actions/files/document/update-document.action";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -38,7 +38,7 @@ import {
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 
 interface DocumentHeaderProps {
-  onSave: () => Promise<void>;
+  onSave: () => void;
   documentData: DocumentBySlugProps;
   setEditor: (type: "lexical-editor" | "markdown-editor") => void;
 }
@@ -55,7 +55,7 @@ export function DocumentHeader(props: DocumentHeaderProps) {
     if (editValue === props.documentData.title) return;
     startSaveTransition(async () => {
       setOptimisticTitle(editValue);
-      const res = await editDocument({
+      const res = await updateDocument({
         id: props.documentData.id,
         collection: props.documentData.collectionId,
         title: editValue,

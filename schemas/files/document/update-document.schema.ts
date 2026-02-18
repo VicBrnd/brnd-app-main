@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const EditDocumentFormSchema = z.object({
+export const UpdateDocumentFormSchema = z.object({
   id: z.string().min(1),
   title: z
     .string()
@@ -17,4 +17,5 @@ export const EditDocumentFormSchema = z.object({
     )
     .optional(),
   collection: z.string().min(1, "Collection is required"),
+  content: z.string().optional(),
 });

@@ -1,5 +1,9 @@
 import { $isCodeNode } from "@lexical/code";
-import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
+import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
+  TRANSFORMERS,
+} from "@lexical/markdown";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -10,7 +14,9 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { $getRoot, EditorState, LexicalEditor } from "lexical";
 
+import { LexicalNodes } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-node";
 import { LexicalPlugins } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-plugins";
+import { LexicalTheme } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-theme";
 
 interface LexicalEditorProps {
   markdownData: string;
@@ -21,11 +27,17 @@ interface LexicalEditorProps {
 export function LexicalEditorCore(props: LexicalEditorProps) {
   const initialConfig = {
     namespace: "LexicalEditorCore",
-    theme: {},
+    theme: LexicalTheme,
+    nodes: LexicalNodes,
+    editorState: () =>
+      $convertFromMarkdownString(props.markdownData, TRANSFORMERS),
+
     onError: (error: Error) => {
       console.error(error);
     },
   };
+
+  console.log(`markdownData Core: ${props.markdownData}`);
 
   const handleChange = (editorState: EditorState) => {
     editorState.read(() => {
@@ -44,7 +56,7 @@ export function LexicalEditorCore(props: LexicalEditorProps) {
     <LexicalComposer initialConfig={initialConfig}>
       <EditorRefPlugin editorRef={props.editorRef} />
       <LexicalPlugins />
-      <div className="relative flex-1 min-h-0">
+      <div className="relative flex-1 min-h-64">
         <RichTextPlugin
           contentEditable={
             <ContentEditable

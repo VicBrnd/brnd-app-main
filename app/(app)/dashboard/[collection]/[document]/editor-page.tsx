@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { startTransition, useCallback, useRef, useState } from "react";
 
 import { goeyToast } from "goey-toast";
 import { LexicalEditor as LexicalEditorSource } from "lexical";
 
+import { updateDocument } from "@/actions/files/document/update-document.action";
 import { LexicalEditor } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-editor";
 import { MarkdownEditor } from "@/app/(app)/dashboard/[collection]/[document]/markdown-editor/markdown-editor";
 import { DocumentHeader } from "@/components/files/document/document-header";
@@ -23,13 +24,26 @@ export function EditorPage(props: EditorProps) {
     "markdown-editor" | "lexical-editor"
   >("lexical-editor");
 
-  const handleSave = async () => {
-    goeyToast.success("Fake Saved", {
-      description: (
-        <div>
-          <strong>Fake With Description</strong>
-        </div>
-      ),
+  console.log(`markdownData: ${markdownData}`);
+
+  const getCurrentMarkdown = useCallback(() => {
+    return markdownData;
+  }, [markdownData]);
+
+  const handleSave = () => {
+    const contentToSave = getCurrentMarkdown();
+    startTransition(async () => {
+      const res = await updateDocument({
+        id: props.documentData.id,
+        collection: props.documentData.collectionId,
+        content: contentToSave,
+      });
+      if (res?.data?.error) {
+        goeyToast.error(res.data.error);
+      }
+      if (res?.data?.success) {
+        goeyToast.success("Successfully Updated");
+      }
     });
   };
 

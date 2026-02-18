@@ -32,14 +32,18 @@ export default async function CollectionPage(
             <DocumentEmpty />
           </Card>
         ) : (
-          <FileListAsync collectionSlug={collection} />
+          <DocumentTableAsync collectionSlug={collection} />
         )}
       </AppPageLayout>
     </>
   );
 }
 
-async function FileListAsync({ collectionSlug }: { collectionSlug: string }) {
+async function DocumentTableAsync({
+  collectionSlug,
+}: {
+  collectionSlug: string;
+}) {
   const documentsData = await getDocuments(collectionSlug);
   const collectionData = await getCollections();
   return (

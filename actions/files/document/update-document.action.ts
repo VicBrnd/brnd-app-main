@@ -7,12 +7,13 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull } from "@/lib/db/utils";
+import { compileMDX, MDXStorage } from "@/lib/mdx/mdx";
 import { authActionClient } from "@/lib/safe-action";
-import { EditDocumentFormSchema } from "@/schemas/files/document/edit-document.schema";
+import { UpdateDocumentFormSchema } from "@/schemas/files/document/update-document.schema";
 
-export const editDocument = authActionClient
-  .metadata({ actionName: "editDocument" })
-  .inputSchema(EditDocumentFormSchema)
+export const updateDocument = authActionClient
+  .metadata({ actionName: "updateDocument" })
+  .inputSchema(UpdateDocumentFormSchema)
   .action(async ({ parsedInput, ctx: { sessionData } }) => {
     const parsedCollection = await db
       .select({ id: collection.id, slug: collection.slug })
@@ -53,6 +54,12 @@ export const editDocument = authActionClient
     const updateData: Record<string, string> = {};
     if (parsedInput.title) updateData.title = parsedInput.title;
     if (parsedInput.slug) updateData.slug = parsedInput.slug;
+
+    if (parsedInput.content) {
+      const compiledResult = await compileMDX(parsedInput.content);
+      updateData.content = parsedInput.content;
+      updateData.compiledContent = MDXStorage.serialize(compiledResult);
+    }
 
     await db
       .update(document)
