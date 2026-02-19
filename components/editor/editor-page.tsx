@@ -6,8 +6,8 @@ import { goeyToast } from "goey-toast";
 import { LexicalEditor as LexicalEditorSource } from "lexical";
 
 import { updateDocument } from "@/actions/files/document/update-document.action";
-import { LexicalEditor } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-editor";
-import { MarkdownEditor } from "@/app/(app)/dashboard/[collection]/[document]/markdown-editor/markdown-editor";
+import { LexicalEditor } from "@/components/editor/lexical-editor/lexical-editor";
+import { MarkdownEditor } from "@/components/editor/markdown-editor/markdown-editor";
 import { DocumentHeader } from "@/components/files/document/document-header";
 import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { Card } from "@/components/ui/card";

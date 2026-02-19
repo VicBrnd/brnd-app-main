@@ -25,6 +25,7 @@ interface CollectionContextMenuProps {
 
 export function CollectionContextMenu(props: CollectionContextMenuProps) {
   const [isLoading, startTransition] = useTransition();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDeleteCollection = () => {
     startTransition(async () => {
@@ -41,19 +42,6 @@ export function CollectionContextMenu(props: CollectionContextMenuProps) {
       }
     });
   };
-
-  // const handleDeleteCollection = () => {
-  //   startTransition(async () => {
-  //     props.removeOptimistic(props.collection.id);
-  //     goeyToast.promise(deleteCollection({ ids: [props.collection.id] }), {
-  //       loading: "Deleting...",
-  //       success: `${props.collection.title} successfully deleted`,
-  //       error: "Something went wrong",
-  //     });
-  //   });
-  // };
-
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <>

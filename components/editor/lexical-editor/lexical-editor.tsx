@@ -26,7 +26,7 @@ export function LexicalEditor(props: LexicalEditorProps) {
 
 const EditorCore = dynamic(
   () =>
-    import("@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-editor-core").then(
+    import("@/components/editor/lexical-editor/lexical-editor-core").then(
       (mod) => mod.LexicalEditorCore,
     ),
   { ssr: false },

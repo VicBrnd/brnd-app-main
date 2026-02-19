@@ -54,7 +54,6 @@ export const updateDocument = authActionClient
     const updateData: Record<string, string> = {};
     if (parsedInput.title) updateData.title = parsedInput.title;
     if (parsedInput.slug) updateData.slug = parsedInput.slug;
-
     if (parsedInput.content) {
       const compiledResult = await compileMDX(parsedInput.content);
       updateData.content = parsedInput.content;

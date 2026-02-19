@@ -1,5 +1,5 @@
-import { SelectBlockFormat } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/toolbar/block-format/select-block-format";
-import { HistoryToolbarPlugin } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/toolbar/history-toolbar-plugin";
+import { SelectBlockFormat } from "@/components/editor/lexical-editor/toolbar/block-format/select-block-format";
+import { HistoryToolbarPlugin } from "@/components/editor/lexical-editor/toolbar/history-toolbar-plugin";
 import {
   Toolbar,
   ToolbarGroup,

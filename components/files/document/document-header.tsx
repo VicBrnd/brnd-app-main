@@ -18,6 +18,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { goeyToast } from "goey-toast";
 
 import { updateDocument } from "@/actions/files/document/update-document.action";
+import { updateStatusDocument } from "@/actions/files/document/update-status-document.action";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -44,11 +45,17 @@ interface DocumentHeaderProps {
 }
 
 export function DocumentHeader(props: DocumentHeaderProps) {
+  const [_isPending, startStatusTransition] = useTransition();
   const [, startSaveTransition] = useTransition();
+
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(props.documentData.title);
+
   const [optimisticTitle, setOptimisticTitle] = useOptimistic(
     props.documentData.title,
+  );
+  const [optimisticPublished, setOptimisticPublished] = useOptimistic(
+    props.documentData.isPublished,
   );
 
   const handleSaveTitle = () => {
@@ -66,6 +73,14 @@ export function DocumentHeader(props: DocumentHeaderProps) {
       }
     });
   };
+
+  const handleToggleStatus = () => {
+    startStatusTransition(async () => {
+      setOptimisticPublished(!optimisticPublished);
+      await updateStatusDocument({ id: props.documentData.id });
+    });
+  };
+
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -149,13 +164,36 @@ export function DocumentHeader(props: DocumentHeaderProps) {
           <div className="hidden items-center gap-2 md:flex">
             <ButtonGroup>
               {/* Button Publish */}
-              <Button variant="outline" size="sm">
-                <HugeiconsIcon icon={ViewIcon} /> Publish
+              <Button variant="outline" size="sm" onClick={handleToggleStatus}>
+                {optimisticPublished ? (
+                  <>
+                    <HugeiconsIcon icon={ViewIcon} /> Unpublish
+                  </>
+                ) : (
+                  <>
+                    <HugeiconsIcon icon={ViewIcon} /> Publish
+                  </>
+                )}
               </Button>
               {/* Button Link */}
-              <Button variant="outline" size="sm">
-                <HugeiconsIcon icon={Link01Icon} />
-              </Button>
+              {optimisticPublished ? (
+                <Button
+                  nativeButton={false}
+                  variant="outline"
+                  size="sm"
+                  render={
+                    <Link
+                      href={`/docs/${props.documentData.collectionSlug}/${props.documentData.slug}`}
+                    />
+                  }
+                >
+                  <HugeiconsIcon icon={Link01Icon} />
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm" disabled>
+                  <HugeiconsIcon icon={Link01Icon} />
+                </Button>
+              )}
             </ButtonGroup>
             <ButtonGroup>
               {/* Button Text */}

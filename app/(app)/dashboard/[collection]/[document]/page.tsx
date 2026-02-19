@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { EditorPage } from "@/app/(app)/dashboard/[collection]/[document]/editor-page";
+import { EditorPage } from "@/components/editor/editor-page";
 import { getDocumentBySlug } from "@/lib/data/documents/get-document-slug";
 
 export default async function DocumentPage(

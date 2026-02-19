@@ -14,9 +14,9 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { $getRoot, EditorState, LexicalEditor } from "lexical";
 
-import { LexicalNodes } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-node";
-import { LexicalPlugins } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-plugins";
-import { LexicalTheme } from "@/app/(app)/dashboard/[collection]/[document]/lexical-editor/lexical-theme";
+import { LexicalNodes } from "@/components/editor/lexical-editor/lexical-node";
+import { LexicalPlugins } from "@/components/editor/lexical-editor/lexical-plugins";
+import { LexicalTheme } from "@/components/editor/lexical-editor/lexical-theme";
 
 interface LexicalEditorProps {
   markdownData: string;
