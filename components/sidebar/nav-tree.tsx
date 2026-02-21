@@ -1,14 +1,25 @@
+"use client";
+import { useState } from "react";
+
+import type { CollectionsProps } from "@/lib/data/collections/get-collections";
+
 import Link from "next/link";
 
-import { ArrowRight01Icon, Folder01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  ArrowRight01Icon,
+  Folder01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { CreateDocumentStep } from "@/components/files/create/create-document-step";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -20,19 +31,30 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useActive } from "@/hooks/use-active-path";
 
 export type TreeNode = {
   name: string;
   href?: string;
   color?: string;
+  slug?: string;
+  collectionId?: string;
   children?: TreeNode[];
 };
 
-export function NavTree(props: { item: TreeNode }) {
+export function NavTree(props: {
+  item: TreeNode;
+  collectionsData?: CollectionsProps[];
+}) {
+  const { isActive, isPartOf } = useActive();
+  const [manualOpen, setManualOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+
   // If the item has no children, render it as a simple menu button
   if (!props.item.children) {
     return (
       <SidebarMenuButton
+        isActive={props.item.href ? isActive(props.item.href) : false}
         render={props.item.href ? <Link href={props.item.href} /> : undefined}
         className="data-[active=true]:bg-transparent"
       >
@@ -43,9 +65,21 @@ export function NavTree(props: { item: TreeNode }) {
   }
 
   // If the item has children, render it as a collapsible menu item
+  // isPartOf is reactive (uses usePathname internally), so open auto-updates on navigation
+  const isCurrentPartOf = props.item.href ? isPartOf(props.item.href) : false;
+  const open = isCurrentPartOf || manualOpen;
+  const handleOpenChange = (next: boolean) => {
+    if (!next && isCurrentPartOf) return; // keep active parents open
+    setManualOpen(next);
+  };
+
   return (
     <SidebarMenuItem>
-      <Collapsible className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90">
+      <Collapsible
+        open={open}
+        onOpenChange={handleOpenChange}
+        className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90"
+      >
         <SidebarMenuButton
           render={props.item.href ? <Link href={props.item.href} /> : undefined}
         >
@@ -63,11 +97,34 @@ export function NavTree(props: { item: TreeNode }) {
           />
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <SidebarMenuSub>
-            {props.item.children.map((child, index) => (
-              <NavTree key={index} item={child} />
-            ))}
-          </SidebarMenuSub>
+          {props.item.children.length === 0 ? (
+            <SidebarMenuSub>
+              <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                <DialogTrigger
+                  render={
+                    <SidebarMenuButton className="text-muted-foreground" />
+                  }
+                >
+                  <HugeiconsIcon icon={Add01Icon} />
+                  <span>New document</span>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <CreateDocumentStep
+                    collectionsData={props.collectionsData ?? []}
+                    collectionId={props.item.collectionId}
+                    onBack={() => setCreateOpen(false)}
+                    onClose={() => setCreateOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </SidebarMenuSub>
+          ) : (
+            <SidebarMenuSub>
+              {props.item.children.map((child) => (
+                <NavTree key={child.href} item={child} />
+              ))}
+            </SidebarMenuSub>
+          )}
         </CollapsibleContent>
       </Collapsible>
     </SidebarMenuItem>

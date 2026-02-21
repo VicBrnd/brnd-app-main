@@ -86,6 +86,7 @@ async function NavTreeAsync() {
                 name: collection.title,
                 href: `/dashboard/${collection.slug}`,
                 color: collection.color,
+                slug: collection.slug,
                 children: documents
                   .filter((document) => document.collectionId === collection.id)
                   .map((document) => ({
