@@ -3,6 +3,7 @@
 import { updateTag } from "next/cache";
 
 import { and, eq, ne } from "drizzle-orm";
+import { returnValidationErrors } from "next-safe-action";
 
 import { db } from "@/lib/db";
 import { collection } from "@/lib/db/schema";
@@ -29,18 +30,21 @@ export const editCollection = authActionClient
         .then(takeFirstOrNull);
 
       if (duplicateCollectionSlug) {
-        return { error: "A collection with this slug already exists." };
+        returnValidationErrors(EditCollectionFormSchema, {
+          slug: {
+            _errors: ["A collection with this slug already exists"],
+          },
+        });
       }
     }
 
-    const updateData: Record<string, string> = {};
-    if (parsedInput.title) updateData.title = parsedInput.title;
-    if (parsedInput.slug) updateData.slug = parsedInput.slug;
-    if (parsedInput.color) updateData.color = parsedInput.color;
-
     await db
       .update(collection)
-      .set(updateData)
+      .set({
+        title: parsedInput.title,
+        slug: parsedInput.slug,
+        color: parsedInput.color,
+      })
       .where(
         and(
           eq(collection.id, parsedInput.id),

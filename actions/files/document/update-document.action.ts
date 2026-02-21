@@ -3,12 +3,13 @@
 import { updateTag } from "next/cache";
 
 import { and, eq } from "drizzle-orm";
+import { returnValidationErrors } from "next-safe-action";
 
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull } from "@/lib/db/utils";
 import { compileMDX, MDXStorage } from "@/lib/mdx/mdx";
-import { authActionClient } from "@/lib/safe-action";
+import { ActionError, authActionClient } from "@/lib/safe-action";
 import { UpdateDocumentFormSchema } from "@/schemas/files/document/update-document.schema";
 
 export const updateDocument = authActionClient
@@ -28,7 +29,7 @@ export const updateDocument = authActionClient
       .then(takeFirstOrNull);
 
     if (!parsedCollection) {
-      return { error: "Collection not found or access denied." };
+      throw new ActionError("Collection not found or access denied.");
     }
 
     if (parsedInput.slug) {
@@ -45,9 +46,13 @@ export const updateDocument = authActionClient
         .then(takeFirstOrNull);
 
       if (duplicateDocumentSlug) {
-        return {
-          error: "A document with this slug already exists in this collection.",
-        };
+        returnValidationErrors(UpdateDocumentFormSchema, {
+          slug: {
+            _errors: [
+              "A document with this slug already exists in this collection",
+            ],
+          },
+        });
       }
     }
 

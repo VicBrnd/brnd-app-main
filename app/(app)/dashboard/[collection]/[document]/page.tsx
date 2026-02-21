@@ -8,11 +8,11 @@ export default async function DocumentPage(
 ) {
   const { collection, document } = await props.params;
 
-  const documentData = await getDocumentBySlug(collection, document);
+  const documentBySlugData = await getDocumentBySlug(collection, document);
 
-  if (!documentData) {
+  if (!documentBySlugData) {
     return notFound();
   }
 
-  return <EditorPage documentData={documentData} />;
+  return <EditorPage documentBySlugData={documentBySlugData} />;
 }

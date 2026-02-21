@@ -27,12 +27,14 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
+import { capitalize, slugify } from "@/lib/utils";
 import { EditCollectionFormSchema } from "@/schemas/files/collection/edit-collection.schema";
 
 interface CollectionEditDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (open: boolean) => void;
-  collection: CollectionsProps;
+  collectionData: CollectionsProps;
 }
 
 export function CollectionEditDialog(props: CollectionEditDialogProps) {
@@ -41,54 +43,29 @@ export function CollectionEditDialog(props: CollectionEditDialogProps) {
   const form = useForm<z.infer<typeof EditCollectionFormSchema>>({
     resolver: zodResolver(EditCollectionFormSchema),
     defaultValues: {
-      id: props.collection.id,
-      title: props.collection.title,
-      slug: props.collection.slug,
-      color: props.collection.color,
+      id: props.collectionData.id,
+      title: props.collectionData.title,
+      slug: props.collectionData.slug,
+      color: props.collectionData.color,
     },
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue("title", value);
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
-  };
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
+    form.setValue("title", e.target.value);
+    form.setValue("slug", slugify(e.target.value));
   };
 
   function onSubmit(data: z.infer<typeof EditCollectionFormSchema>) {
-    startTransition(() => {
-      goeyToast.promise(
-        (async () => {
-          const result = await editCollection(data);
-          if (result?.data?.error) throw new Error(result.data.error);
-          return result.data;
-        })(),
-        {
-          loading: "Updating collection...",
-          success: () => {
-            props.setDialogOpen(false);
-            return "Collection updated successfully";
-          },
-          error: (err) =>
-            err instanceof Error ? err.message : "Updating collection failed",
+    startTransition(async () => {
+      goeyToast.promise(resolveActionResult(editCollection(data)), {
+        loading: "Updating collection...",
+        success: () => {
+          props.setDialogOpen(false);
+          return "Collection updated successfully";
         },
-      );
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to update collection",
+      });
     });
   }
 
@@ -117,6 +94,7 @@ export function CollectionEditDialog(props: CollectionEditDialogProps) {
                   </FieldLabel>
                   <Input
                     {...field}
+                    value={capitalize(field.value ?? "")}
                     id="form-edit-collection-title"
                     aria-invalid={fieldState.invalid}
                     placeholder="Collection Title"
@@ -135,7 +113,7 @@ export function CollectionEditDialog(props: CollectionEditDialogProps) {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-edit-collection-slug">
-                    Slug <span className="text-destructive -ml-1.5">*</span>
+                    Slug
                   </FieldLabel>
                   <Input
                     {...field}
@@ -143,7 +121,7 @@ export function CollectionEditDialog(props: CollectionEditDialogProps) {
                     aria-invalid={fieldState.invalid}
                     placeholder="collection-slug"
                     autoComplete="off"
-                    onChange={handleSlugChange}
+                    disabled
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -160,7 +138,7 @@ export function CollectionEditDialog(props: CollectionEditDialogProps) {
                     Color <span className="text-destructive -ml-1.5">*</span>
                   </FieldLabel>
                   <ColorPicker
-                    color={props.collection.color}
+                    color={props.collectionData.color}
                     onChange={(newColor) => {
                       form.setValue("color", newColor);
                     }}

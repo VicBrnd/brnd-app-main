@@ -34,6 +34,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
+import { slugify } from "@/lib/utils";
 import { CreateDocumentFormSchema } from "@/schemas/files/document/create-document.schema";
 
 interface CreateDocumentStepProps {
@@ -58,63 +60,27 @@ export function CreateDocumentStep(props: CreateDocumentStepProps) {
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue("title", value);
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
-  };
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
+    form.setValue("title", e.target.value);
+    form.setValue("slug", slugify(e.target.value));
   };
 
   function onSubmit(data: z.infer<typeof CreateDocumentFormSchema>) {
-    startTransition(() => {
-      goeyToast.promise(
-        (async () => {
-          const result = await createDocument(data);
-
-          if (result?.serverError) {
-            throw new Error(result.serverError);
-          }
-
-          if (result?.data?.error) {
-            throw new Error(result.data.error);
-          }
-
-          if (!result?.data?.success) {
-            throw new Error("Erreur inconnue");
-          }
-
-          return result.data;
-        })(),
-        {
-          loading: "Creating document...",
-          success: (result) => {
-            props.onClose();
-            router.push(
-              `/dashboard/${result.collection.slug}/${result.document.slug}`,
-            );
-            return "Document created successfully";
-          },
-          error: (err) =>
-            err instanceof Error ? err.message : "An error occurred",
+    startTransition(async () => {
+      goeyToast.promise(resolveActionResult(createDocument(data)), {
+        loading: "Creating document...",
+        success: (result) => {
+          props.onClose();
+          router.push(
+            `/dashboard/${result.collection.slug}/${result.document.slug}`,
+          );
+          return "Document created successfully";
         },
-      );
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to create document",
+      });
     });
   }
+
   return (
     <>
       <DialogHeader>
@@ -165,7 +131,7 @@ export function CreateDocumentStep(props: CreateDocumentStepProps) {
                   aria-invalid={fieldState.invalid}
                   placeholder="document-slug"
                   autoComplete="off"
-                  onChange={handleSlugChange}
+                  disabled
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />

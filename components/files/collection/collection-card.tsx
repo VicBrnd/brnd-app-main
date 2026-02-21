@@ -44,7 +44,7 @@ export function CollectionCard(props: CollectionCardProps) {
         {optimisticCollections.map((collection) => (
           <CollectionContextMenu
             key={collection.id}
-            collection={collection}
+            collectionData={collection}
             removeOptimistic={removeOptimistic}
           >
             <div className="flex flex-col rounded-xl border bg-background dark:bg-sidebar/50 p-2 gap-2 cursor-default">

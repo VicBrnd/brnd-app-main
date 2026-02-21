@@ -17,7 +17,9 @@ export const addAvatar = authActionClient
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     for (const file of parsedInput) {
       if (!allowedTypes.includes(file.type)) {
-        throw new Error("Invalid file type. Only JPEG, PNG, and WebP are allowed.");
+        throw new Error(
+          "Invalid file type. Only JPEG, PNG, and WebP are allowed.",
+        );
       }
     }
 

@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
+import { slugify } from "@/lib/utils";
 import { CreateCollectionFormSchema } from "@/schemas/files/collection/create-collection.schema";
 
 interface CreateCollectionStepProps {
@@ -45,55 +47,22 @@ export function CreateCollectionStep(props: CreateCollectionStepProps) {
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue("title", value);
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
-  };
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue(
-      "slug",
-      value
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\da-z-]/g, ""),
-    );
+    form.setValue("title", e.target.value);
+    form.setValue("slug", slugify(e.target.value));
   };
 
   function onSubmit(data: z.infer<typeof CreateCollectionFormSchema>) {
-    startTransition(() => {
-      goeyToast.promise(
-        (async () => {
-          const result = await createCollection(data);
-          if (result?.serverError) {
-            throw new Error(result.serverError);
-          }
-          if (result?.data?.error) {
-            throw new Error(result.data.error);
-          }
-          if (!result?.data?.success) {
-            throw new Error("Erreur inconnue");
-          }
-          return result.data;
-        })(),
-        {
-          loading: "Creating collection...",
-          success: (result) => {
-            props.onClose();
-            router.push(`/dashboard/${result.collection.slug}`);
-            return "Collection created successfully";
-          },
-          error: (err) =>
-            err instanceof Error ? err.message : "Creating collection failed",
+    startTransition(async () => {
+      goeyToast.promise(resolveActionResult(createCollection(data)), {
+        loading: "Creating collection...",
+        success: (result) => {
+          props.onClose();
+          router.push(`/dashboard/${result.collection.slug}`);
+          return "Collection created successfully";
         },
-      );
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to create collection",
+      });
     });
   }
 
@@ -147,7 +116,7 @@ export function CreateCollectionStep(props: CreateCollectionStepProps) {
                   aria-invalid={fieldState.invalid}
                   placeholder="collection-slug"
                   autoComplete="off"
-                  onChange={handleSlugChange}
+                  disabled
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />

@@ -4,12 +4,12 @@ export const UpdateDocumentFormSchema = z.object({
   id: z.string().min(1),
   title: z
     .string()
-    .min(1, "Title must be at least 1 characters.")
+    .min(3, "Title must be at least 3 characters.")
     .max(32, "Title must be at most 32 characters.")
     .optional(),
   slug: z
     .string()
-    .min(1, "Slug must be at least 1 characters.")
+    .min(3, "Slug must be at least 3 characters.")
     .max(255, "Slug must be at most 255 characters.")
     .regex(
       /^[\da-z-]+$/,

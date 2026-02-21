@@ -12,14 +12,17 @@ import { DocumentHeader } from "@/components/files/document/document-header";
 import { AppPageLayout } from "@/components/layout/app-page-layout";
 import { Card } from "@/components/ui/card";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
 
 interface EditorProps {
-  documentData: DocumentBySlugProps;
+  documentBySlugData: DocumentBySlugProps;
 }
 
 export function EditorPage(props: EditorProps) {
   const editorRef = useRef<LexicalEditorSource | null>(null);
-  const [markdownData, setMarkdownData] = useState(props.documentData.content);
+  const [markdownData, setMarkdownData] = useState(
+    props.documentBySlugData.content,
+  );
   const [currentEditor, setCurrentEditor] = useState<
     "markdown-editor" | "lexical-editor"
   >("lexical-editor");
@@ -30,28 +33,32 @@ export function EditorPage(props: EditorProps) {
     return markdownData;
   }, [markdownData]);
 
-  const handleSave = () => {
+  const handleSaveDocument = () => {
     const contentToSave = getCurrentMarkdown();
     startTransition(async () => {
-      const res = await updateDocument({
-        id: props.documentData.id,
-        collection: props.documentData.collectionId,
-        content: contentToSave,
-      });
-      if (res?.data?.error) {
-        goeyToast.error(res.data.error);
-      }
-      if (res?.data?.success) {
-        goeyToast.success("Successfully Updated");
-      }
+      goeyToast.promise(
+        resolveActionResult(
+          updateDocument({
+            id: props.documentBySlugData.id,
+            collection: props.documentBySlugData.collectionId,
+            content: contentToSave,
+          }),
+        ),
+        {
+          loading: "Saving document...",
+          success: "Document saved successfully",
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to save document",
+        },
+      );
     });
   };
 
   return (
     <>
       <DocumentHeader
-        onSave={handleSave}
-        documentData={props.documentData}
+        onSave={handleSaveDocument}
+        documentData={props.documentBySlugData}
         setEditor={setCurrentEditor}
       />
       <AppPageLayout title="Editor" description="Editor Document">

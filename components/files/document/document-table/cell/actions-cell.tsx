@@ -1,9 +1,12 @@
 "use client";
 
+import { useTransition } from "react";
+
 import Link from "next/link";
 
 import { MoreHorizontalIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { goeyToast } from "goey-toast";
 
 import { moveDocumentAction } from "@/actions/files/document/move-document.action";
 import { Button } from "@/components/ui/button";
@@ -22,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
 
 interface ActionsCellProps {
   collectionsData: CollectionsProps[];
@@ -31,14 +35,29 @@ interface ActionsCellProps {
 }
 
 export function ActionsCell(props: ActionsCellProps) {
+  const [isLoading, startTransition] = useTransition();
+
   const availableCollections = props.collectionsData.filter(
     (collection) => collection.id !== props.documentData.collectionId,
   );
 
-  const handleMoveDocument = async (collectionId: string) => {
-    await moveDocumentAction({
-      documentId: props.documentData.id,
-      collectionId,
+  const handleMoveDocument = (collectionId: string) => {
+    startTransition(async () => {
+      goeyToast.promise(
+        resolveActionResult(
+          moveDocumentAction({
+            documentId: props.documentData.id,
+            collectionId,
+          }),
+        ),
+        {
+          loading: "Moving...",
+          success: (result) =>
+            `Document moved to ${result.collectionTitle} successfully`,
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to move document",
+        },
+      );
     });
   };
 
@@ -64,8 +83,9 @@ export function ActionsCell(props: ActionsCellProps) {
             </DropdownMenuItem>
             <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuSub>
-              {/* <DropdownMenuSubTrigger disabled={isMoving}> */}
-              <DropdownMenuSubTrigger>Move to</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger disabled={isLoading}>
+                Move to
+              </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuGroup>
@@ -74,7 +94,7 @@ export function ActionsCell(props: ActionsCellProps) {
                     {availableCollections.map((collection) => (
                       <DropdownMenuItem
                         key={collection.id}
-                        // disabled={isMoving}
+                        disabled={isLoading}
                         onClick={() => handleMoveDocument(collection.id)}
                       >
                         {collection.title}
@@ -89,8 +109,7 @@ export function ActionsCell(props: ActionsCellProps) {
           <DropdownMenuItem
             variant="destructive"
             onClick={() => props.onDelete(props.documentData.id)}
-            disabled={props.isDeleting}
-            // disabled={isDeleting || isMoving}
+            disabled={props.isDeleting || isLoading}
           >
             Delete
           </DropdownMenuItem>

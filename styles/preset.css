@@ -264,7 +264,7 @@
   margin-inline: auto;
   padding-inline: 1rem;
 
-  @apply 2xl:max-w-[1400px];
+  @apply 2xl:max-w-fd-container;
 }
 
 @variant dark (&:where(.dark, .dark *));

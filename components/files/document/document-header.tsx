@@ -1,8 +1,9 @@
 "use client";
 
-import { useOptimistic, useState, useTransition } from "react";
+import { useOptimistic, useRef, useState, useTransition } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft02Icon,
@@ -17,6 +18,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { goeyToast } from "goey-toast";
 
+import { deleteDocument } from "@/actions/files/document/delete-document.action";
 import { updateDocument } from "@/actions/files/document/update-document.action";
 import { updateStatusDocument } from "@/actions/files/document/update-status-document.action";
 import { MdxIcon } from "@/components/icons/mdx-icons";
@@ -37,54 +39,105 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
+import { capitalize, slugify } from "@/lib/utils";
 
 interface DocumentHeaderProps {
   onSave: () => void;
-  documentData: DocumentBySlugProps;
   setEditor: (type: "lexical-editor" | "markdown-editor") => void;
+  documentData: DocumentBySlugProps;
 }
 
 export function DocumentHeader(props: DocumentHeaderProps) {
-  const [_isPending, startStatusTransition] = useTransition();
-  const [, startSaveTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const [isEditing, startEditing] = useState(false);
+  const [editValues, setEditValues] = useState({
+    title: props.documentData.title,
+    slug: props.documentData.slug,
+  });
+  const [optimisticValues, setOptimistic] = useOptimistic({
+    title: props.documentData.title,
+    isPublished: props.documentData.isPublished,
+  });
+  const isCancel = useRef(false);
+  const router = useRouter();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(props.documentData.title);
-
-  const [optimisticTitle, setOptimisticTitle] = useOptimistic(
-    props.documentData.title,
-  );
-  const [optimisticPublished, setOptimisticPublished] = useOptimistic(
-    props.documentData.isPublished,
-  );
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEditValues({ title: value, slug: slugify(value) });
+  };
 
   const handleSaveTitle = () => {
-    if (editValue === props.documentData.title) return;
-    startSaveTransition(async () => {
-      setOptimisticTitle(editValue);
-      const res = await updateDocument({
-        id: props.documentData.id,
-        collection: props.documentData.collectionId,
-        title: editValue,
-      });
-      if (res?.data?.error) {
-        goeyToast.error(res.data.error);
-        setEditValue(props.documentData.title);
-      }
+    if (
+      isPending ||
+      isCancel.current ||
+      editValues.title === props.documentData.title
+    )
+      return;
+    startTransition(async () => {
+      setOptimistic((prev) => ({ ...prev, title: editValues.title }));
+      goeyToast.promise(
+        resolveActionResult(
+          updateDocument({
+            id: props.documentData.id,
+            collection: props.documentData.collectionId,
+            title: editValues.title,
+            slug: editValues.slug,
+          }),
+        ).then((res) => {
+          router.replace(
+            `/dashboard/${props.documentData.collectionSlug}/${editValues.slug}`,
+          );
+          return res;
+        }),
+        {
+          loading: "Saving...",
+          success: "Title saved",
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to save title",
+        },
+      );
     });
   };
 
   const handleToggleStatus = () => {
-    startStatusTransition(async () => {
-      setOptimisticPublished(!optimisticPublished);
-      await updateStatusDocument({ id: props.documentData.id });
+    startTransition(async () => {
+      setOptimistic((prev) => ({ ...prev, isPublished: !prev.isPublished }));
+      goeyToast.promise(
+        resolveActionResult(
+          updateStatusDocument({ id: props.documentData.id }),
+        ),
+        {
+          loading: optimisticValues.isPublished
+            ? "Unpublishing..."
+            : "Publishing...",
+          success: optimisticValues.isPublished
+            ? "Document unpublished"
+            : "Document published",
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to update status",
+        },
+      );
+    });
+  };
+
+  const handleDeleteDocument = (id: string) => {
+    startTransition(async () => {
+      goeyToast.promise(resolveActionResult(deleteDocument({ ids: [id] })), {
+        loading: "Deleting...",
+        success: () => {
+          router.push(`/dashboard/${props.documentData.collectionSlug}`);
+          return "Document deleted successfully";
+        },
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to delete document",
+      });
     });
   };
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        {/* Back button */}
         <Button
           nativeButton={false}
           variant="ghost"
@@ -97,41 +150,42 @@ export function DocumentHeader(props: DocumentHeaderProps) {
           <HugeiconsIcon icon={ArrowLeft02Icon} />
           <span className="sr-only">Back</span>
         </Button>
-
-        {/* Separator */}
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-
-        {/* Title */}
         <HugeiconsIcon
           icon={File01Icon}
           size={14}
           className="shrink-0"
           style={{ color: props.documentData.collectionColor }}
         />
-        {/* Inline title editing */}
         {isEditing ? (
           <input
             className="text-sm font-semibold border-none outline-none px-0 py-0 bg-transparent"
             autoFocus
-            value={editValue.charAt(0).toUpperCase() + editValue.slice(1)}
-            onChange={(e) => setEditValue(e.target.value)}
+            value={capitalize(editValues.title)}
+            onChange={handleTitleChange}
             onBlur={() => {
-              setIsEditing(false);
+              startEditing(false);
               handleSaveTitle();
+              isCancel.current = false;
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setIsEditing(false);
+                startEditing(false);
                 handleSaveTitle();
               }
               if (e.key === "Escape") {
-                setEditValue(props.documentData.title);
-                setIsEditing(false);
+                isCancel.current = true;
+                setEditValues({
+                  title: props.documentData.title,
+                  slug: props.documentData.slug,
+                });
+                startEditing(false);
               }
             }}
+            disabled={isPending}
           />
         ) : (
           <Tooltip>
@@ -140,14 +194,16 @@ export function DocumentHeader(props: DocumentHeaderProps) {
                 <h1
                   className="text-sm font-semibold"
                   onClick={() => {
-                    setEditValue(optimisticTitle);
-                    setIsEditing(true);
+                    setEditValues((prev) => ({
+                      ...prev,
+                      title: optimisticValues.title,
+                    }));
+                    startEditing(true);
                   }}
                 />
               }
             >
-              {optimisticTitle.charAt(0).toUpperCase() +
-                optimisticTitle.slice(1)}
+              {capitalize(optimisticValues.title)}
             </TooltipTrigger>
             <TooltipContent side="bottom">
               Click to edit the title
@@ -156,16 +212,24 @@ export function DocumentHeader(props: DocumentHeaderProps) {
         )}
 
         <div className="ml-auto flex items-center gap-2">
-          {/* Button Save */}
-          <Button variant="outline" size="sm" onClick={props.onSave}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={props.onSave}
+            disabled={isPending}
+          >
             <HugeiconsIcon icon={FloppyDiskIcon} />
             Save
           </Button>
           <div className="hidden items-center gap-2 md:flex">
             <ButtonGroup>
-              {/* Button Publish */}
-              <Button variant="outline" size="sm" onClick={handleToggleStatus}>
-                {optimisticPublished ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleToggleStatus}
+                disabled={isPending}
+              >
+                {optimisticValues.isPublished ? (
                   <>
                     <HugeiconsIcon icon={ViewIcon} /> Unpublish
                   </>
@@ -175,8 +239,7 @@ export function DocumentHeader(props: DocumentHeaderProps) {
                   </>
                 )}
               </Button>
-              {/* Button Link */}
-              {optimisticPublished ? (
+              {optimisticValues.isPublished ? (
                 <Button
                   nativeButton={false}
                   variant="outline"
@@ -196,32 +259,35 @@ export function DocumentHeader(props: DocumentHeaderProps) {
               )}
             </ButtonGroup>
             <ButtonGroup>
-              {/* Button Text */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => props.setEditor("lexical-editor")}
+                disabled={isPending}
               >
                 <HugeiconsIcon icon={TextCreationIcon} />
               </Button>
-              {/* Button Mdx */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => props.setEditor("markdown-editor")}
+                disabled={isPending}
               >
                 <MdxIcon />
               </Button>
             </ButtonGroup>
-            {/* Button Delete */}
-            <Button variant="outline-destructive" size="sm">
+            <Button
+              variant="outline-destructive"
+              size="sm"
+              onClick={() => handleDeleteDocument(props.documentData.id)}
+              disabled={isPending}
+            >
               <HugeiconsIcon icon={Delete01Icon} />
               <span className="flex items-center gap-1 sr-only md:not-sr-only">
                 Delete
               </span>
             </Button>
           </div>
-          {/* Mobile: Overflow menu */}
           <DropdownMenu>
             <DropdownMenuTrigger
               render={

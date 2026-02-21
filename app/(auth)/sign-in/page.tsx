@@ -8,7 +8,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FingerAccessIcon, Mail01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { goeyToast } from "goey-toast";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { AuthCard } from "@/components/auth/auth-card";
@@ -56,12 +56,12 @@ export default function Page() {
         email: data.email,
         fetchOptions: {
           onSuccess: () => {
-            goeyToast.success("Check your inbox", {
+            toast.success("Check your inbox", {
               description: `A sign-in link has been sent to ${data.email}`,
             });
           },
           onError: (error) => {
-            goeyToast.error(error.error.message);
+            toast.error(error.error.message);
           },
         },
       });

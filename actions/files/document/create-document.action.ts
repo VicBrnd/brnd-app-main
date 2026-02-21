@@ -3,12 +3,13 @@
 import { updateTag } from "next/cache";
 
 import { and, eq } from "drizzle-orm";
+import { returnValidationErrors } from "next-safe-action";
 
 import { getDocumentCount } from "@/lib/data/documents/get-document-count";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull, takeFirstOrThrow } from "@/lib/db/utils";
-import { authActionClient } from "@/lib/safe-action";
+import { ActionError, authActionClient } from "@/lib/safe-action";
 import { CreateDocumentFormSchema } from "@/schemas/files/document/create-document.schema";
 
 export const createDocument = authActionClient
@@ -28,7 +29,7 @@ export const createDocument = authActionClient
       .then(takeFirstOrNull);
 
     if (!parsedCollection) {
-      return { error: "Collection not found or access denied." };
+      throw new ActionError("Collection not found or access denied");
     }
 
     const duplicateDocumentSlug = await db
@@ -44,9 +45,13 @@ export const createDocument = authActionClient
       .then(takeFirstOrNull);
 
     if (duplicateDocumentSlug) {
-      return {
-        error: "A document with this slug already exists in this collection.",
-      };
+      returnValidationErrors(CreateDocumentFormSchema, {
+        slug: {
+          _errors: [
+            "A document with this slug already exists in this collection",
+          ],
+        },
+      });
     }
 
     const documentCount = await getDocumentCount(parsedCollection.id);

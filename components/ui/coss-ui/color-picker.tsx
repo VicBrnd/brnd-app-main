@@ -11,7 +11,7 @@ const COLORS = [
   { value: "#10B981", label: "Emerald" },
 ] as const;
 
-type CollectionColor = (typeof COLORS)[number]["value"];
+export type CollectionColor = (typeof COLORS)[number]["value"];
 
 interface ColorPickerProps {
   color?: string;

@@ -5,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "better-auth";
-import { goeyToast } from "goey-toast";
+import { toast } from "sonner";
 
 import { updateUser } from "@/actions/account/update-user.action";
 import { Input } from "@/components/ui/brnd-ui/input";
@@ -45,12 +45,12 @@ export function NameCard(props: NameCardProps) {
 
   const onSubmit: SubmitHandler<UpdateUserSchema> = (values) => {
     if (values.name === user?.name) {
-      goeyToast.info("No changes detected");
+      toast.info("No changes detected");
       return;
     }
     startTransition(async () => {
-      goeyToast.promise(updateUser({ name: values.name }), {
-        loading: "Saving your changes...",
+      toast.promise(updateUser({ name: values.name }), {
+        loading: "Saving changes...",
         success: () => {
           methods.reset(values);
           refetch();
@@ -58,7 +58,7 @@ export function NameCard(props: NameCardProps) {
         },
         error: (error) => {
           console.error("Save error:", error);
-          return "Unable to save your changes. Please try again";
+          return "Failed to save changes";
         },
       });
     });

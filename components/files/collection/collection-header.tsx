@@ -34,60 +34,79 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Collection } from "@/lib/db/types";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
 
 interface CollectionHeaderProps {
   collectionData: Collection;
 }
 
 export function CollectionHeader(props: CollectionHeaderProps) {
-  const router = useRouter();
-
-  const [isDeleting, startDeleteTransition] = useTransition();
-  const [, startSaveTransition] = useTransition();
-
+  const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(props.collectionData.title);
-
   const [optimisticTitle, setOptimisticTitle] = useOptimistic(
     props.collectionData.title,
   );
   const [optimisticColor, setOptimisticColor] = useOptimistic(
     props.collectionData.color,
   );
-
-  const handleDeleteCollection = (collectionId: string) => {
-    startDeleteTransition(async () => {
-      const res = await deleteCollection({ ids: [collectionId] });
-      if (res?.data?.error) goeyToast.error(res.data.error);
-      if (res?.data?.success)
-        goeyToast.success("Collection deleted successfully");
-      router.push("/dashboard");
-    });
-  };
+  const router = useRouter();
 
   const handleSaveTitle = () => {
     if (editValue === props.collectionData.title) return;
-    startSaveTransition(async () => {
+    startTransition(async () => {
       setOptimisticTitle(editValue);
-      const res = await editCollection({
-        id: props.collectionData.id,
-        title: editValue,
-      });
-      if (res?.data?.error) {
-        goeyToast.error(res.data.error);
-        setEditValue(props.collectionData.title);
-      }
+      goeyToast.promise(
+        resolveActionResult(
+          editCollection({
+            id: props.collectionData.id,
+            title: editValue,
+          }),
+        ),
+        {
+          loading: "Saving...",
+          success: "Changes saved",
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to save title",
+        },
+      );
     });
   };
 
   const handleSaveColor = (newColor: string) => {
-    startSaveTransition(async () => {
+    startTransition(async () => {
       setOptimisticColor(newColor);
-      const res = await editCollection({
-        id: props.collectionData.id,
-        color: newColor,
-      });
-      if (res?.data?.error) goeyToast.error(res.data.error);
+      goeyToast.promise(
+        resolveActionResult(
+          editCollection({
+            id: props.collectionData.id,
+            color: newColor,
+          }),
+        ),
+        {
+          loading: "Saving...",
+          success: "Changes saved",
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to save color",
+        },
+      );
+    });
+  };
+
+  const handleDeleteCollection = (collectionId: string) => {
+    startTransition(async () => {
+      goeyToast.promise(
+        resolveActionResult(deleteCollection({ ids: [collectionId] })),
+        {
+          loading: "Deleting...",
+          success: () => {
+            router.push("/dashboard");
+            return "Collection deleted successfully";
+          },
+          error: (err: unknown) =>
+            err instanceof Error ? err.message : "Failed to delete collection",
+        },
+      );
     });
   };
 
@@ -194,7 +213,7 @@ export function CollectionHeader(props: CollectionHeaderProps) {
             size="sm"
             onClick={() => handleDeleteCollection(props.collectionData.id)}
           >
-            {isDeleting ? <Spinner /> : <HugeiconsIcon icon={Delete01Icon} />}
+            {isPending ? <Spinner /> : <HugeiconsIcon icon={Delete01Icon} />}
             <span className="flex items-center gap-1 sr-only md:not-sr-only">
               Delete
             </span>

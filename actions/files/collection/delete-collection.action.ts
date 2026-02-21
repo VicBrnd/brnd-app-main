@@ -8,7 +8,7 @@ import { z } from "zod/v4";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull } from "@/lib/db/utils";
-import { authActionClient } from "@/lib/safe-action";
+import { ActionError, authActionClient } from "@/lib/safe-action";
 
 export const deleteCollection = authActionClient
   .metadata({ actionName: "deleteCollection" })
@@ -32,9 +32,7 @@ export const deleteCollection = authActionClient
       .then(takeFirstOrNull);
 
     if (emptyCollection) {
-      return {
-        error: "Collection is not empty.",
-      };
+      throw new ActionError("Collection is not empty");
     }
 
     await db

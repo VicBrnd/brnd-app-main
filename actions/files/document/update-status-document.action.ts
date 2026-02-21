@@ -8,7 +8,7 @@ import { z } from "zod/v4";
 import { db } from "@/lib/db";
 import { collection, document } from "@/lib/db/schema";
 import { takeFirstOrNull } from "@/lib/db/utils";
-import { authActionClient } from "@/lib/safe-action";
+import { ActionError, authActionClient } from "@/lib/safe-action";
 
 export const updateStatusDocument = authActionClient
   .metadata({ actionName: "updateStatusDocument" })
@@ -32,7 +32,7 @@ export const updateStatusDocument = authActionClient
       .then(takeFirstOrNull);
 
     if (!toggledStatus) {
-      return { error: "Unable to update document status." };
+      throw new ActionError("Unable to update document status");
     }
 
     updateTag("files");

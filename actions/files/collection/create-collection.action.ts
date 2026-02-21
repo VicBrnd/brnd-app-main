@@ -3,6 +3,7 @@
 import { updateTag } from "next/cache";
 
 import { and, eq } from "drizzle-orm";
+import { returnValidationErrors } from "next-safe-action";
 
 import { db } from "@/lib/db";
 import { collection } from "@/lib/db/schema";
@@ -27,7 +28,11 @@ export const createCollection = authActionClient
       .then(takeFirstOrNull);
 
     if (duplicateCollectionSlug) {
-      return { error: "A collection with this slug already exists." };
+      returnValidationErrors(CreateCollectionFormSchema, {
+        slug: {
+          _errors: ["A collection with this slug already exists"],
+        },
+      });
     }
 
     const newCollection = await db

@@ -2,12 +2,15 @@
 
 import { useOptimistic, useTransition } from "react";
 
+import { goeyToast } from "goey-toast";
+
 import { deleteDocument } from "@/actions/files/document/delete-document.action";
 import { DocumentTableColumns } from "@/components/files/document/document-table/document-table-columns";
 import { DocumentTableData } from "@/components/files/document/document-table/document-table-data";
 import { DataTableSkeleton } from "@/components/ui/dice-ui/data-table-skeleton";
 import { CollectionsProps } from "@/lib/data/collections/get-collections";
 import { DocumentsProps } from "@/lib/data/documents/get-documents";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
 
 interface DocumentTableProps {
   collectionsData: CollectionsProps[];
@@ -24,7 +27,12 @@ export function DocumentTable(props: DocumentTableProps) {
   const handleDeleteDocument = (id: string) => {
     startTransition(async () => {
       removeOptimistic(id);
-      await deleteDocument({ ids: [id] });
+      goeyToast.promise(resolveActionResult(deleteDocument({ ids: [id] })), {
+        loading: "Deleting...",
+        success: "Document deleted successfully",
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to delete document",
+      });
     });
   };
 

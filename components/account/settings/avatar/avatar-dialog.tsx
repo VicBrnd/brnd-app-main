@@ -13,7 +13,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { User } from "better-auth";
-import { goeyToast } from "goey-toast";
+import { toast } from "sonner";
 
 import { addAvatar } from "@/actions/account/add-avatar.action";
 import { deleteAvatar } from "@/actions/account/delete-avatar.action";
@@ -83,7 +83,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
 
   const handleUpload = () => {
     if (files.length === 0) {
-      goeyToast.error("Please select an image to continue");
+      toast.error("Please select an image to continue");
       return;
     }
     setCropModalOpen(true);
@@ -92,7 +92,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
 
   const handleUploadSave = async () => {
     if (!files[0]?.file || !cropArea) {
-      goeyToast.error("Please select an image to continue");
+      toast.error("Please select an image to continue");
       return;
     }
 
@@ -105,8 +105,8 @@ export function AvatarDialog(props: AvatarDialogProps) {
       });
 
       startTransition(() => {
-        goeyToast.promise(addAvatar([croppedFile]), {
-          loading: "Uploading your image...",
+        toast.promise(addAvatar([croppedFile]), {
+          loading: "Uploading image...",
           success: () => {
             removeFile(files[0].id);
             setSelected([]);
@@ -114,21 +114,21 @@ export function AvatarDialog(props: AvatarDialogProps) {
             setCropModalOpen(false);
             refetch();
 
-            return "Uploaded successfully";
+            return "Image uploaded successfully";
           },
           error: (err) =>
-            err instanceof Error ? err.message : "Upload failed",
+            err instanceof Error ? err.message : "Failed to upload image",
         });
       });
     } catch (error) {
-      goeyToast.error("Failed to process image");
+      toast.error("Failed to process image");
       console.error("Upload error:", error);
     }
   };
 
   const handleEdit = async () => {
     if (selected.length !== 1) {
-      goeyToast.error("Please select exactly one image");
+      toast.error("Please select exactly one image");
       return;
     }
 
@@ -139,7 +139,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
       addFiles([file]);
     };
 
-    goeyToast.promise(editSelectedImage(), {
+    toast.promise(editSelectedImage(), {
       loading: "Preparing image for editing...",
       success: () => {
         setCropModalOpen(true);
@@ -147,13 +147,13 @@ export function AvatarDialog(props: AvatarDialogProps) {
 
         return "Image ready for editing";
       },
-      error: "Unable to prepare image for editing",
+      error: "Failed to prepare image for editing",
     });
   };
 
   const handleDelete = async () => {
     if (selected.length === 0) {
-      goeyToast.error("Please select an image to continue");
+      toast.error("Please select an image to continue");
       return;
     }
 
@@ -161,38 +161,35 @@ export function AvatarDialog(props: AvatarDialogProps) {
     const imageText = imageCount === 1 ? "image" : "images";
 
     startTransition(async () => {
-      goeyToast.promise(
-        deleteAvatar({ keys: selected.map((item) => item.key) }),
-        {
-          loading: `Deleting ${imageCount} ${imageText}...`,
-          success: () => {
-            setSelected([]);
-            refetch();
+      toast.promise(deleteAvatar({ keys: selected.map((item) => item.key) }), {
+        loading: `Deleting ${imageCount} ${imageText}...`,
+        success: () => {
+          setSelected([]);
+          refetch();
 
-            return `Successfully deleted ${imageCount} ${imageText}`;
-          },
-          error: (error) => {
-            console.error("Delete error:", error);
-            return "Unable to delete the selected image(s)";
-          },
+          return `${imageCount} ${imageText} deleted successfully`;
         },
-      );
+        error: (error) => {
+          console.error("Delete error:", error);
+          return "Failed to delete image(s)";
+        },
+      });
     });
   };
 
   const handleSave = async () => {
     if (selected.length === 0) {
-      goeyToast.error("Please select an image to continue");
+      toast.error("Please select an image to continue");
       return;
     }
     if (selected.length !== 1) {
-      goeyToast.error("Please select only one image");
+      toast.error("Please select only one image");
       return;
     }
 
     startTransition(async () => {
-      goeyToast.promise(updateUser({ image: selected[0].url }), {
-        loading: "Saving your changes...",
+      toast.promise(updateUser({ image: selected[0].url }), {
+        loading: "Saving changes...",
         success: () => {
           setSelected([]);
           setDialogOpen(false);
@@ -201,7 +198,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
         },
         error: (error) => {
           console.error("Save error:", error);
-          return "Unable to save your changes. Please try again";
+          return "Failed to save changes";
         },
       });
     });
@@ -262,7 +259,7 @@ export function AvatarDialog(props: AvatarDialogProps) {
                   disabled={isLoading || isPending}
                   onClick={() => {
                     startTransition(() => {
-                      goeyToast.promise(updateUser({ image: "" }), {
+                      toast.promise(updateUser({ image: "" }), {
                         loading: "Removing avatar...",
                         success: () => {
                           refetch();
