@@ -14,11 +14,11 @@ import { Card } from "@/components/ui/card";
 import { DocumentBySlugProps } from "@/lib/data/documents/get-document-slug";
 import { resolveActionResult } from "@/lib/safe-action/resolve-action";
 
-interface EditorProps {
+interface DocumentEditorProps {
   documentBySlugData: DocumentBySlugProps;
 }
 
-export function EditorPage(props: EditorProps) {
+export function DocumentEditor(props: DocumentEditorProps) {
   const editorRef = useRef<LexicalEditorSource | null>(null);
   const [markdownData, setMarkdownData] = useState(
     props.documentBySlugData.content,
@@ -35,6 +35,10 @@ export function EditorPage(props: EditorProps) {
 
   const handleSaveDocument = () => {
     const contentToSave = getCurrentMarkdown();
+
+    if (contentToSave === props.documentBySlugData.content)
+      return goeyToast.info("No changes detected");
+
     startTransition(async () => {
       goeyToast.promise(
         resolveActionResult(

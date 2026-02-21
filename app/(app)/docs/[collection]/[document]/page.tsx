@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Copy01Icon, PropertyEditIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+import { DocsHeader } from "@/app/(app)/docs/[collection]/[document]/docs-header";
 import {
   DocsBody,
   DocsPage,
@@ -28,32 +29,38 @@ export default async function namePage(
   if (!compiledMdx || !compiledMdx.code) notFound();
 
   return (
-    <DocsPage>
-      <DocsTitle className="text-3xl font-semibold">
-        {documentData.title}
-      </DocsTitle>
-      <div className="flex gap-2">
-        <Button variant="secondary" size="xs" disabled>
-          <HugeiconsIcon icon={Copy01Icon} className="size-3" />
-          Copy Markdown
-        </Button>
-        <Button
-          nativeButton={false}
-          variant="secondary"
-          size="xs"
-          render={
-            <Link
-              href={`/dashboard/${documentData.collectionSlug}/${documentData.slug}`}
-            />
-          }
-        >
-          <HugeiconsIcon icon={PropertyEditIcon} className="size-3" />
-          Edit Document
-        </Button>
-      </div>
-      <DocsBody>
-        <MDXRenderer code={compiledMdx.code} />
-      </DocsBody>
-    </DocsPage>
+    <>
+      <DocsHeader documentData={documentData} />
+      <DocsPage>
+        <span className="eyebrow h-5 text-primary dark:text-primary-light text-sm font-semibold">
+          {documentData.collectionTitle}
+        </span>
+        <DocsTitle className="text-3xl font-semibold">
+          {documentData.title}
+        </DocsTitle>
+        <div className="flex gap-2">
+          <Button variant="secondary" size="xs" disabled>
+            <HugeiconsIcon icon={Copy01Icon} className="size-3" />
+            Copy Markdown
+          </Button>
+          <Button
+            nativeButton={false}
+            variant="secondary"
+            size="xs"
+            render={
+              <Link
+                href={`/dashboard/${documentData.collectionSlug}/${documentData.slug}`}
+              />
+            }
+          >
+            <HugeiconsIcon icon={PropertyEditIcon} className="size-3" />
+            Edit Document
+          </Button>
+        </div>
+        <DocsBody>
+          <MDXRenderer code={compiledMdx.code} />
+        </DocsBody>
+      </DocsPage>
+    </>
   );
 }

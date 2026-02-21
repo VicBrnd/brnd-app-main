@@ -18,7 +18,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { data } from "@/config/dashboard.config";
+import { SidebarData } from "@/config/dashboard.config";
 import { getAuthContext } from "@/lib/auth/auth-context";
 import { getCollections } from "@/lib/data/collections/get-collections";
 import { getDocuments } from "@/lib/data/documents/get-documents";
@@ -30,7 +30,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {/* Top of the sidebar */}
         <NavMain
-          items={data.navMain}
+          items={SidebarData.navMain}
           AppFilesDialog={
             <Suspense
               fallback={
@@ -55,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </Suspense>
 
         {/* Other sidebar items */}
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={SidebarData.navSecondary} className="mt-auto" />
       </SidebarContent>
 
       {/* Sidebar User info */}

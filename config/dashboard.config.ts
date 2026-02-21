@@ -5,21 +5,34 @@ import {
   Settings01Icon,
 } from "@hugeicons/core-free-icons";
 
-export const data = {
+export const BreadcrumbData = [
+  {
+    label: "Documentations",
+    value: "documentations",
+    url: "/docs",
+    match: "/docs",
+  },
+  {
+    label: "Dashboard",
+    value: "dashboard",
+    url: "/dashboard",
+    match: "/dashboard",
+  },
+  {
+    label: "Account",
+    value: "account",
+    url: "/dashboard/account/settings",
+    match: "/dashboard/account",
+  },
+];
+
+export const SidebarData = {
   navMain: [
     {
       title: "All Files",
       url: "/dashboard",
       icon: Home01Icon,
     },
-  ],
-  tree: [
-    ["Uploadthing", ["API"]],
-    ["Zustand", ["Sidebar Store"]],
-    ["React", ["UseActionState"]],
-    ["NextJs", "Rate-Limiter"],
-    ["BetterAuth", "Auth Config"],
-    ["Redis", "@upstash/redis"],
   ],
   navSecondary: [
     {

@@ -10,7 +10,7 @@ export interface DocsPageProps {
 export function DocsPage({ ...props }: DocsPageProps) {
   return (
     <main className="flex w-full min-w-0 flex-col">
-      <article className="flex flex-1 flex-col w-full max-w-290 gap-6 px-4 py-8 md:px-6 md:mx-auto">
+      <article className="flex flex-1 flex-col w-full max-w-250 gap-2 px-4 py-8 md:px-6 md:mx-auto">
         {props.children}
       </article>
     </main>

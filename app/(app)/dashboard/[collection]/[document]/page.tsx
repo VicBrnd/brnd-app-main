@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { EditorPage } from "@/components/editor/editor-page";
+import { DocumentEditor } from "@/components/files/document/document-page";
 import { getDocumentBySlug } from "@/lib/data/documents/get-document-slug";
 
 export default async function DocumentPage(
@@ -14,5 +14,5 @@ export default async function DocumentPage(
     return notFound();
   }
 
-  return <EditorPage documentBySlugData={documentBySlugData} />;
+  return <DocumentEditor documentBySlugData={documentBySlugData} />;
 }

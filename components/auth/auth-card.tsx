@@ -6,11 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function AuthCard(props: {
+interface AuthCardProps {
   title: string;
   description: string;
   children: React.ReactNode;
-}) {
+}
+
+export function AuthCard(props: AuthCardProps) {
   return (
     <Card>
       <CardHeader>
