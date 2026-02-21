@@ -48,7 +48,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </Suspense>
           }
         />
-
         {/* Collections and Documents */}
         <Suspense fallback={<NavTreeSkeleton />}>
           <NavTreeAsync />
@@ -82,6 +81,23 @@ async function NavTreeAsync() {
           collectionsData={collectionsData}
           documentsData={documentsData}
         />
+        {/* {collections.map((collection) => (
+            <NavTree
+              key={collection.id}
+              item={{
+                name: collection.title,
+                href: `/dashboard/${collection.slug}`,
+                color: collection.color,
+                slug: collection.slug,
+                children: documents
+                  .filter((document) => document.collectionId === collection.id)
+                  .map((document) => ({
+                    name: document.title,
+                    href: `/dashboard/${collection.slug}/${document.slug}`,
+                  })),
+              }}
+            />
+          ))} */}
       </SidebarGroupContent>
     </SidebarGroup>
   );

@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
 
 import type { CollectionsProps } from "@/lib/data/collections/get-collections";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Add01Icon,
@@ -11,15 +11,14 @@ import {
   Folder01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { goeyToast } from "goey-toast";
 
-import { CreateDocumentStep } from "@/components/files/create/create-document-step";
 import { MdxIcon } from "@/components/icons/mdx-icons";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -31,103 +30,84 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useActive } from "@/hooks/use-active-path";
-
-export type TreeNode = {
-  name: string;
-  href?: string;
-  color?: string;
-  slug?: string;
-  collectionId?: string;
-  children?: TreeNode[];
-};
+import { DocumentsProps } from "@/lib/data/documents/get-documents";
 
 export function NavTree(props: {
-  item: TreeNode;
-  collectionsData?: CollectionsProps[];
+  collectionsData: CollectionsProps[];
+  documentsData: DocumentsProps[];
 }) {
-  const { isActive, isPartOf } = useActive();
-  const [manualOpen, setManualOpen] = useState(false);
-  const [createOpen, setCreateOpen] = useState(false);
-
-  // If the item has no children, render it as a simple menu button
-  if (!props.item.children) {
-    return (
-      <SidebarMenuButton
-        isActive={props.item.href ? isActive(props.item.href) : false}
-        render={props.item.href ? <Link href={props.item.href} /> : undefined}
-        className="data-[active=true]:bg-transparent"
-      >
-        <MdxIcon />
-        <span>{props.item.name}</span>
-      </SidebarMenuButton>
-    );
-  }
-
-  // If the item has children, render it as a collapsible menu item
-  // isPartOf is reactive (uses usePathname internally), so open auto-updates on navigation
-  const isCurrentPartOf = props.item.href ? isPartOf(props.item.href) : false;
-  const open = isCurrentPartOf || manualOpen;
-  const handleOpenChange = (next: boolean) => {
-    if (!next && isCurrentPartOf) return; // keep active parents open
-    setManualOpen(next);
-  };
-
+  const pathname = usePathname();
   return (
-    <SidebarMenuItem>
-      <Collapsible
-        open={open}
-        onOpenChange={handleOpenChange}
-        className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90"
-      >
-        <SidebarMenuButton
-          render={props.item.href ? <Link href={props.item.href} /> : undefined}
-        >
-          <HugeiconsIcon
-            icon={Folder01Icon}
-            style={props.item.color ? { color: props.item.color } : undefined}
-          />
-          <span>{props.item.name}</span>
-        </SidebarMenuButton>
-        <CollapsibleTrigger render={<SidebarMenuAction />}>
-          <span className="sr-only">Arrow menu action</span>
-          <HugeiconsIcon
-            icon={ArrowRight01Icon}
-            className="transition-transform"
-          />
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          {props.item.children.length === 0 ? (
-            <SidebarMenuSub>
-              <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-                <DialogTrigger
-                  render={
-                    <SidebarMenuButton className="text-muted-foreground" />
-                  }
-                >
-                  <HugeiconsIcon icon={Add01Icon} />
-                  <span>New document</span>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <CreateDocumentStep
-                    collectionsData={props.collectionsData ?? []}
-                    collectionId={props.item.collectionId}
-                    onBack={() => setCreateOpen(false)}
-                    onClose={() => setCreateOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
-            </SidebarMenuSub>
-          ) : (
-            <SidebarMenuSub>
-              {props.item.children.map((child) => (
-                <NavTree key={child.href} item={child} />
-              ))}
-            </SidebarMenuSub>
-          )}
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarMenuItem>
+    <SidebarMenu>
+      {props.collectionsData.map((collection) => (
+        <SidebarMenuItem key={collection.id}>
+          <Collapsible className="group/collapsible [&>button[data-panel-open]>svg:last-child]:rotate-90">
+            <SidebarMenuButton
+              className="data-[active=true]:bg-transparent"
+              render={<Link href={`/dashboard/${collection.slug}`} />}
+              isActive={
+                pathname === `/dashboard/${collection.slug}` ||
+                pathname.startsWith(`/dashboard/${collection.slug}/`)
+              }
+            >
+              <HugeiconsIcon
+                icon={Folder01Icon}
+                style={{ color: collection.color }}
+              />
+              <span>{collection.title}</span>
+            </SidebarMenuButton>
+            <CollapsibleTrigger render={<SidebarMenuAction />}>
+              <span className="sr-only">Arrow menu action</span>
+              <HugeiconsIcon
+                icon={ArrowRight01Icon}
+                className="transition-transform"
+              />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              {(() => {
+                const documents = props.documentsData.filter(
+                  (document) => document.collectionId === collection.id,
+                );
+                if (documents.length === 0)
+                  return (
+                    <SidebarMenuSub>
+                      <SidebarMenuButton
+                        className="data-[active=true]:bg-transparent"
+                        onClick={() => goeyToast.info("Work in progress")}
+                      >
+                        <HugeiconsIcon icon={Add01Icon} />
+                        <span>Create Document</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuSub>
+                  );
+                return (
+                  <SidebarMenuSub>
+                    {documents.map((document) => (
+                      <SidebarMenuButton
+                        key={document.id}
+                        className="data-[active=true]:bg-transparent"
+                        render={
+                          <Link
+                            href={`/dashboard/${collection.slug}/${document.slug}`}
+                          />
+                        }
+                        isActive={
+                          pathname ===
+                          `/dashboard/${collection.slug}/${document.slug}`
+                        }
+                      >
+                        <MdxIcon />
+                        <span>{document.title}</span>
+                      </SidebarMenuButton>
+                    ))}
+                  </SidebarMenuSub>
+                );
+              })()}
+            </CollapsibleContent>
+          </Collapsible>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
   );
 }
 

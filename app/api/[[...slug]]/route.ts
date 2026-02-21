@@ -3,6 +3,7 @@ import { Elysia } from "elysia";
 
 import { BetterAuth } from "@/app/api/auth";
 import { Collections } from "@/app/api/collections";
+import { Documents } from "@/app/api/documents";
 import { OpenAPI } from "@/lib/auth/auth-openapi";
 
 export const app = new Elysia({ name: "app", prefix: "/api" })
@@ -21,7 +22,8 @@ export const app = new Elysia({ name: "app", prefix: "/api" })
       : (app) => app,
   )
   .use(BetterAuth)
-  .use(Collections);
+  .use(Collections)
+  .use(Documents);
 
 export const GET = app.fetch;
 export const POST = app.fetch;

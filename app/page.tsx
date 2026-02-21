@@ -1,10 +1,12 @@
-"use client";
+import { Suspense } from "react";
 
+import NextImage from "next/image";
 import Link from "next/link";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { getSession } from "@/lib/data/account/get-session";
 
 export default function Page() {
   return (
@@ -20,41 +22,82 @@ export default function Page() {
           </p>
         </div>
         <div>
-          <ButtonGroup>
-            <Button
-              variant="outline"
-              size="lg"
-              nativeButton={false}
-              render={<Link href="/docs" />}
-            >
-              Documentation
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              nativeButton={false}
-              render={<Link href="/dashboard" />}
-            >
-              Dashboard
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              nativeButton={false}
-              render={<Link href="/user" />}
-            >
-              <Avatar size="sm">
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              Victor Brnd
-            </Button>
-          </ButtonGroup>
+          <Suspense>
+            <HomeButton />
+          </Suspense>
         </div>
       </div>
     </main>
+  );
+}
+
+export async function HomeButton() {
+  const ctx = await getSession();
+
+  if (ctx?.session) {
+    return (
+      <ButtonGroup>
+        <Button
+          variant="outline"
+          size="lg"
+          nativeButton={false}
+          render={<Link href="/docs" />}
+        >
+          Documentation
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          nativeButton={false}
+          render={<Link href="/dashboard" />}
+        >
+          Dashboard
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          nativeButton={false}
+          render={<Link href="/dashboard/account/settings" />}
+        >
+          <Avatar className="rounded-full overflow-hidden" size="sm">
+            {ctx.user.image && (
+              <NextImage
+                src={ctx.user.image}
+                alt={ctx.user.name}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover"
+                priority
+                loading="eager"
+              />
+            )}
+            <AvatarFallback className="rounded-lg">
+              {ctx.user.name?.slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+          {ctx.user.name}
+        </Button>
+      </ButtonGroup>
+    );
+  }
+  return (
+    <ButtonGroup>
+      <Button
+        variant="outline"
+        size="lg"
+        nativeButton={false}
+        render={<Link href="/docs" />}
+      >
+        Documentation
+      </Button>
+      <Button
+        variant="outline"
+        size="lg"
+        nativeButton={false}
+        render={<Link href="/sign-in" />}
+      >
+        Sign-in
+      </Button>
+    </ButtonGroup>
   );
 }
