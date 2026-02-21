@@ -1,11 +1,12 @@
 "use client";
 
 import { useTransition } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "better-auth";
-import { toast } from "sonner";
+import { goeyToast } from "goey-toast";
+import * as z from "zod";
 
 import { updateUser } from "@/actions/account/update-user.action";
 import { Input } from "@/components/ui/brnd-ui/input";
@@ -20,10 +21,8 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth/auth-client";
-import {
-  UpdateUserSchema,
-  updateUserSchema,
-} from "@/schemas/account/update-user.schema";
+import { resolveActionResult } from "@/lib/safe-action/resolve-action";
+import { UpdateUserFormSchema } from "@/schemas/account/update-user.schema";
 
 interface NameCardProps {
   userData: User;
@@ -31,45 +30,42 @@ interface NameCardProps {
 
 export function NameCard(props: NameCardProps) {
   const [isLoading, startTransition] = useTransition();
-
   const { data, isPending, refetch } = authClient.useSession();
   const user = data?.user || props.userData;
 
-  const methods = useForm({
-    resolver: zodResolver(updateUserSchema),
+  const form = useForm<z.infer<typeof UpdateUserFormSchema>>({
+    resolver: zodResolver(UpdateUserFormSchema),
     mode: "onChange",
     defaultValues: {
       name: user?.name || "",
     },
   });
 
-  const onSubmit: SubmitHandler<UpdateUserSchema> = (values) => {
-    if (values.name === user?.name) {
-      toast.info("No changes detected");
+  function onSubmit(data: z.infer<typeof UpdateUserFormSchema>) {
+    if (data.name === user?.name) {
+      goeyToast.info("No changes detected");
       return;
     }
     startTransition(async () => {
-      toast.promise(updateUser({ name: values.name }), {
+      goeyToast.promise(resolveActionResult(updateUser({ name: data.name })), {
         loading: "Saving changes...",
         success: () => {
-          methods.reset(values);
+          form.reset(data);
           refetch();
           return "Changes saved successfully";
         },
-        error: (error) => {
-          console.error("Save error:", error);
-          return "Failed to save changes";
-        },
+        error: (err: unknown) =>
+          err instanceof Error ? err.message : "Failed to save changes",
       });
     });
-  };
+  }
 
   return (
-    <form onSubmit={methods.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         <Controller
           name="name"
-          control={methods.control}
+          control={form.control}
           render={({ field, fieldState }) => (
             <Card className="bg-background">
               <CardHeader>

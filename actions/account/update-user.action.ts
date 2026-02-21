@@ -5,11 +5,11 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { authActionClient } from "@/lib/safe-action";
-import { updateUserSchema } from "@/schemas/account/update-user.schema";
+import { UpdateUserFormSchema } from "@/schemas/account/update-user.schema";
 
 export const updateUser = authActionClient
   .metadata({ actionName: "updateUser" })
-  .inputSchema(updateUserSchema)
+  .inputSchema(UpdateUserFormSchema)
   .action(async ({ parsedInput }) => {
     await auth.api.updateUser({
       body: {
@@ -20,4 +20,6 @@ export const updateUser = authActionClient
     });
 
     updateTag("session");
+
+    return { success: true };
   });

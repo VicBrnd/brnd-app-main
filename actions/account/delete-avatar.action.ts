@@ -7,7 +7,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { updateUser } from "@/actions/account/update-user.action";
 import { db } from "@/lib/db";
 import { image } from "@/lib/db/schema";
-import { authActionClient } from "@/lib/safe-action";
+import { ActionError, authActionClient } from "@/lib/safe-action";
 import { utapi } from "@/lib/upload";
 import { deleteAvatarSchema } from "@/schemas/account/delete-avatar.schema";
 
@@ -26,7 +26,7 @@ export const deleteAvatar = authActionClient
       );
 
     if (imagesDelete.length !== parsedInput.keys.length) {
-      throw new Error("Some images not found or access denied");
+      throw new ActionError("Some images not found or access denied");
     }
 
     const shouldUpdateUserImage =
@@ -59,7 +59,9 @@ export const deleteAvatar = authActionClient
         "Some files failed to delete from storage:",
         failedDeletions,
       );
+      throw new ActionError("Some files failed to delete from storage");
     }
 
     updateTag("session");
+    return { success: true };
   });

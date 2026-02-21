@@ -7,7 +7,6 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeStorage } from "@/components/theme/theme-storage";
 import { GoeyToaster } from "@/components/ui/goey-toaster";
-import { Toaster } from "@/components/ui/sonner";
 import { fontVariables } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +39,6 @@ export default function RootLayout({
       <body className={cn("h-full antialiased")}>
         <NuqsAdapter>
           <ThemeProvider>
-            <Toaster position="top-right" />
             {children}
             <GoeyToaster position="top-right" />
           </ThemeProvider>

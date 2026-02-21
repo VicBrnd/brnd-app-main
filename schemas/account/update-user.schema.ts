@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
 
-export const updateUserSchema = z.object({
+export const UpdateUserFormSchema = z.object({
   name: z
     .string({
       error: (issue) =>
@@ -13,26 +13,26 @@ export const updateUserSchema = z.object({
     .max(32, "Maximum 32 characters allowed.")
     .refine(
       (value) => /^[A-Za-zÀ-ÿ]/.test(value),
-      "Name must start with a letter."
+      "Name must start with a letter.",
     )
     .refine(
       (value) => /^[\s'A-Za-zÀ-ÿ\-]+$/.test(value),
-      "Name can only contain letters, spaces, hyphens and apostrophes."
+      "Name can only contain letters, spaces, hyphens and apostrophes.",
     )
     .refine(
       (value) => !/\s{2,}/.test(value),
-      "Name cannot contain consecutive spaces"
+      "Name cannot contain consecutive spaces",
     )
     .transform((value) =>
       value
         .split(" ")
         .map(
-          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
         )
-        .join(" ")
+        .join(" "),
     )
     .optional(),
-  image: z.string().optional(),
+  image: z.union([z.url(), z.literal("")]).optional(),
   currentPassword: z
     .string()
     .min(8, "Password must be at least 8 characters long.")
@@ -50,5 +50,3 @@ export const updateUserSchema = z.object({
     })
     .optional(),
 });
-
-export type UpdateUserSchema = z.infer<typeof updateUserSchema>;

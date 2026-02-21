@@ -41,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       // <div className="relative flex gap-2">
-      <div className="relative flex">
+      <div className="relative flex gap-2">
         <input
           type={password ? (isVisible ? "text" : "password") : type}
           className={cn(
@@ -57,12 +57,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {startAdornment && (
-          <div className="absolute inset-y-0 start-0 flex items-center justify-center border-r pe-3 ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+          <div className="absolute inset-y-0 inset-s-0 flex items-center justify-center border-r pe-3 ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
             {startAdornment}
           </div>
         )}
         {endAdornment && (
-          <div className="absolute inset-y-0 end-2 flex items-center justify-center border-l pe-3 ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+          <div className="absolute inset-y-0 inset-e-2 flex items-center justify-center border-l pe-3 ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
             {endAdornment}
           </div>
         )}
@@ -73,7 +73,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-label={isVisible ? "Hide password" : "Show password"}
             aria-pressed={isVisible}
             aria-controls="password"
-            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 inset-e-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isVisible ? (
               <HugeiconsIcon icon={ViewOffIcon} size={16} aria-hidden="true" />

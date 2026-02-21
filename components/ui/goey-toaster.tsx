@@ -1,21 +1,23 @@
-"use client"
+"use client";
 
-import { GoeyToaster as GoeyToasterPrimitive, goeyToast } from "goey-toast"
-import type { GoeyToasterProps } from "goey-toast"
-import "goey-toast/styles.css"
+import type { GoeyToasterProps } from "goey-toast";
 
-export { goeyToast }
-export type { GoeyToasterProps }
+import { GoeyToaster as GoeyToasterPrimitive, goeyToast } from "goey-toast";
+
+import "goey-toast/styles.css";
+
 export type {
-  GoeyToastOptions,
   GoeyPromiseData,
   GoeyToastAction,
   GoeyToastClassNames,
+  GoeyToastOptions,
   GoeyToastTimings,
-} from "goey-toast"
+} from "goey-toast";
+export { goeyToast };
+export type { GoeyToasterProps };
 
 function GoeyToaster(props: GoeyToasterProps) {
-  return <GoeyToasterPrimitive position="bottom-right" {...props} />
+  return <GoeyToasterPrimitive position="bottom-right" {...props} />;
 }
 
-export { GoeyToaster }
+export { GoeyToaster };

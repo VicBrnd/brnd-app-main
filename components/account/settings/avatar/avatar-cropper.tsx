@@ -23,10 +23,6 @@ interface AvatarCropperProps {
 }
 
 export function AvatarCropper(props: AvatarCropperProps) {
-  const handleCropChange = (pixels: Area | null) => {
-    props.setCropArea(pixels);
-  };
-
   return (
     <>
       <DialogHeader>
@@ -42,7 +38,7 @@ export function AvatarCropper(props: AvatarCropperProps) {
             cropPadding={0}
             image={props.filePreview}
             zoom={props.cropZoom}
-            onCropChange={handleCropChange}
+            onCropChange={props.setCropArea}
             onZoomChange={props.setCropZoom}
           >
             <CropperDescription />
